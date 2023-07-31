@@ -1,39 +1,37 @@
-import React, { useState } from "react";
-import { Route, Routes } from "react-router-dom";
-import HomePage from "./pages/home/homePage";
-import LoginPage from "./pages/auth/login/login";
-import { useSelector } from "react-redux";
-import Layout from "./components/layout/layouts";
-import Brands from "./pages/brands/brands";
-import Companies from "./pages/companies/companies";
-import Users from "./pages/users/users";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline, StyledEngineProvider } from '@mui/material';
+import { UserContext } from './context/userContext';
+
+// routing
+import Routes from 'routes';
+
+// defaultTheme
+import themes from 'themes';
+
+// project imports
+import NavigationScroll from 'layout/NavigationScroll';
+
+// ==============================|| APP ||============================== //
 
 const App = () => {
-  const userData = useSelector((state) => state.Auth.userData);
-  console.log(userData, "userData");
+  const [user, setUser] = useState('');
+  const customization = useSelector((state) => state.customization);
+
   return (
-    <>
-      {userData !== null ? (
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/brands" element={<Brands />} />
-            {userData?.data?.role === "Superadmin" && (
-              <>
-                <Route path="/companies" element={<Companies />} />
-              </>
-            )}
-            <Route path="/users" element={<Users />} />
-            <Route path="*" element={<HomePage />} />
-          </Routes>
-        </Layout>
-      ) : (
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="*" element={<LoginPage />} />
-        </Routes>
-      )}
-    </>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={themes(customization)}>
+        <CssBaseline />
+        <NavigationScroll>
+          <UserContext.Provider value={{ user, setUser }}>
+            <Routes />
+          </UserContext.Provider>
+        </NavigationScroll>
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 };
+
 export default App;
