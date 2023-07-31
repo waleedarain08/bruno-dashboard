@@ -22,7 +22,7 @@ const dashboard = {
       id: 'default',
       title: 'Dashboard',
       type: 'item',
-      url: '/dashboard',
+      url: '/',
       icon: GridViewIcon,
       breadcrumbs: false
     },
