@@ -1,0 +1,3 @@
+export const IS_LOADING = "IS_LOADING";
+export const BRAND_DATA_SUCCESS = "BRAND_DATA_SUCCESS";
+export const BRAND_DATA_FALED = "BRAND_DATA_FALED";
