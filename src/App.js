@@ -19,7 +19,6 @@ import NavigationScroll from 'layout/NavigationScroll';
 const App = () => {
   const [user, setUser] = useState('');
   const customization = useSelector((state) => state.customization);
-
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={themes(customization)}>
