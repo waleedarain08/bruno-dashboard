@@ -34,6 +34,10 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
+      path: '*',
+      element: <DashboardDefault />
+    },
+    {
       path: '/dashboard',
       children: [
         {

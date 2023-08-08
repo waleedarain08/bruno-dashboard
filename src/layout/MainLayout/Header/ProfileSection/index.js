@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-
+import * as actionTypes from '../../../../store/auth/authType';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -38,10 +38,12 @@ import User1 from 'assets/images/users/user-round.svg';
 
 // assets
 import { IconLogout, IconSettings, IconUser } from '@tabler/icons';
+import { useDispatch } from 'react-redux';
 
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
@@ -56,7 +58,9 @@ const ProfileSection = () => {
    * */
   const anchorRef = useRef(null);
   const handleLogout = async () => {
-    console.log('Logout');
+    dispatch({
+      type: actionTypes.LOGOUT
+    });
   };
 
   const handleClose = (event) => {

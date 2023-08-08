@@ -1,23 +1,23 @@
-import React, { useContext, useState } from 'react';
-// import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 // import { Navigate } from 'react-router-dom';
-import { UserContext } from '../../context/userContext';
+// import { UserContext } from '../../context/userContext';
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
-  Checkbox,
+  // Checkbox,
   // Divider,
   FormControl,
-  FormControlLabel,
+  // FormControlLabel,
   FormHelperText,
   Grid,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
-  Stack,
+  // Stack,
   Typography
   // useMediaQuery
 } from '@mui/material';
@@ -33,18 +33,22 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Login } from 'store/auth/authAction';
 
 // import Google from 'assets/images/icons/social-google.svg';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
-  const { setUser } = useContext(UserContext);
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.AuthReducer.data);
+  // const { setUser } = useContext(UserContext);
   const theme = useTheme();
+  console.log(data, 'data');
   const scriptedRef = useScriptRef();
   // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   // const customization = useSelector((state) => state.customization);
-  const [checked, setChecked] = useState(true);
+  // const [checked, setChecked] = useState(true);
 
   // const googleHandler = async () => {
   //   console.error('Login');
@@ -59,65 +63,9 @@ const FirebaseLogin = ({ ...others }) => {
     event.preventDefault();
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   <Navigate to="/dashboard" replace={true} />;
-  // };
-
   return (
     <>
       <Grid container direction="column" justifyContent="center" spacing={2}>
-        {/* <Grid item xs={12}>
-          <AnimateButton>
-            <Button
-              disableElevation
-              fullWidth
-              onClick={googleHandler}
-              size="large"
-              variant="outlined"
-              sx={{
-                color: 'grey.700',
-                backgroundColor: theme.palette.grey[50],
-                borderColor: theme.palette.grey[100]
-              }}
-            >
-              <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
-              </Box>
-              Sign in with Google
-            </Button>
-          </AnimateButton>
-        </Grid>
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex'
-            }}
-          >
-            <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-
-            <Button
-              variant="outlined"
-              sx={{
-                cursor: 'unset',
-                m: 2,
-                py: 0.5,
-                px: 7,
-                borderColor: `${theme.palette.grey[100]} !important`,
-                color: `${theme.palette.grey[900]}!important`,
-                fontWeight: 500,
-                borderRadius: `${customization.borderRadius}px`
-              }}
-              disableRipple
-              disabled
-            >
-              OR
-            </Button>
-
-            <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-          </Box>
-        </Grid> */}
         <Grid item xs={12} container alignItems="center" justifyContent="center">
           <Box sx={{ mb: 2 }}>
             <Typography variant="subtitle1">Sign in with Email address</Typography>
@@ -127,8 +75,8 @@ const FirebaseLogin = ({ ...others }) => {
 
       <Formik
         initialValues={{
-          email: 'test@test.com',
-          password: '123456',
+          email: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
@@ -139,9 +87,17 @@ const FirebaseLogin = ({ ...others }) => {
           console.log(values, 'values');
           try {
             if (scriptedRef.current) {
-              setUser(values?.email);
-              setStatus({ success: true });
-              setSubmitting(false);
+              const data = {
+                email: values?.email,
+                password: values?.password,
+                deviceToken: 'deviceToken',
+                deviceType: 'deviceType',
+                role: 'admin'
+              };
+              dispatch(Login(data));
+              // setUser(values?.email);
+              // setStatus({ success: true });
+              // setSubmitting(false);
             }
           } catch (err) {
             console.error(err);
@@ -205,7 +161,7 @@ const FirebaseLogin = ({ ...others }) => {
                 </FormHelperText>
               )}
             </FormControl>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
+            {/* <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
               <FormControlLabel
                 control={
                   <Checkbox checked={checked} onChange={(event) => setChecked(event.target.checked)} name="checked" color="primary" />
@@ -215,7 +171,7 @@ const FirebaseLogin = ({ ...others }) => {
               <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
                 Forgot Password?
               </Typography>
-            </Stack>
+            </Stack> */}
             {errors.submit && (
               <Box sx={{ mt: 3 }}>
                 <FormHelperText error>{errors.submit}</FormHelperText>
