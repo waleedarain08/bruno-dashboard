@@ -1,7 +1,8 @@
 // action - state management
 import * as actionTypes from './authType';
-import { Post } from '../../helpers/apicalls/apicalls';
+import { Post, Get } from "../../helpers/apicalls/apicalls";
 
+<<<<<<< HEAD
 export const Login = (data) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.Loading });
@@ -22,4 +23,25 @@ export const Login = (data) => {
         dispatch({ type: actionTypes.FailedLogin });
       });
   };
+=======
+export const Loggin = (data, token) => {
+    return (dispatch) => {
+        dispatch({ type: actionTypes.Loading });
+        Post("login", data, token)
+            .then(function (response) {
+                if (response) {
+                    dispatch({
+                        type: actionTypes.SuccessLogin,
+                        payload: response?.data
+                    });
+                } else {
+                    dispatch({ type: actionTypes.FailedLogin });
+                    alert(response.message);
+                }
+            })
+            .catch(function (error) {
+                dispatch({ type: actionTypes.FailedLogin });
+            });
+    };
+>>>>>>> 941ab75 (Revert "chnages")
 };

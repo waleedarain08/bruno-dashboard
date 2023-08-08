@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -13,13 +14,17 @@ import moment from 'moment/moment';
 import { useLocation } from 'react-router-dom';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
+=======
+import React from 'react';
+// material-ui
+import { Typography } from '@mui/material';
+>>>>>>> 941ab75 (Revert "chnages")
 
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { GetPets } from 'store/pets/petsAction';
-import { InfinitySpin } from 'react-loader-spinner';
+// project imports
+import MainCard from 'ui-component/cards/MainCard';
 
 const PetsProfile = () => {
+<<<<<<< HEAD
   const location = useLocation();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -106,6 +111,17 @@ const PetsProfile = () => {
         </Paper>
       )}
     </Box>
+=======
+  return (
+    <MainCard title="Sample Card">
+      <Typography variant="body2">
+        Lorem ipsum dolor sit amen, consenter nipissing eli, sed do elusion tempos incident ut laborers et doolie magna alissa. Ut enif ad
+        minim venice, quin nostrum exercitation illampu laborings nisi ut liquid ex ea commons construal. Duos aube grue dolor in
+        reprehended in voltage veil esse colum doolie eu fujian bulla parian. Exceptive sin ocean cuspidate non president, sunk in culpa qui
+        officiate descent molls anim id est labours.
+      </Typography>
+    </MainCard>
+>>>>>>> 941ab75 (Revert "chnages")
   );
 };
 

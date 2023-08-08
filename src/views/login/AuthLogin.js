@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 // import { useSelector } from 'react-redux';
 // import { Navigate } from 'react-router-dom';
-
 import { UserContext } from '../../context/userContext';
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -128,8 +127,8 @@ const FirebaseLogin = ({ ...others }) => {
 
       <Formik
         initialValues={{
-          email: 'admin@brunokitchen.com',
-          password: 'bruno@kitchen123',
+          email: 'test@test.com',
+          password: '123456',
           submit: null
         }}
         validationSchema={Yup.object().shape({
