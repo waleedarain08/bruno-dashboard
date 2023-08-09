@@ -75,8 +75,8 @@ const FirebaseLogin = ({ ...others }) => {
 
       <Formik
         initialValues={{
-          email: '',
-          password: '',
+          email: 'admin@brunokitchen.com',
+          password: 'bruno@kitchen123',
           submit: null
         }}
         validationSchema={Yup.object().shape({
@@ -112,7 +112,7 @@ const FirebaseLogin = ({ ...others }) => {
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit} {...others}>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-email-login">Email Address</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-login"
                 type="email"
