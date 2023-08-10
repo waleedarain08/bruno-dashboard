@@ -5,7 +5,7 @@ import { Get } from '../../helpers/apicalls/apicalls';
 export const GetUsers = (data) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoading });
-    Get('user/users?count=10&page=1', data)
+    Get('user/users?count=1000000&page=1', data)
       .then(function (response) {
         if (response?.isSuccess) {
           dispatch({

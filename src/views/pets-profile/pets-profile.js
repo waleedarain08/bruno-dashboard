@@ -23,12 +23,10 @@ const PetsProfile = () => {
   const rows = useSelector((state) => state.PetsReducer.data);
   const isLoading = useSelector((state) => state.PetsReducer.isLoading);
   const dispatch = useDispatch();
-  console.log(rows, 'rows');
 
   useEffect(() => {
     dispatch(GetPets(Userdata?.clientToken));
-  }, []);
-
+  }, [])
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -61,8 +59,8 @@ const PetsProfile = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows?.map((row) => (
-                  <TableRow key={row?.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
+                  <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       <Avatar alt="Remy Sharp" src={row?.media} />
                     </TableCell>
@@ -77,7 +75,7 @@ const PetsProfile = () => {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
             component="div"
             count={rows?.length}
             rowsPerPage={rowsPerPage}

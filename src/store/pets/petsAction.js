@@ -5,7 +5,7 @@ import { Get } from '../../helpers/apicalls/apicalls';
 export const GetPets = (data) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoading });
-    Get('pet/?page=1&count=10', data)
+    Get(`pet/?page=1&count=100000`, data)
       .then(function (response) {
         if (response?.isSuccess) {
           dispatch({

@@ -9,6 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { InfinitySpin } from 'react-loader-spinner';
+import Switch from '@mui/material/Switch';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -21,8 +22,6 @@ const UserAccounts = () => {
   const rows = useSelector((state) => state.UsersReducer.data);
   const isLoading = useSelector((state) => state.UsersReducer.isLoading);
   const dispatch = useDispatch();
-  console.log(rows, 'rows');
-
   useEffect(() => {
     dispatch(GetUsers(Userdata?.clientToken));
   }, []);
@@ -58,22 +57,22 @@ const UserAccounts = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows?.map((row) => (
-                  <TableRow key={row?.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
+                  <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       {row?.fullName}
                     </TableCell>
                     <TableCell align="left">{row?.email}</TableCell>
                     <TableCell align="left">{row?.phoneNumber} </TableCell>
                     <TableCell align="left">{row?.role}</TableCell>
-                    <TableCell align="right">{row?.isBlock ? 'true' : 'false'}</TableCell>
+                    <TableCell align="right"> <Switch value={row?.isBlock} color="warning" /></TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[5, 10, 25, 50, 100]}
             component="div"
             count={rows?.length}
             rowsPerPage={rowsPerPage}
