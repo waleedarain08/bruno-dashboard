@@ -26,6 +26,13 @@ import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 // assets
 
@@ -39,6 +46,17 @@ const PromoLoality = ({ ...others }) => {
   const theme = useTheme();
   console.log(data, 'data');
   const scriptedRef = useScriptRef();
+  function createData(name, calories, fat, carbs, protein) {
+    return { name, calories, fat, carbs, protein };
+  }
+
+  const rows = [
+    createData('Frozen ', 40),
+    createData('sandwich', 43),
+    createData('Eclair', 60),
+    createData('Cupcake', 43),
+    createData('Gingerbread', 39)
+  ];
 
   return (
     <>
@@ -239,6 +257,35 @@ const PromoLoality = ({ ...others }) => {
           </Card>
         </Grid>
         <Grid item xs={1}></Grid>
+      </Grid>
+      <Grid sx={{ mt: 5 }} container spacing={2}>
+        <Grid container direction="column" justifyContent="center" spacing={2}>
+          <Grid item xs={12} container alignItems="center" justifyContent="center">
+            <Box sx={{ mb: 4 }}>
+              <Typography variant="subtitle1">Total Promo Codes</Typography>
+            </Box>
+          </Grid>
+        </Grid>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Promo Code</TableCell>
+                <TableCell align="right">Percentage</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="right">% {row.calories}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Grid>
     </>
   );
