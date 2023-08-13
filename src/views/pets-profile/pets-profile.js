@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Avatar from '@mui/material/Avatar';
 import Paper from '@mui/material/Paper';
 import moment from 'moment/moment';
+import { useLocation } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -17,16 +18,18 @@ import { GetPets } from 'store/pets/petsAction';
 import { InfinitySpin } from 'react-loader-spinner';
 
 const PetsProfile = () => {
+  const location = useLocation();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const Userdata = useSelector((state) => state.AuthReducer.data);
-  const rows = useSelector((state) => state.PetsReducer.data);
+  const data = useSelector((state) => state.PetsReducer.data);
+  const rows = data?.filter((i) => i?.user?._id === location?.state?._id);
   const isLoading = useSelector((state) => state.PetsReducer.isLoading);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(GetPets(Userdata?.clientToken));
-  }, [])
+  }, []);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -58,20 +61,30 @@ const PetsProfile = () => {
                   <TableCell align="right">Weight</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
-                  <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell component="th" scope="row">
-                      <Avatar alt="Remy Sharp" src={row?.media} />
+              {rows?.length > 0 ? (
+                <TableBody>
+                  {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
+                    <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell component="th" scope="row">
+                        <Avatar alt="Remy Sharp" src={row?.media} />
+                      </TableCell>
+                      <TableCell align="left">{row?.name}</TableCell>
+                      <TableCell align="left">{row?.breed}</TableCell>
+                      <TableCell align="left">{moment(row?.bornOnDate).format('MMM Do YY')}</TableCell>
+                      <TableCell align="left">{row?.user?.fullName}</TableCell>
+                      <TableCell align="right">{row?.actualWeight} kg</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              ) : (
+                <TableBody>
+                  <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell colSpan={6} align="left">
+                      No Record Found
                     </TableCell>
-                    <TableCell align="left">{row?.name}</TableCell>
-                    <TableCell align="left">{row?.breed}</TableCell>
-                    <TableCell align="left">{moment(row?.bornOnDate).format('MMM Do YY')}</TableCell>
-                    <TableCell align="left">{row?.user?.fullName}</TableCell>
-                    <TableCell align="right">{row?.actualWeight} kg</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
+                </TableBody>
+              )}
             </Table>
           </TableContainer>
           <TablePagination

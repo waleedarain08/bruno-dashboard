@@ -9,6 +9,8 @@ import FoodRecipes from 'views/food-recipes/food-recipes';
 import ProductCategories from 'views/product-categories/product-categories';
 import UsersFeedback from 'views/users-feedback/users-feedback';
 import BlogFAQ from 'views/blog-&-FAQ/blog-&-FAQ';
+import Cookingsheet from 'views/cooking-sheet/cooking-sheet';
+import PromoLoyality from 'views/promo-codes&loyality-points/promo-loyality';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -56,10 +58,10 @@ const MainRoutes = {
       ]
     },
     {
-      path: '/pet-profile',
+      path: '/user-auccounts/pet-profile',
       children: [
         {
-          path: '/pet-profile',
+          path: '/user-auccounts/pet-profile',
           element: <PetsProfile />
         }
       ]
@@ -70,6 +72,24 @@ const MainRoutes = {
         {
           path: '/food-recipes',
           element: <FoodRecipes />
+        }
+      ]
+    },
+    {
+      path: '/cooking-sheet',
+      children: [
+        {
+          path: '/cooking-sheet',
+          element: <Cookingsheet />
+        }
+      ]
+    },
+    {
+      path: '/promo-code&loyality-points',
+      children: [
+        {
+          path: '/promo-code&loyality-points',
+          element: <PromoLoyality />
         }
       ]
     },

@@ -10,12 +10,15 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { InfinitySpin } from 'react-loader-spinner';
 import Switch from '@mui/material/Switch';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { GetUsers } from 'store/users/usersAction';
 
 const UserAccounts = () => {
+  const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const Userdata = useSelector((state) => state.AuthReducer.data);
@@ -33,6 +36,11 @@ const UserAccounts = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const moveToPets = (e, row) => {
+    e.preventDefault();
+    navigate('/user-auccounts/pet-profile', { state: row });
   };
 
   return (
@@ -53,6 +61,7 @@ const UserAccounts = () => {
                   <TableCell align="left">Email</TableCell>
                   <TableCell align="left">Phone Number</TableCell>
                   <TableCell align="left">Role</TableCell>
+                  <TableCell align="left">Pets</TableCell>
                   <TableCell align="right">Block</TableCell>
                 </TableRow>
               </TableHead>
@@ -65,7 +74,15 @@ const UserAccounts = () => {
                     <TableCell align="left">{row?.email}</TableCell>
                     <TableCell align="left">{row?.phoneNumber} </TableCell>
                     <TableCell align="left">{row?.role}</TableCell>
-                    <TableCell align="right"> <Switch value={row?.isBlock} color="warning" /></TableCell>
+                    <TableCell align="left">
+                      <Button onClick={(e) => moveToPets(e, row)} size="small" variant="contained" color="secondary">
+                        View Pets
+                      </Button>
+                    </TableCell>
+                    <TableCell align="right">
+                      {' '}
+                      <Switch value={row?.isBlock} color="warning" />
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
