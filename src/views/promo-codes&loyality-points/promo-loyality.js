@@ -54,11 +54,11 @@ const PromoLoality = ({ ...others }) => {
   }
 
   const rows = [
-    createData('Frozen ', 40),
-    createData('sandwich', 43),
-    createData('Eclair', 60),
-    createData('Cupcake', 43),
-    createData('Gingerbread', 39)
+    createData('Frozen ', 40 , '23/10/2023','Delete'),
+    createData('sandwich', 43, '23/10/2023', 'Delete'),
+    createData('Eclair', 60, '23/10/2023', 'Delete'),
+    createData('Cupcake', 43, '23/10/2023', 'Delete'),
+    createData('Gingerbread', 39, '23/10/2023', 'Delete')
   ];
 
   return (
@@ -71,7 +71,7 @@ const PromoLoality = ({ ...others }) => {
               <Grid container direction="column" justifyContent="center" spacing={2}>
                 <Grid item xs={12} container alignItems="center" justifyContent="center">
                   <Box sx={{ mb: 2, mt: 2 }}>
-                    <Typography variant="subtitle1">Set Percentage</Typography>
+                    <Typography variant="subtitle1">Set Loyalty Points Percentage Below</Typography>
                   </Box>
                 </Grid>
               </Grid>
@@ -106,7 +106,7 @@ const PromoLoality = ({ ...others }) => {
                       error={Boolean(touched.Percentage && errors.Percentage)}
                       sx={{ ...theme.typography.customInput }}
                     >
-                      <InputLabel htmlFor="outlined-adornment-email-login">Percentage %</InputLabel>
+                      <InputLabel htmlFor="outlined-adornment-email-login">Enter % below that you want to apply.</InputLabel>
                       <OutlinedInput
                         id="outlined-adornment-email-login"
                         type="text"
@@ -114,7 +114,7 @@ const PromoLoality = ({ ...others }) => {
                         name="Percentage"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        label="Percentage %"
+                        label="Enter Discount %"
                         inputProps={{}}
                       />
                       {touched.Percentage && errors.Percentage && (
@@ -158,7 +158,7 @@ const PromoLoality = ({ ...others }) => {
               <Grid container direction="column" justifyContent="center" spacing={2}>
                 <Grid item xs={12} container alignItems="center" justifyContent="center">
                   <Box sx={{ mb: 2, mt: 2 }}>
-                    <Typography variant="subtitle1">Promo Code</Typography>
+                    <Typography variant="subtitle1">Enter Promo Code Detail Below</Typography>
                   </Box>
                 </Grid>
               </Grid>
@@ -192,7 +192,7 @@ const PromoLoality = ({ ...others }) => {
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                   <form noValidate onSubmit={handleSubmit} {...others}>
                     <FormControl fullWidth error={Boolean(touched.Code && errors.Code)} sx={{ ...theme.typography.customInput }}>
-                      <InputLabel htmlFor="outlined-adornment-email-login">Promo Code</InputLabel>
+                      <InputLabel htmlFor="outlined-adornment-email-login">Enter Promo Code</InputLabel>
                       <OutlinedInput
                         id="outlined-adornment-email-login"
                         type="Code"
@@ -215,7 +215,7 @@ const PromoLoality = ({ ...others }) => {
                       error={Boolean(touched.Percentage && errors.Percentage)}
                       sx={{ ...theme.typography.customInput }}
                     >
-                      <InputLabel htmlFor="outlined-adornment-password-login">Percentage %</InputLabel>
+                      <InputLabel htmlFor="outlined-adornment-password-login">Enter % of discount</InputLabel>
                       <OutlinedInput
                         id="outlined-adornment-password-login"
                         type={'text'}
@@ -234,7 +234,8 @@ const PromoLoality = ({ ...others }) => {
                     </FormControl>
                     <FormControl fullWidth error={Boolean(touched.expiry && errors.expiry)} sx={{ ...theme.typography.customInput }}>
                       <LocalizationProvider dateAdapter={AdapterMoment}>
-                        <DatePicker />
+                        <DatePicker
+                         />
                       </LocalizationProvider>
                       {touched.expiry && errors.expiry && (
                         <FormHelperText error id="standard-weight-helper-text-password-login">
@@ -276,7 +277,7 @@ const PromoLoality = ({ ...others }) => {
         <Grid container direction="column" justifyContent="center" spacing={2}>
           <Grid item xs={12} container alignItems="center" justifyContent="center">
             <Box sx={{ mb: 4 }}>
-              <Typography variant="subtitle1">Total Promo Codes</Typography>
+              <Typography variant="subtitle1">List of all Promo Codes</Typography>
             </Box>
           </Grid>
         </Grid>
@@ -284,8 +285,12 @@ const PromoLoality = ({ ...others }) => {
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell>Promo Code</TableCell>
-                <TableCell align="right">Percentage</TableCell>
+                <TableCell> Promo Code </TableCell>
+                <TableCell align="left">Percentage</TableCell>
+                <TableCell align="left">Expiry Date</TableCell>
+                <TableCell align="right">Action</TableCell>
+
+
               </TableRow>
             </TableHead>
             <TableBody>
@@ -294,7 +299,10 @@ const PromoLoality = ({ ...others }) => {
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  <TableCell align="right">% {row.calories}</TableCell>
+                  <TableCell align="left">% {row.calories}</TableCell>
+                  <TableCell align="left"> {row.fat}</TableCell>
+                  <TableCell align="right"> {row.carbs}</TableCell>
+
                 </TableRow>
               ))}
             </TableBody>
