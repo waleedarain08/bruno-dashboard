@@ -1,5 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 import { useTheme } from '@mui/material/styles';
 import {
@@ -163,6 +166,7 @@ const PromoLoality = ({ ...others }) => {
                 initialValues={{
                   Percentage: '',
                   Code: '',
+                  expiry: '',
                   submit: null
                 }}
                 validationSchema={Yup.object().shape({
@@ -225,6 +229,16 @@ const PromoLoality = ({ ...others }) => {
                       {touched.Percentage && errors.Percentage && (
                         <FormHelperText error id="standard-weight-helper-text-password-login">
                           {errors.Percentage}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                    <FormControl fullWidth error={Boolean(touched.expiry && errors.expiry)} sx={{ ...theme.typography.customInput }}>
+                      <LocalizationProvider dateAdapter={AdapterMoment}>
+                        <DatePicker />
+                      </LocalizationProvider>
+                      {touched.expiry && errors.expiry && (
+                        <FormHelperText error id="standard-weight-helper-text-password-login">
+                          {errors.expiry}
                         </FormHelperText>
                       )}
                     </FormControl>
