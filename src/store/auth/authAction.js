@@ -3,7 +3,6 @@ import * as actionTypes from './authType';
 import { Post } from '../../helpers/apicalls/apicalls';
 
 export const Login = (data) => {
-  console.log(data, 'data');
   return (dispatch) => {
     dispatch({ type: actionTypes.Loading });
     Post('auth/login', data, false)

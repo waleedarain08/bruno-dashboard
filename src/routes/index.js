@@ -12,6 +12,6 @@ import SpecialRoute from './SpecialRoute';
 export default function ThemeRoutes() {
   const data = useSelector((state) => state.AuthReducer.data);
   return useRoutes(
-    data !== null && data?.email === 'chef@brunokitchen.com' ? [SpecialRoute] : data !== null ? [MainRoutes] : [AuthenticationRoutes]
+    data !== null && data?.email == 'chef@brunokitchen.com' ? [SpecialRoute] : data !== null ? [MainRoutes] : [AuthenticationRoutes]
   );
 }
