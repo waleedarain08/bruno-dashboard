@@ -1,4 +1,6 @@
 import { lazy } from 'react';
+// import { useSelector } from 'react-redux';
+// const data = useSelector((state) => state.AuthReducer.data);
 
 // project imports
 import MainLayout from 'layout/MainLayout';
