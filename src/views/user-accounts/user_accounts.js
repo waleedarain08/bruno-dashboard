@@ -22,7 +22,9 @@ const UserAccounts = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const Userdata = useSelector((state) => state.AuthReducer.data);
-  const rows = useSelector((state) => state.UsersReducer.data);
+  const allData = useSelector((state) => state.UsersReducer.data);
+  const rows = allData?.filter((i) => i?.isGuest !== true)
+
   const isLoading = useSelector((state) => state.UsersReducer.isLoading);
   const dispatch = useDispatch();
   useEffect(() => {

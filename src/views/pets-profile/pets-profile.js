@@ -11,6 +11,8 @@ import Avatar from '@mui/material/Avatar';
 import Paper from '@mui/material/Paper';
 import moment from 'moment/moment';
 import { useLocation } from 'react-router-dom';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -26,6 +28,7 @@ const PetsProfile = () => {
   const rows = data?.filter((i) => i?.user?._id === location?.state?._id);
   const isLoading = useSelector((state) => state.PetsReducer.isLoading);
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     dispatch(GetPets(Userdata?.clientToken));
@@ -57,6 +60,7 @@ const PetsProfile = () => {
                   <TableCell align="left">Name</TableCell>
                   <TableCell align="left">Breed</TableCell>
                   <TableCell align="left">Born</TableCell>
+                  <TableCell align="left">Primary</TableCell>
                   <TableCell align="left">Owner</TableCell>
                   <TableCell align="right">Weight</TableCell>
                 </TableRow>
@@ -71,6 +75,7 @@ const PetsProfile = () => {
                       <TableCell align="left">{row?.name}</TableCell>
                       <TableCell align="left">{row?.breed}</TableCell>
                       <TableCell align="left">{moment(row?.bornOnDate).format('MMM Do YY')}</TableCell>
+                      <TableCell align="left">{row?.isDefault ? <CheckCircleOutlineIcon /> : <CancelIcon />}</TableCell>
                       <TableCell align="left">{row?.user?.fullName}</TableCell>
                       <TableCell align="right">{row?.actualWeight} kg</TableCell>
                     </TableRow>
