@@ -64,6 +64,7 @@ const UserAccounts = () => {
                   <TableCell align="left">Phone Number</TableCell>
                   <TableCell align="left">Role</TableCell>
                   <TableCell align="left">Pets</TableCell>
+                  <TableCell align="center">Loyality Points</TableCell>
                   <TableCell align="right">Block</TableCell>
                 </TableRow>
               </TableHead>
@@ -81,6 +82,7 @@ const UserAccounts = () => {
                         View Pets
                       </Button>
                     </TableCell>
+                    <TableCell align="center">0</TableCell>
                     <TableCell align="right">
                       {' '}
                       <Switch value={row?.isBlock} color="warning" />
