@@ -13,6 +13,7 @@ import UsersFeedback from 'views/users-feedback/users-feedback';
 import BlogFAQ from 'views/blog-&-FAQ/blog-&-FAQ';
 import Cookingsheet from 'views/cooking-sheet/cooking-sheet';
 import PromoLoyality from 'views/promo-codes&loyality-points/promo-loyality';
+import Ingredients from 'views/ingredients/Ingredients';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -74,6 +75,15 @@ const MainRoutes = {
         {
           path: '/food-recipes',
           element: <FoodRecipes />
+        }
+      ]
+    },
+    {
+      path: '/ingredients',
+      children: [
+        {
+          path: '/ingredients',
+          element: <Ingredients />
         }
       ]
     },

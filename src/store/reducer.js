@@ -5,7 +5,9 @@ import AuthReducer from './auth/authReducer';
 import customizationReducer from './customizationReducer';
 import UsersReducer from './users/usersReducer';
 import PetsReducer from './pets/petsReducer';
-import PromosReducer  from './promos/promosReducer';
+import PromosReducer from './promos/promosReducer';
+import RecipeReducer from './recipe/recipeReducer';
+import IngredientsReducer from './ingredients/ingredientsReducer';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
@@ -14,7 +16,9 @@ const reducer = combineReducers({
   AuthReducer: AuthReducer,
   UsersReducer: UsersReducer,
   PetsReducer: PetsReducer,
-  PromosReducer: PromosReducer
+  PromosReducer: PromosReducer,
+  RecipeReducer: RecipeReducer,
+  IngredientsReducer: IngredientsReducer
 });
 
 export default reducer;
