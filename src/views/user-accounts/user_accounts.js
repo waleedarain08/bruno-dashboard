@@ -22,7 +22,9 @@ const UserAccounts = () => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const Userdata = useSelector((state) => state.AuthReducer.data);
-  const rows = useSelector((state) => state.UsersReducer.data);
+  const allData = useSelector((state) => state.UsersReducer.data);
+  const rows = allData?.filter((i) => i?.isGuest !== true)
+
   const isLoading = useSelector((state) => state.UsersReducer.isLoading);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -62,6 +64,7 @@ const UserAccounts = () => {
                   <TableCell align="left">Phone Number</TableCell>
                   <TableCell align="left">Role</TableCell>
                   <TableCell align="left">Pets</TableCell>
+                  <TableCell align="center">Loyality Points</TableCell>
                   <TableCell align="right">Block</TableCell>
                 </TableRow>
               </TableHead>
@@ -79,6 +82,7 @@ const UserAccounts = () => {
                         View Pets
                       </Button>
                     </TableCell>
+                    <TableCell align="center">0</TableCell>
                     <TableCell align="right">
                       {' '}
                       <Switch value={row?.isBlock} color="warning" />

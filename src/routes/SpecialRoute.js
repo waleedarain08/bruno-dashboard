@@ -5,10 +5,9 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
-import Cookingsheet from 'views/cooking-sheet/cooking-sheet';
 
 // dashboard routing
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
+const Cookingsheet = Loadable(lazy(() => import('views/cooking-sheet/cooking-sheet')));
 
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -19,18 +18,18 @@ const SpecialRoute = {
   children: [
     {
       path: '/',
-      element: <DashboardDefault />
+      element: <Cookingsheet />
     },
     {
       path: '*',
-      element: <DashboardDefault />
+      element: <Cookingsheet />
     },
     {
       path: '/dashboard',
       children: [
         {
           path: 'dashboard',
-          element: <DashboardDefault />
+          element: <Cookingsheet />
         }
       ]
     },
