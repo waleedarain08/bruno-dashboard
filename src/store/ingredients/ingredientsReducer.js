@@ -3,7 +3,11 @@ import * as actionTypes from './ingredientsType';
 
 export const initialState = {
   isLoading: false,
-  data: []
+  data: [],
+  isLoadingDelete: false,
+  DeleteData: null,
+  isLoadingSave: false,
+  SaveData: []
 };
 
 // ==============================|| UsersReducer REDUCER ||============================== //
@@ -25,6 +29,43 @@ const IngredientsReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false
+      };
+    ///////////////////////////////////////////////////////////
+    case actionTypes.isLoadingDelete:
+      return {
+        ...state,
+        isLoadingDelete: true
+      };
+    case actionTypes.SuccessiIngredientDelete:
+      return {
+        ...state,
+        isLoadingDelete: false,
+        DeleteData: action.payload
+      };
+
+    case actionTypes.FailediIngredientDelete:
+      return {
+        ...state,
+        isLoadingDelete: false
+      };
+
+    ///////////////////////////////////////////////////////////
+    case actionTypes.isLoadingSave:
+      return {
+        ...state,
+        isLoadingSave: true
+      };
+    case actionTypes.SuccessiIngredientSave:
+      return {
+        ...state,
+        isLoadingSave: false,
+        SaveData: action.payload
+      };
+
+    case actionTypes.FailediIngredientSave:
+      return {
+        ...state,
+        isLoadingSave: false
       };
 
     default:

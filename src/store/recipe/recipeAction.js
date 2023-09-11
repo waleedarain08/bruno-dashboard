@@ -2,10 +2,10 @@
 import * as actionTypes from './recipeType';
 import { Get } from '../../helpers/apicalls/apicalls';
 
-export const GetAllRecipes = () => {
+export const GetAllRecipes = (data) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoading });
-    Get(`recipe/`, true)
+    Get(`recipe/`, data)
       .then(function (response) {
         if (response?.isSuccess) {
           dispatch({

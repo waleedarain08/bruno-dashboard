@@ -79,7 +79,7 @@ const PromoLoality = ({ ...others }) => {
   const onDelete = () => {
     dispatch(DeletePromo(PromoId, Userdata?.clientToken, onSuccess));
   }
-  console.log(PromoId, "PromoId")
+
 
   return (
     <>

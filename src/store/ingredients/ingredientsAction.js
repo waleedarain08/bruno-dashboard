@@ -1,11 +1,11 @@
 // action - state management
 import * as actionTypes from './ingredientsType';
-import { Get } from '../../helpers/apicalls/apicalls';
+import { Get, Delete, Post } from '../../helpers/apicalls/apicalls';
 
-export const GetAllIngredient = () => {
+export const GetAllIngredient = (data) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoading });
-    Get(`ingredient/`, true)
+    Get(`ingredient/`, data)
       .then(function (response) {
         if (response?.isSuccess) {
           dispatch({
@@ -20,6 +20,53 @@ export const GetAllIngredient = () => {
       .catch(function (error) {
         console.log(error, 'error');
         dispatch({ type: actionTypes.FailediIngredients });
+      });
+  };
+};
+
+export const DeleteIngredient = (data, id, onSuccess) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.isLoadingDelete });
+    Delete(`ingredient/${id}`, data)
+      .then(function (response) {
+        if (response?.isSuccess) {
+          dispatch({
+            type: actionTypes.SuccessiIngredientDelete,
+            payload: response?.data
+          });
+          onSuccess();
+        } else {
+          dispatch({ type: actionTypes.FailediIngredientDelete });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.FailediIngredientDelete });
+      });
+  };
+};
+
+export const SaveIngredient = (data, Token, onSuccess) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.isLoadingSave });
+    Post(`ingredient/`, data, Token)
+      .then(function (response) {
+        console.log(response, "responsePost")
+        if (response?.isSuccess) {
+          dispatch({
+            type: actionTypes.SuccessiIngredientSave,
+            payload: response?.data
+          });
+          onSuccess();
+        } else {
+          dispatch({ type: actionTypes.FailediIngredientSave });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.FailediIngredientSave });
       });
   };
 };

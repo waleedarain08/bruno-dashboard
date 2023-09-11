@@ -18,7 +18,7 @@ import TextField from '@mui/material/TextField';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import { GetAllIngredient } from 'store/ingredients/ingredientsAction';
+import { DeleteIngredient, GetAllIngredient, SaveIngredient } from 'store/ingredients/ingredientsAction';
 import { TextareaAutosize } from '@mui/base';
 import { styled } from '@mui/system';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
@@ -36,7 +36,6 @@ const grey = {
   800: '#32383f',
   900: '#24292f'
 };
-
 const style = {
   position: 'absolute',
   top: '50%',
@@ -77,18 +76,33 @@ const StyledTextarea = styled(TextareaAutosize)(
 
 const Ingredients = () => {
   //   const navigate = useNavigate();
+  const [Name, setName] = React.useState("");
+  const [Quantity, setQuantity] = React.useState(0);
+  const [Remaing, setRemaing] = React.useState(0);
+  const [Consmption, setConsmption] = React.useState(0);
+  const [Description, setDescription] = React.useState("");
+  const [Error, setError] = React.useState("");
+  const [IsAdd, setIsAdd] = React.useState(null);
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const handleOpen = (Name) => {
+    setOpen(true);
+    setError("");
+    setIsAdd(Name);
+  };
+  const [Delete_Id, setDelete_Id] = React.useState(null);
+  const handleCloseDelete = () => setOpenDelete(!openDelete);
   const handleClose = () => setOpen(false);
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const allData = useSelector((state) => state.IngredientsReducer.data);
   const rows = allData?.filter((i) => i?.isGuest !== true);
 
-  console.log(allData, 'allData');
-
   const isLoading = useSelector((state) => state.IngredientsReducer.isLoading);
+  const isLoadingDelete = useSelector((state) => state.IngredientsReducer.isLoadingDelete);
+  const isLoadingSave = useSelector((state) => state.IngredientsReducer.isLoadingSave);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetAllIngredient(Userdata?.clientToken));
@@ -102,32 +116,153 @@ const Ingredients = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  const onDeleteClick = (id) => {
+    setOpenDelete(true)
+    setDelete_Id(id);
+  }
+  const onDelete = () => {
+    dispatch(DeleteIngredient(Userdata?.clientToken, Delete_Id, onSuccess));
+  }
+  const onSuccess = () => {
+    dispatch(GetAllIngredient(Userdata?.clientToken));
+    setOpenDelete(false);
+    setOpen(false);
+  }
+  const onSave = () => {
+
+    if (Name !== "" && Description !== "") {
+      setError("")
+      let data = {
+        name: Name,
+        description: Description,
+        totalConsmption: Consmption,
+        remaingQuantity: Remaing,
+        lastAddedQuantity: Quantity
+      }
+      if (IsAdd === "Add") {
+        dispatch(SaveIngredient(data, Userdata?.clientToken, onSuccess));
+      }
+      else {
+        alert("this Function currenty not working")
+        // dispatch(SaveIngredient(data, Userdata?.clientToken, onSuccess));
+      }
+    } else {
+      setError("All Feilds Required")
+    }
+  }
+  const onEditClick = (data) => {
+    setDelete_Id(data?.userId);
+    setName(data?.name);
+    setQuantity(data?.lastAddedQuantity);
+    setRemaing(data?.remainingQuantity);
+    setConsmption(data?.totalConsumption);
+    setDescription(data?.description)
+    handleOpen("Edit");
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Typography style={{ textAlign: 'center', paddingBottom: 20 }} variant="h4" component="h2">
-            Add Ingredient
+            {IsAdd} Ingredient
           </Typography>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
-            <TextField id="outlined-basic" label="Name" variant="outlined" />
-            <TextField id="outlined-basic" label="Last Added Quantity" variant="outlined" />
+            <TextField value={Name} onChange={(e) => setName(e.target.value)} id="outlined-basic" label="Name" variant="outlined" />
+            <TextField type={"number"} value={Quantity} onChange={(e) => setQuantity(e.target.value)} id="outlined-basic" label="Last Added Quantity" variant="outlined" />
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-            <TextField id="outlined-basic" label="Remaing Quantity" variant="outlined" />
-            <TextField id="outlined-basic" label="Total Consmption" variant="outlined" />
+            <TextField type={"number"} value={Remaing} onChange={(e) => setRemaing(e.target.value)} id="outlined-basic" label="Remaing Quantity" variant="outlined" />
+            <TextField type={"number"} value={Consmption} onChange={(e) => setConsmption(e.target.value)} id="outlined-basic" label="Total Consmption" variant="outlined" />
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
-            <StyledTextarea maxRows={4} aria-label="maximum height" placeholder="Description" defaultValue="" />
+            <StyledTextarea value={Description} onChange={(e) => setDescription(e.target.value)} maxRows={5} aria-label="maximum height" placeholder="Description" defaultValue="" />
           </Box>
+          {Error !== "" && <Typography style={{ color: "red", textAlign: "center" }} id="modal-modal-title" variant="h6" component="h2">
+            {Error}
+          </Typography>}
           <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
             <AnimateButton>
-              <Button style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
-                Save
+              <Button
+                style={{ margin: 4 }}
+                disableElevation
+                size="large"
+                type="submit"
+                disabled={isLoadingSave}
+                variant="contained"
+                color="secondary"
+                onClick={() => onSave()}
+              >
+                {isLoadingSave ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginRight: 30 }}>
+                  <InfinitySpin width="50" height="20" color="#fff" />
+                </div> : "Save"}
               </Button>
             </AnimateButton>
           </Box>
+        </Box>
+      </Modal>
+      <Modal
+        open={openDelete}
+        onClose={handleCloseDelete}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 400,
+          bgcolor: 'background.paper',
+          border: '2px solid #D78809',
+          boxShadow: 24,
+          p: 4,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column"
+        }}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Are you sure you want to delete this Ingredient
+          </Typography>
+          <Box sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "row",
+            padding: 1
+          }}>
+            <AnimateButton>
+              <Button
+                onClick={handleCloseDelete}
+                style={{ margin: 4 }}
+                disableElevation
+                size="large"
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
+                Cancel
+              </Button>
+            </AnimateButton>
+            <AnimateButton>
+              <Button
+                style={{ margin: 4 }}
+                disableElevation
+                size="large"
+                type="submit"
+                disabled={isLoadingDelete}
+                variant="contained"
+                color="secondary"
+                onClick={() => onDelete()}
+              >
+                {isLoadingDelete ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginRight: 30 }}>
+                  <InfinitySpin width="50" height="20" color="#fff" />
+                </div> : "Delete"}
+              </Button>
+            </AnimateButton>
+          </Box>
+
         </Box>
       </Modal>
       {isLoading ? (
@@ -140,7 +275,7 @@ const Ingredients = () => {
         <Paper sx={{ width: '100%', mb: 2 }}>
           <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
             <AnimateButton>
-              <Button onClick={handleOpen} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+              <Button onClick={() => handleOpen("Add")} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
                 Add Ingredients
               </Button>
             </AnimateButton>
@@ -168,8 +303,8 @@ const Ingredients = () => {
                     <TableCell align="left">{row?.lastAddedQuantity}</TableCell>
                     <TableCell align="left">{row?.description}</TableCell>
                     <TableCell>
-                      <BorderColorIcon style={{ marginRight: 2, cursor: 'pointer' }} />
-                      <DeleteIcon style={{ marginLeft: 2, cursor: 'pointer' }} />
+                      <BorderColorIcon onClick={() => onEditClick(row)} style={{ marginRight: 2, cursor: 'pointer' }} />
+                      <DeleteIcon onClick={() => onDeleteClick(row?._id)} style={{ marginLeft: 2, cursor: 'pointer' }} />
                     </TableCell>
                   </TableRow>
                 ))}
