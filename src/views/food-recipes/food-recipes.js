@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import RecipeReviewCard from 'ui-component/cards/Recipe';
 import { GetAllRecipes } from 'store/recipe/recipeAction';
 import { styled } from '@mui/system';
+import Grid from '@mui/material/Grid';
 import { TextareaAutosize } from '@mui/base';
 
 const grey = {
@@ -143,9 +144,15 @@ const FoodRecipes = () => {
               </Button>
             </AnimateButton>
           </Box>
-          {rows?.map((i, index) => {
-            return <RecipeReviewCard data={i} key={index} />;
-          })}
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+              {rows?.map((i, index) => {
+                return <Grid item xs={2} sm={4} md={4} key={index}>
+                  <RecipeReviewCard data={i} key={index} />
+                </Grid>
+              })}
+            </Grid>
+          </Box>
         </Paper>
       )}
     </Box>
