@@ -288,7 +288,7 @@ const Ingredients = () => {
                   <TableCell>Name</TableCell>
                   <TableCell align="left">Stock Level</TableCell>
                   <TableCell align="left">Total Consmption</TableCell>
-                  <TableCell align="left">Last Added Quantity</TableCell>
+                  {/* <TableCell align="left">Last Added Quantity</TableCell> */}
                   <TableCell align="left">Ingredient Cooking Method</TableCell>
                   <TableCell align="left">Cooking Contingency Factor</TableCell>
                   <TableCell align="left">Actions</TableCell>
@@ -303,7 +303,7 @@ const Ingredients = () => {
                     </TableCell>
                     <TableCell align="left">{row?.remaingQuantity}</TableCell>
                     <TableCell align="left">{row?.totalConsmption} </TableCell>
-                    <TableCell align="left">{row?.lastAddedQuantity}</TableCell>
+                    {/* <TableCell align="left">{row?.lastAddedQuantity}</TableCell> */}
                     <TableCell align="left">{row?.description}</TableCell>
                     <TableCell align="left">{row?.CookingContingencyFactor}</TableCell>
 
