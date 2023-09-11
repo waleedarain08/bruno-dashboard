@@ -68,7 +68,7 @@ export default function RecipeReviewCard({ data }) {
             return (
               <>
                 <Typography style={{ padding: 4 }} key={index}>
-                  {i?.name} , Aggregate : {i?.aggregate}
+                  {i?.name} - {i?.aggregate}% - {i?.aggregate*10} grams
                 </Typography>
               </>
             );

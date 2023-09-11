@@ -284,24 +284,29 @@ const Ingredients = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
+                  <TableCell align="left">Ingredient Reference</TableCell>
                   <TableCell>Name</TableCell>
-                  <TableCell align="left">Remain-Quantity</TableCell>
-                  <TableCell align="left">Total-Consmption</TableCell>
-                  <TableCell align="left">Last-Added-Quantity</TableCell>
-                  <TableCell align="left">Description</TableCell>
+                  <TableCell align="left">Stock Level</TableCell>
+                  <TableCell align="left">Total Consmption</TableCell>
+                  {/* <TableCell align="left">Last Added Quantity</TableCell> */}
+                  <TableCell align="left">Ingredient Cooking Method</TableCell>
+                  <TableCell align="left">Cooking Contingency Factor</TableCell>
                   <TableCell align="left">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
                   <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell align="left">{row?.ingredientReference}</TableCell>
                     <TableCell component="th" scope="row">
                       {row?.name}
                     </TableCell>
                     <TableCell align="left">{row?.remaingQuantity}</TableCell>
                     <TableCell align="left">{row?.totalConsmption} </TableCell>
-                    <TableCell align="left">{row?.lastAddedQuantity}</TableCell>
+                    {/* <TableCell align="left">{row?.lastAddedQuantity}</TableCell> */}
                     <TableCell align="left">{row?.description}</TableCell>
+                    <TableCell align="left">{row?.CookingContingencyFactor}</TableCell>
+
                     <TableCell>
                       <BorderColorIcon onClick={() => onEditClick(row)} style={{ marginRight: 2, cursor: 'pointer' }} />
                       <DeleteIcon onClick={() => onDeleteClick(row?._id)} style={{ marginLeft: 2, cursor: 'pointer' }} />
