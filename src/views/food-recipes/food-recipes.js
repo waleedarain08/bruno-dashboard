@@ -12,22 +12,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import RecipeReviewCard from 'ui-component/cards/Recipe';
 import { GetAllRecipes } from 'store/recipe/recipeAction';
-import { styled } from '@mui/system';
+// import { styled } from '@mui/system';
 import Grid from '@mui/material/Grid';
-import { TextareaAutosize } from '@mui/base';
+// import { TextareaAutosize } from '@mui/base';
+import ImageUploader from 'ui-component/ImageUploader';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import { GetAllIngredient } from 'store/ingredients/ingredientsAction';
+import { handleUpload } from 'utils/helperFunction';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
-const grey = {
-  50: '#f6f8fa',
-  100: '#eaeef2',
-  200: '#d0d7de',
-  300: '#afb8c1',
-  400: '#8c959f',
-  500: '#6e7781',
-  600: '#57606a',
-  700: '#424a53',
-  800: '#32383f',
-  900: '#24292f'
-};
 const style = {
   position: 'absolute',
   top: '50%',
@@ -39,46 +36,45 @@ const style = {
   boxShadow: 24,
   p: 4
 };
-const StyledTextarea = styled(TextareaAutosize)(
-  ({ theme }) => `
-    width: 320px;
-    font-family: IBM Plex Sans, sans-serif;
-    font-size: 0.875rem;
-    font-weight: 400;
-    line-height: 1.5;
-    padding: 12px;
-    border-radius: 12px 12px 0 12px;
-    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-    background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-    border: 2px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-    box-shadow: 0px 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
-    &:hover {
-      border-color: #D78809};
-    }
-
-    &:focus {
-      border-color: #D78809;
-    }
-    // firefox
-    &:focus-visible {
-      outline: 0;
-    }
-  `
-);
 
 const FoodRecipes = () => {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+  const [age, setAge] = React.useState('');
+  const [selectedFiles, setSelectedFiles] = React.useState([]);
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
   const handleClose = () => setOpen(false);
   const Userdata = useSelector((state) => state.AuthReducer.data);
+  const allData = useSelector((state) => state.IngredientsReducer.data);
   const rows = useSelector((state) => state.RecipeReducer.data);
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
-  console.log(rows, 'rows');
+  console.log(selectedFiles, 'rows');
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetAllRecipes(Userdata?.clientToken));
+    dispatch(GetAllIngredient(Userdata?.clientToken));
   }, []);
 
+  const IngredientArr = allData?.map((i) => {
+    return {
+      _id: i?._id,
+      name: i?.name,
+      aggregate: i?.ingredientReference
+    };
+  })
+
+  const onSave = () => {
+    selectedFiles?.map(async (i) => {
+      await handleUpload(i).then((res) => {
+        return console.log(res, "res");
+      }).catch((err) => console.log(err))
+      return newimg;
+    })
+
+  }
   return (
     <Box sx={{ width: '100%' }}>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
@@ -87,17 +83,47 @@ const FoodRecipes = () => {
             Add Recipe
           </Typography>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
-            <TextField id="outlined-basic" label="Name" variant="outlined" />
-            <TextField id="outlined-basic" label="Last Added Quantity" variant="outlined" />
+            <TextField style={{ margin: 5, }} sx={{ width: '100%' }} id="outlined-basic" label="Name" variant="outlined" />
+            <TextField style={{ margin: 5, }} sx={{ width: '100%' }} id="outlined-basic" label="Recipe No" variant="outlined" />
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-            <TextField id="outlined-basic" label="Remaing Quantity" variant="outlined" />
-            <TextField id="outlined-basic" label="Total Consmption" variant="outlined" />
+            <TextField style={{ margin: 5, }} sx={{ width: '100%' }} id="outlined-basic" label="Nutrition" variant="outlined" />
+            <TextField style={{ margin: 5, }} sx={{ width: '100%' }} id="outlined-basic" label="Life Stage" variant="outlined" />
           </Box>
-          <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
-            <StyledTextarea maxRows={5} aria-label="maximum height" placeholder="Description" defaultValue="" />
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <TextField style={{ margin: 5, }} sx={{ width: '100%' }} type={"number"} id="outlined-basic" label="Price Per KG" variant="outlined" />
+            <TextField style={{ margin: 5, }} sx={{ width: '100%' }} type={"number"} id="outlined-basic" label="Calories Content No" variant="outlined" />
+          </Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <TextField style={{ margin: 5, }} sx={{ width: '100%' }} id="outlined-basic" label="Instructions" variant="outlined" />
+            <TextField style={{ margin: 5, }} sx={{ width: '100%' }} id="outlined-basic" label="Details" variant="outlined" />
+          </Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Ingredient</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={age}
+                label="Ingredient"
+                onChange={handleChange}
+              >
+                {IngredientArr?.map((i, index) => {
+                  return <MenuItem key={index} value={i?._id}>{i?.name}</MenuItem>
+                })}
+
+                {/* <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem> */}
+              </Select>
+            </FormControl>
           </Box>
 
+          <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
+            <TextField style={{ marginTop: 5, }} sx={{ width: '100%' }} id="outlined-basic" label="Description" variant="outlined" />
+            {/* <StyledTextarea sx={{ width: '100%' }} maxRows={5} aria-label="maximum height" placeholder="Description" defaultValue="" /> */}
+          </Box>
+          <FormControlLabel style={{ marginLeft: 7 }} required control={<Switch />} label="Featured" />
+          <ImageUploader setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
           <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
             <AnimateButton>
               <Button
@@ -108,7 +134,7 @@ const FoodRecipes = () => {
                 // disabled={isLoadingSave}
                 variant="contained"
                 color="secondary"
-              // onClick={() => onSave()}
+                onClick={() => onSave()}
               >
                 {isLoading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginRight: 30 }}>
                   <InfinitySpin width="50" height="20" color="#fff" />

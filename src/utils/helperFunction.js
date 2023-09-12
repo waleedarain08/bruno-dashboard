@@ -1,10 +1,14 @@
 import { storage } from "./firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+
 
 
 export const handleUpload = (image) => {
     // e.preventDefault();
     return new Promise((resolve, reject) => {
-        const uploadTask = storage.ref(`images/${image?.name}`).put(image);
+        // ref(storage, `images/${image?.name}`).put(image)
+        const storageRef = ref(storage, `files/${image.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, image);
         uploadTask.on(
             "state_changed",
             (snapshot) => {
@@ -16,22 +20,22 @@ export const handleUpload = (image) => {
             (error) => {
                 console.log(error);
                 reject({ message: "Error", data: error })
-
             },
             () => {
-                storage
-                    .ref("images")
-                    .child(image?.name)
-                    .getDownloadURL()
-                    .then((url) => {
-                        resolve({ message: "Uploaded", data: url })
-                    });
-
+                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    resolve({ message: "Uploaded", data: url })
+                });
             }
         );
 
     })
 
+    // storage
+    // .ref("images")
+    // .child(image?.name)
+    // .getDownloadURL()
+    // .then((url) => {
 
+    // });
 
 };
