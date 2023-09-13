@@ -7,7 +7,8 @@ export const initialState = {
   isLoadingDelete: false,
   DeleteData: null,
   isLoadingSave: false,
-  SaveData: []
+  SaveData: [],
+  EditIngData: [],
 };
 
 // ==============================|| UsersReducer REDUCER ||============================== //
@@ -63,6 +64,25 @@ const IngredientsReducer = (state = initialState, action) => {
       };
 
     case actionTypes.FailediIngredientSave:
+      return {
+        ...state,
+        isLoadingSave: false
+      };
+
+    ///////////////////////////////////////////////////////////
+    case actionTypes.isLoadingEditIng:
+      return {
+        ...state,
+        isLoadingSave: true
+      };
+    case actionTypes.SuccessiIngredientEditIng:
+      return {
+        ...state,
+        isLoadingSave: false,
+        EditIngData: action.payload
+      };
+
+    case actionTypes.FailediIngredientEditIng:
       return {
         ...state,
         isLoadingSave: false

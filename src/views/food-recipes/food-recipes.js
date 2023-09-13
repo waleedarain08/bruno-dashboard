@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import RecipeReviewCard from 'ui-component/cards/Recipe';
-import { AddRecipe, GetAllRecipes } from 'store/recipe/recipeAction';
+import { AddRecipe, EditRecipe, GetAllRecipes } from 'store/recipe/recipeAction';
 // import { styled } from '@mui/system';
 import Grid from '@mui/material/Grid';
 // import { TextareaAutosize } from '@mui/base';
@@ -31,7 +31,9 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-
+  maxHeight: '100vh', // Set the maximum height with a viewport-relative unit (vh)
+  overflowY: 'auto', // Enable vertical scrolling if content overflows
+  overflowX: 'hidden',
   bgcolor: 'background.paper',
   border: '2px solid #D78809',
   boxShadow: 24,
@@ -53,7 +55,10 @@ const FoodRecipes = () => {
   const [Featured, setFeatured] = React.useState(false);
   const [Loading, setLoading] = React.useState(false);
   const [Error, setError] = React.useState('');
-  const [selectedFile, setSelectedFile] = React.useState([]);
+  const [Condition, setCondition] = React.useState(null);
+  const [PreviewEdit, setPreviewEdit] = React.useState(null);
+  const [selectedFile, setSelectedFile] = React.useState(null);
+  const [SelectedId, setSelectedId] = React.useState(null);
   const [fields, setFields] = React.useState([{ name: '', aggregate: 0 }]);
 
   const handleSelectChange = (index, value) => {
@@ -61,6 +66,22 @@ const FoodRecipes = () => {
     updatedFields[index].name = value;
     setFields(updatedFields);
   };
+  const InitialState = () => {
+    setNameRecipe("");
+    setRecipeNo(0);
+    setNnutrition("");
+    setLifeStage("");
+    setKG("");
+    setContentNo(0);
+    setInstructions("");
+    setDetails("");
+    setDescription("");
+    setFeatured("");
+    setSelectedFile(null);
+    setPreviewEdit(null);
+    setSelectedId(null);
+    setFields([{ name: '', aggregate: 0 }]);
+  }
 
   const handleNumberChange = (index, value) => {
     const updatedFields = [...fields];
@@ -72,6 +93,12 @@ const FoodRecipes = () => {
     updatedFields.splice(index, 1);
     setFields(updatedFields);
   };
+
+  const onAddRecipeBtn = () => {
+    setCondition("Add");
+    InitialState();
+    setOpen(true);
+  }
 
   const handleAddField = () => {
     setFields([...fields, { name: '', aggregate: 0 }]);
@@ -97,6 +124,12 @@ const FoodRecipes = () => {
     };
   });
 
+  const onSuccess = () => {
+    dispatch(GetAllRecipes(Userdata?.clientToken));
+    InitialState();
+    handleClose();
+  };
+
   const onSave = async () => {
     if (
       NameRecipe !== '' &&
@@ -112,8 +145,56 @@ const FoodRecipes = () => {
     ) {
       setError('');
       setLoading(true);
-      await handleUpload(selectedFile)
-        .then((res) => {
+      if (Condition === "Add") {
+        let NewValues = fields?.map((i) => {
+          return {
+            name: i?.name,
+            aggregate: parseInt(i?.aggregate)
+          };
+        });
+        const newPath = await ImageUpload(selectedFile);
+        let newdata = {
+          name: NameRecipe,
+          isFeatured: Featured,
+          ingredient: NewValues,
+          description: Description,
+          details: Details,
+          instructions: Instructions,
+          nutrition: Nnutrition,
+          pricePerKG: KG,
+          media: newPath,
+          recipeNo: RecipeNo,
+          lifeStage: LifeStage,
+          caloriesContentNo: ContentNo
+        };
+        dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
+      }
+      else {
+        if (selectedFile !== null) {
+          let NewValues = fields?.map((i) => {
+            return {
+              name: i?.name,
+              aggregate: parseInt(i?.aggregate)
+            };
+          });
+          const newPath = await ImageUpload(selectedFile);
+          let newdata = {
+            name: NameRecipe,
+            isFeatured: Featured,
+            ingredient: NewValues,
+            description: Description,
+            details: Details,
+            instructions: Instructions,
+            nutrition: Nnutrition,
+            pricePerKG: KG,
+            media: newPath,
+            recipeNo: RecipeNo,
+            lifeStage: LifeStage,
+            caloriesContentNo: ContentNo
+          };
+          dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
+        }
+        else {
           let NewValues = fields?.map((i) => {
             return {
               name: i?.name,
@@ -129,33 +210,54 @@ const FoodRecipes = () => {
             instructions: Instructions,
             nutrition: Nnutrition,
             pricePerKG: KG,
-            media: res?.data,
+            media: PreviewEdit,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
             caloriesContentNo: ContentNo
           };
-          dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
-        })
-        .catch(() => {
-          setLoading(false);
-          setError('Error Please Try Again');
-        });
+          dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
+        }
+
+      }
     } else {
       setError('All Field is Required');
       // console.log(res?.data, 'res')
     }
   };
-  const onSuccess = () => {
-    dispatch(GetAllRecipes(Userdata?.clientToken));
-    handleClose();
+
+  const ImageUpload = async (data) => {
+    try {
+      let news = await handleUpload(data);
+      return news.data;
+    } catch (error) {
+      return error;
+    }
   };
 
+
+  const EditValues = (data) => {
+    setCondition("Edit");
+    setSelectedId(data?._id)
+    setNameRecipe(data?.name);
+    setRecipeNo(data?.recipeNo);
+    setNnutrition(data?.nutrition);
+    setLifeStage(data?.lifeStage);
+    setKG(data?.pricePerKG);
+    setContentNo(data?.caloriesContentNo);
+    setInstructions(data?.instructions);
+    setDetails(data?.details);
+    setDescription(data?.description);
+    setFeatured(data?.isFeatured);
+    setPreviewEdit(data?.media)
+    setFields(data?.ingredient);
+    // console.log(data, "data")
+  }
   return (
     <Box sx={{ width: '100%' }}>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
         <Box sx={style}>
           <Typography style={{ textAlign: 'center', paddingBottom: 20 }} variant="h4" component="h2">
-            Add Recipe
+            {Condition} Recipe
           </Typography>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
             <TextField
@@ -184,16 +286,18 @@ const FoodRecipes = () => {
               style={{ margin: 5 }}
               sx={{ width: '100%' }}
               id="outlined-basic"
-              label="Nutrition"
+              label="Nutrition (Enter comma separated values)"
               variant="outlined"
             />
+          </Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
-              value={LifeStage}
-              onChange={(e) => setLifeStage(e.target.value)}
+              value={Instructions}
+              onChange={(e) => setInstructions(e.target.value)}
               style={{ margin: 5 }}
               sx={{ width: '100%' }}
               id="outlined-basic"
-              label="Life Stage"
+              label="Instructions"
               variant="outlined"
             />
           </Box>
@@ -221,12 +325,12 @@ const FoodRecipes = () => {
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
-              value={Instructions}
-              onChange={(e) => setInstructions(e.target.value)}
+              value={LifeStage}
+              onChange={(e) => setLifeStage(e.target.value)}
               style={{ margin: 5 }}
               sx={{ width: '100%' }}
               id="outlined-basic"
-              label="Instructions"
+              label="Life Stage"
               variant="outlined"
             />
             <TextField
@@ -284,7 +388,6 @@ const FoodRecipes = () => {
               <AddCircleIcon variant="contained" color="primary" onClick={handleAddField} />
             </div>
           </Box>
-
           <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
               value={Description}
@@ -300,10 +403,10 @@ const FoodRecipes = () => {
           <FormControlLabel
             style={{ marginLeft: 7 }}
             required
-            control={<Switch value={Featured} onChange={() => setFeatured((prev) => !prev)} />}
+            control={<Switch value={Featured} onChange={() => setFeatured(!Featured)} />}
             label="Featured"
           />
-          <ImageUploader setSelectedFile={setSelectedFile} selectedFile={selectedFile} />
+          <ImageUploader PreviewEdit={PreviewEdit} setSelectedFile={setSelectedFile} />
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
               {Error}
@@ -344,7 +447,8 @@ const FoodRecipes = () => {
           <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
             <AnimateButton>
               <Button
-                onClick={() => setOpen(true)}
+
+                onClick={() => onAddRecipeBtn()}
                 style={{ margin: '12px' }}
                 variant="contained"
                 color="primary"
@@ -370,7 +474,7 @@ const FoodRecipes = () => {
               {rows?.map((i, index) => {
                 return (
                   <Grid item xs={2} sm={4} md={4} key={index}>
-                    <RecipeReviewCard data={i} key={index} />
+                    <RecipeReviewCard data={i} key={index} setOpen={setOpen} EditValues={EditValues} />
                   </Grid>
                 );
               })}

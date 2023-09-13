@@ -1,6 +1,6 @@
 // action - state management
 import * as actionTypes from './recipeType';
-import { Delete, Get, Post } from '../../helpers/apicalls/apicalls';
+import { Delete, Get, Post, Put } from '../../helpers/apicalls/apicalls';
 
 export const GetAllRecipes = (data) => {
   return (dispatch) => {
@@ -71,6 +71,33 @@ export const DeleteRecipe = (id, token, onSuccess) => {
       .catch(function (error) {
         console.log(error, 'error');
         dispatch({ type: actionTypes.FailedRecipeDelete });
+      });
+  };
+};
+
+export const EditRecipe = (id, data, token, setLoading, onSuccess) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.isLoadingEdit });
+    Put(`recipe/${id}`, data, token)
+      .then(function (response) {
+        console.log(response, 'response');
+        if (response?.isSuccess) {
+          onSuccess();
+          setLoading(false);
+          dispatch({
+            type: actionTypes.SuccessRecipeEdit,
+            payload: response?.data
+          });
+        } else {
+          dispatch({ type: actionTypes.FailedRecipeEdit });
+          setLoading(false);
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        setLoading(false);
+        dispatch({ type: actionTypes.FailedRecipeEdit });
       });
   };
 };

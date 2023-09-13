@@ -7,7 +7,9 @@ export const initialState = {
   isLoadingAdd: false,
   addData: [],
   isLoadingDelete: false,
-  deleteData: []
+  deleteData: [],
+  isLoadingEdit: false,
+  EditData: [],
 };
 
 // ==============================|| UsersReducer REDUCER ||============================== //
@@ -64,6 +66,24 @@ const RecipeReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoadingDelete: false
+      };
+
+    ///////////////////////////////////////////////////////////////
+    case actionTypes.isLoadingEdit:
+      return {
+        ...state,
+        isLoadingEdit: true
+      };
+    case actionTypes.SuccessRecipeEdit:
+      return {
+        ...state,
+        isLoadingEdit: false,
+        EditData: action.payload
+      };
+    case actionTypes.FailedRecipeEdit:
+      return {
+        ...state,
+        isLoadingEdit: false
       };
 
     default:

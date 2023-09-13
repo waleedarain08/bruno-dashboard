@@ -35,7 +35,7 @@ const ExpandMore = styled((props) => {
   })
 }));
 
-export default function RecipeReviewCard({ data }) {
+export default function RecipeReviewCard({ data, setOpen, EditValues }) {
   const dispatch = useDispatch();
   const [expanded, setExpanded] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -53,6 +53,8 @@ export default function RecipeReviewCard({ data }) {
   };
 
   const handleEdit = () => {
+    EditValues(data)
+    setOpen(true);
     handleClose();
     console.log('Edit clicked');
   };

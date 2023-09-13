@@ -1,6 +1,6 @@
 // action - state management
 import * as actionTypes from './ingredientsType';
-import { Get, Delete, Post } from '../../helpers/apicalls/apicalls';
+import { Get, Delete, Post, Put } from '../../helpers/apicalls/apicalls';
 
 export const GetAllIngredient = (data) => {
   return (dispatch) => {
@@ -70,3 +70,30 @@ export const SaveIngredient = (data, Token, onSuccess) => {
       });
   };
 };
+
+export const EditIngredient = (id, data, token, onSuccess) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.isLoadingEditIng });
+    Put(`ingredient/${id}`, data, token)
+      .then(function (response) {
+        console.log(response, 'response');
+        if (response?.isSuccess) {
+          onSuccess();
+          dispatch({
+            type: actionTypes.SuccessiIngredientEditIng,
+            payload: response?.data
+          });
+        } else {
+          dispatch({ type: actionTypes.FailediIngredientEditIng });
+
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+
+        dispatch({ type: actionTypes.FailediIngredientEditIng });
+      });
+  };
+};
+

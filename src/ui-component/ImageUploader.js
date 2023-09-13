@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IconButton, Input, Paper } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-const ImageUploader = ({ setSelectedFile }) => {
+const ImageUploader = ({ PreviewEdit, setSelectedFile }) => {
   const [previewUrl, setPreviewUrl] = useState(null);
+
+  useEffect(() => {
+    if (PreviewEdit !== null) {
+      setPreviewUrl(PreviewEdit)
+    }
+  }, [PreviewEdit]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];

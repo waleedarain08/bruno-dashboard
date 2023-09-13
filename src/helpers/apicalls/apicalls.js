@@ -45,8 +45,8 @@ async function Put(path, data, token) {
   let response = await axios.put(url, data, {
     headers: token
       ? {
-        Accept: 'multipart/form-data',
-        Authorization: `${token}`
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`
       }
       : {
         Accept: 'application/json'

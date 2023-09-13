@@ -18,9 +18,8 @@ import TextField from '@mui/material/TextField';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import { DeleteIngredient, GetAllIngredient, SaveIngredient } from 'store/ingredients/ingredientsAction';
-// import { TextareaAutosize } from '@mui/base';
-// import { styled } from '@mui/system';
+import { DeleteIngredient, GetAllIngredient, SaveIngredient, EditIngredient } from 'store/ingredients/ingredientsAction';
+
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -161,8 +160,8 @@ const Ingredients = () => {
         dispatch(SaveIngredient(data, Userdata?.clientToken, onSuccess));
       }
       else {
-        alert("this Function currenty not working")
-        // dispatch(SaveIngredient(data, Userdata?.clientToken, onSuccess));
+        console.log(data, Delete_Id, "data")
+        dispatch(EditIngredient(Delete_Id, data, Userdata?.clientToken, onSuccess));
       }
     } else {
       setError("All Feilds Required")
