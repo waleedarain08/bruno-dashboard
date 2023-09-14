@@ -14,6 +14,7 @@ import BlogFAQ from 'views/blog-&-FAQ/blog-&-FAQ';
 import Cookingsheet from 'views/cooking-sheet/cooking-sheet';
 import PromoLoyality from 'views/promo-codes&loyality-points/promo-loyality';
 import Ingredients from 'views/ingredients/Ingredients';
+import Categories from 'views/categories/Categories';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -111,6 +112,15 @@ const MainRoutes = {
         {
           path: '/product-categories',
           element: <ProductCategories />
+        }
+      ]
+    },
+    {
+      path: '/categories',
+      children: [
+        {
+          path: '/categories',
+          element: <Categories />
         }
       ]
     },

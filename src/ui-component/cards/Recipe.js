@@ -20,6 +20,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Tooltip from '@mui/material/Tooltip';
 import { useSelector, useDispatch } from 'react-redux';
 import { DeleteRecipe, GetAllRecipes } from 'store/recipe/recipeAction';
 
@@ -70,10 +71,17 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
   const onDelete = () => {
     dispatch(DeleteRecipe(data?._id, Userdata?.clientToken, onSuccess));
   };
+
+  let truncatedDescription = data?.description.length > 60
+    ? `${data?.description.slice(0, 50)}...`
+    : data?.description;
+
   const onSuccess = () => {
     dispatch(GetAllRecipes(Userdata?.clientToken));
     handleClose();
   };
+  const id = data?._id;
+  const lastThreeCharacters = id?.slice(-3);
 
   return (
     <Card sx={{ maxWidth: 345, boxShadow: 3, margin: 2 }}>
@@ -150,7 +158,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
           </IconButton>
         }
         title={data?.name}
-        subheader={`#${data?.recipeNo}`}
+        subheader={`${data?.category !== "" ? `BRN-${lastThreeCharacters}` : `#${data?.recipeNo}`}`}
       />
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem onClick={handleEdit}>Edit</MenuItem>
@@ -158,42 +166,50 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
       </Menu>
       <CardMedia component="img" height="194" image={data?.media} alt="image" />
       <CardContent>
+        {data?.category !== "" && <Typography variant="body2" color="text.secondary">
+          Category : {data?.category}
+        </Typography>}
+
         <Typography variant="body2" color="text.secondary">
           PricePerKG : {data?.pricePerKG}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Description: {data?.description}
-        </Typography>
+        <Tooltip title={data?.description}>
+          <Typography variant="body2" color="text.secondary">
+            Description: {truncatedDescription}
+          </Typography>
+        </Tooltip>
       </CardContent>
-      <CardActions disableSpacing>
-        <Typography color="text.secondary">Details</Typography>
-        <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
-          <ExpandMoreIcon />
-        </ExpandMore>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography style={{ fontWeight: 'bold' }}>Ingredient:</Typography>
-          {data?.ingredient?.map((i, index) => {
-            return (
-              <>
-                <Typography style={{ padding: 4 }} key={index}>
-                  {i?.name} - {i?.aggregate}% - {i?.aggregate * 10} grams
-                </Typography>
-              </>
-            );
-          })}
-          <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
-            LifeStage : {data?.lifeStage}
-          </Typography>
-          <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
-            Nutrition : {data?.nutrition}
-          </Typography>
-          <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
-            Instructions : {data?.instructions}
-          </Typography>
-        </CardContent>
-      </Collapse>
+      {data?.category === "" && <>
+        <CardActions disableSpacing>
+          <Typography color="text.secondary">Details</Typography>
+          <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
+            <ExpandMoreIcon />
+          </ExpandMore>
+        </CardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <Typography style={{ fontWeight: 'bold' }}>Ingredient:</Typography>
+            {data?.ingredient?.map((i, index) => {
+              return (
+                <>
+                  <Typography style={{ padding: 4 }} key={index}>
+                    {i?.name} - {i?.aggregate}% - {i?.aggregate * 10} grams
+                  </Typography>
+                </>
+              );
+            })}
+            <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
+              LifeStage : {data?.lifeStage}
+            </Typography>
+            <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
+              Nutrition : {data?.nutrition}
+            </Typography>
+            <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
+              Instructions : {data?.instructions}
+            </Typography>
+          </CardContent>
+        </Collapse></>}
+
     </Card>
   );
 }

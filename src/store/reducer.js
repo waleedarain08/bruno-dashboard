@@ -8,6 +8,7 @@ import PetsReducer from './pets/petsReducer';
 import PromosReducer from './promos/promosReducer';
 import RecipeReducer from './recipe/recipeReducer';
 import IngredientsReducer from './ingredients/ingredientsReducer';
+import CategoryReducer from './categories/categoriesReducer';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
@@ -18,7 +19,8 @@ const reducer = combineReducers({
   PetsReducer: PetsReducer,
   PromosReducer: PromosReducer,
   RecipeReducer: RecipeReducer,
-  IngredientsReducer: IngredientsReducer
+  IngredientsReducer: IngredientsReducer,
+  CategoryReducer: CategoryReducer
 });
 
 export default reducer;

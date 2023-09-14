@@ -107,7 +107,9 @@ const FoodRecipes = () => {
   const handleClose = () => setOpen(false);
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const allData = useSelector((state) => state.IngredientsReducer.data);
-  const rows = useSelector((state) => state.RecipeReducer.data);
+  const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
+  const rows = filterProdcuts?.recipe?.filter((i) => i?.category === "")
+  console.log(rows, "rows")
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
 
   const dispatch = useDispatch();
@@ -471,7 +473,7 @@ const FoodRecipes = () => {
           </Box>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-              {rows?.recipe?.map((i, index) => {
+              {rows?.map((i, index) => {
                 return (
                   <Grid item xs={2} sm={4} md={4} key={index}>
                     <RecipeReviewCard data={i} key={index} setOpen={setOpen} EditValues={EditValues} />

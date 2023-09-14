@@ -1,98 +1,98 @@
 // action - state management
-import * as actionTypes from './ingredientsType';
-import { Get, Delete, Post, Put } from '../../helpers/apicalls/apicalls';
+import * as actionTypes from './categoriesType';
+import { Get, Delete, Post, Patch } from '../../helpers/apicalls/apicalls';
 
-export const GetAllIngredient = (data) => {
+export const GetAllCategories = (data) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoading });
-    Get(`ingredient/`, data)
+    Get(`category/`, data)
       .then(function (response) {
+        console.log(response, "response")
         if (response?.isSuccess) {
           dispatch({
-            type: actionTypes.SuccessiIngredients,
+            type: actionTypes.SuccessCategories,
             payload: response?.data
           });
         } else {
-          dispatch({ type: actionTypes.FailediIngredients });
+          dispatch({ type: actionTypes.FailedCategories });
           alert(response.message);
         }
       })
       .catch(function (error) {
         console.log(error, 'error');
-        dispatch({ type: actionTypes.FailediIngredients });
+        dispatch({ type: actionTypes.FailedCategories });
       });
   };
 };
 
-export const DeleteIngredient = (data, id, onSuccess) => {
+export const DeleteCategories = (data, id, onSuccess) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingDelete });
-    Delete(`ingredient/${id}`, data)
+    Delete(`category/${id}`, data)
       .then(function (response) {
         if (response?.isSuccess) {
           dispatch({
-            type: actionTypes.SuccessiIngredientDelete,
+            type: actionTypes.SuccessiCategorieDelete,
             payload: response?.data
           });
           onSuccess();
         } else {
-          dispatch({ type: actionTypes.FailediIngredientDelete });
+          dispatch({ type: actionTypes.FailediCategorieDelete });
           alert(response.message);
         }
       })
       .catch(function (error) {
         console.log(error, 'error');
-        dispatch({ type: actionTypes.FailediIngredientDelete });
+        dispatch({ type: actionTypes.FailediCategorieDelete });
       });
   };
 };
 
-export const SaveIngredient = (data, Token, onSuccess) => {
+export const SaveCategories = (data, Token, onSuccess) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingSave });
-    Post(`ingredient/`, data, Token)
+    Post(`category/`, data, Token)
       .then(function (response) {
         console.log(response, "responsePost")
         if (response?.isSuccess) {
           dispatch({
-            type: actionTypes.SuccessiIngredientSave,
+            type: actionTypes.SuccessiCategorieSave,
             payload: response?.data
           });
           onSuccess();
         } else {
-          dispatch({ type: actionTypes.FailediIngredientSave });
+          dispatch({ type: actionTypes.FailediCategorieSave });
           alert(response.message);
         }
       })
       .catch(function (error) {
         console.log(error, 'error');
-        dispatch({ type: actionTypes.FailediIngredientSave });
+        dispatch({ type: actionTypes.FailediCategorieSave });
       });
   };
 };
 
-export const EditIngredient = (id, data, token, onSuccess) => {
+export const EditCategories = (id, data, token, onSuccess) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingEditIng });
-    Put(`ingredient/${id}/quantity`, data, token)
+    Patch(`category/${id}`, data, token)
       .then(function (response) {
         console.log(response, 'response');
         if (response?.isSuccess) {
           onSuccess();
           dispatch({
-            type: actionTypes.SuccessiIngredientEditIng,
+            type: actionTypes.SuccessiCategorieEditIng,
             payload: response?.data
           });
         } else {
-          dispatch({ type: actionTypes.FailediIngredientEditIng });
-
+          dispatch({ type: actionTypes.FailediCategorieEditIng });
           alert(response.message);
         }
       })
       .catch(function (error) {
         console.log(error, 'error');
 
-        dispatch({ type: actionTypes.FailediIngredientEditIng });
+        dispatch({ type: actionTypes.FailediCategorieEditIng });
       });
   };
 };

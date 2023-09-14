@@ -18,12 +18,12 @@ import TextField from '@mui/material/TextField';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import { DeleteIngredient, GetAllIngredient, SaveIngredient, EditIngredient } from 'store/ingredients/ingredientsAction';
 
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import { GetAllCategories, DeleteCategories, SaveCategories, EditCategories } from 'store/categories/categoriesAction';
 
 // const grey = {
 //   50: '#f6f8fa',
@@ -75,16 +75,9 @@ const style = {
 //   `
 // );
 
-const Ingredients = () => {
+const Categories = () => {
   //   const navigate = useNavigate();
   const [Name, setName] = React.useState("");
-  const [Quantity, setQuantity] = React.useState(0);
-  const [Remaing, setRemaing] = React.useState(0);
-  const [Consmption, setConsmption] = React.useState(0);
-  const [Description, setDescription] = React.useState("");
-  const [IngredientReference, setIngredientReference] = React.useState("");
-  const [Fector, setFector] = React.useState("");
-
   const [Error, setError] = React.useState("");
   const [IsAdd, setIsAdd] = React.useState(null);
 
@@ -101,27 +94,22 @@ const Ingredients = () => {
     if (Name === "Add") {
       setDelete_Id(null);
       setName("");
-      setQuantity(0);
-      setRemaing(0);
-      setConsmption(0);
-      setDescription("");
-      setIngredientReference("");
-      setFector("");
     }
   };
 
   const handleCloseDelete = () => setOpenDelete(!openDelete);
   const handleClose = () => setOpen(false);
   const Userdata = useSelector((state) => state.AuthReducer.data);
-  const allData = useSelector((state) => state.IngredientsReducer.data);
+  const allData = useSelector((state) => state.CategoryReducer.data);
+  // CategoryReducer
   const rows = allData?.filter((i) => i?.isGuest !== true);
 
-  const isLoading = useSelector((state) => state.IngredientsReducer.isLoading);
-  const isLoadingDelete = useSelector((state) => state.IngredientsReducer.isLoadingDelete);
-  const isLoadingSave = useSelector((state) => state.IngredientsReducer.isLoadingSave);
+  const isLoading = useSelector((state) => state.CategoryReducer.isLoading);
+  const isLoadingDelete = useSelector((state) => state.CategoryReducer.isLoadingDelete);
+  const isLoadingSave = useSelector((state) => state.CategoryReducer.isLoadingSave);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(GetAllIngredient(Userdata?.clientToken));
+    dispatch(GetAllCategories(Userdata?.clientToken));
   }, []);
 
   const handleChangePage = (event, newPage) => {
@@ -137,44 +125,33 @@ const Ingredients = () => {
     setDelete_Id(id);
   }
   const onDelete = () => {
-    dispatch(DeleteIngredient(Userdata?.clientToken, Delete_Id, onSuccess));
+    dispatch(DeleteCategories(Userdata?.clientToken, Delete_Id, onSuccess));
   }
   const onSuccess = () => {
-    dispatch(GetAllIngredient(Userdata?.clientToken));
+    dispatch(GetAllCategories(Userdata?.clientToken));
     setOpenDelete(false);
     setOpen(false);
   }
   const onSave = () => {
-    if (Name !== "" && Description !== "") {
+    if (Name !== "") {
       setError("")
       let data = {
         name: Name,
-        description: Description,
-        totalConsmption: Consmption,
-        remaingQuantity: Remaing,
-        lastAddedQuantity: Quantity,
-        ingredientReference: IngredientReference,
-        CookingContingencyFector: Fector
       }
       if (IsAdd === "Add") {
-        dispatch(SaveIngredient(data, Userdata?.clientToken, onSuccess));
+        dispatch(SaveCategories(data, Userdata?.clientToken, onSuccess));
       }
       else {
-        dispatch(EditIngredient(Delete_Id, data, Userdata?.clientToken, onSuccess));
+        dispatch(EditCategories(Delete_Id, data, Userdata?.clientToken, onSuccess));
       }
     } else {
       setError("All Feilds Required")
     }
   }
+
   const onEditClick = (data) => {
     setDelete_Id(data?._id);
     setName(data?.name);
-    setQuantity(data?.lastAddedQuantity);
-    setRemaing(data?.remaingQuantity);
-    setConsmption(data?.totalConsmption);
-    setDescription(data?.description);
-    setIngredientReference(data?.ingredientReference);
-    setFector(data?.CookingContingencyFactor);
     handleOpen("Edit");
   }
 
@@ -189,23 +166,10 @@ const Ingredients = () => {
         <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
           <Box sx={style}>
             <Typography style={{ textAlign: 'center', paddingBottom: 20 }} variant="h4" component="h2">
-              {IsAdd} Ingredient
+              {IsAdd} Category
             </Typography>
             <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
               <TextField value={Name} onChange={(e) => setName(e.target.value)} id="outlined-basic" label="Name" variant="outlined" />
-              <TextField value={IngredientReference} onChange={(e) => setIngredientReference(e.target.value)} id="outlined-basic" label="Ingredient Reference" variant="outlined" />
-            </Box>
-            <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
-              <TextField value={Fector} onChange={(e) => setFector(e.target.value)} id="outlined-basic" label="Cooking Contingency Fector" variant="outlined" />
-              <TextField type={"number"} value={Quantity} onChange={(e) => setQuantity(e.target.value)} id="outlined-basic" label="Last Added Quantity" variant="outlined" />
-            </Box>
-            <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-              <TextField type={"number"} value={Remaing} onChange={(e) => setRemaing(e.target.value)} id="outlined-basic" label="Remaing Quantity" variant="outlined" />
-              <TextField type={"number"} value={Consmption} onChange={(e) => setConsmption(e.target.value)} id="outlined-basic" label="Total Consmption" variant="outlined" />
-            </Box>
-            <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
-              {/* <StyledTextarea value={Description} onChange={(e) => setDescription(e.target.value)} maxRows={5} aria-label="maximum height" placeholder="Description" defaultValue="" /> */}
-              <TextField sx={{ width: '100%' }} value={Description} onChange={(e) => setDescription(e.target.value)} id="outlined-basic" label="Description" variant="outlined" />
             </Box>
             {Error !== "" && <Typography style={{ color: "red", textAlign: "center" }} id="modal-modal-title" variant="h6" component="h2">
               {Error}
@@ -252,7 +216,7 @@ const Ingredients = () => {
             flexDirection: "column"
           }}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Are you sure you want to delete this Ingredient
+              Are you sure you want to delete this Category
             </Typography>
             <Box sx={{
               display: "flex",
@@ -305,7 +269,7 @@ const Ingredients = () => {
             <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
               <AnimateButton>
                 <Button onClick={() => handleOpen("Add")} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
-                  Add Ingredients
+                  Add Category
                 </Button>
               </AnimateButton>
             </Box>
@@ -313,30 +277,17 @@ const Ingredients = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="left">Ingredient Reference</TableCell>
                     <TableCell>Name</TableCell>
-                    <TableCell align="left">Stock Level</TableCell>
-                    <TableCell align="left">Total Consmption</TableCell>
-                    {/* <TableCell align="left">Last Added Quantity</TableCell> */}
-                    <TableCell align="left">Ingredient Cooking Method</TableCell>
-                    <TableCell align="left">Cooking Contingency Factor</TableCell>
-                    <TableCell align="left">Actions</TableCell>
+                    <TableCell align="right">Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
                     <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                      <TableCell align="left">{row?.ingredientReference}</TableCell>
                       <TableCell component="th" scope="row">
                         {row?.name}
                       </TableCell>
-                      <TableCell align="left">{row?.remaingQuantity}</TableCell>
-                      <TableCell align="left">{row?.totalConsmption} </TableCell>
-                      {/* <TableCell align="left">{row?.lastAddedQuantity}</TableCell> */}
-                      <TableCell align="left">{row?.description}</TableCell>
-                      <TableCell align="left">{row?.CookingContingencyFactor}</TableCell>
-
-                      <TableCell>
+                      <TableCell align="right">
                         <BorderColorIcon onClick={() => onEditClick(row)} style={{ marginRight: 2, cursor: 'pointer' }} />
                         <DeleteIcon onClick={() => onDeleteClick(row?._id)} style={{ marginLeft: 2, cursor: 'pointer' }} />
                       </TableCell>
@@ -362,4 +313,4 @@ const Ingredients = () => {
   );
 };
 
-export default Ingredients;
+export default Categories;

@@ -78,8 +78,8 @@ async function Patch(path, data, token) {
   let response = await axios.patch(url, data, {
     headers: token
       ? {
-        Accept: 'multipart/form-data',
-        Authorization: `${token}`
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
       }
       : {
         Accept: 'application/json'
