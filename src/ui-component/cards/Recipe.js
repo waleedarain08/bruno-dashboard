@@ -201,12 +201,14 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
             <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
               LifeStage : {data?.lifeStage}
             </Typography>
-            <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
-              Nutrition : {data?.nutrition}
+            <Typography style={{  fontWeight: 'bold',marginTop: 16 }} paragraph>
+            Guaranteed Analysis:  
             </Typography>
+            {data?.nutrition}
             <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
-              Instructions : {data?.instructions}
+              Instructions : 
             </Typography>
+            {data?.instructions}
           </CardContent>
         </Collapse></>}
 

@@ -46,7 +46,7 @@ const FoodRecipes = () => {
   const [NameRecipe, setNameRecipe] = React.useState('');
   const [RecipeNo, setRecipeNo] = React.useState(0);
   const [Nnutrition, setNnutrition] = React.useState('');
-  const [LifeStage, setLifeStage] = React.useState('');
+  const [LifeStage, setLifeStage] = React.useState('Adult');
   const [KG, setKG] = React.useState('');
   const [ContentNo, setContentNo] = React.useState(0);
   const [Instructions, setInstructions] = React.useState('');
@@ -66,6 +66,8 @@ const FoodRecipes = () => {
     updatedFields[index].name = value;
     setFields(updatedFields);
   };
+
+
   const InitialState = () => {
     setNameRecipe("");
     setRecipeNo(0);
@@ -109,7 +111,7 @@ const FoodRecipes = () => {
   const allData = useSelector((state) => state.IngredientsReducer.data);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
   const rows = filterProdcuts?.recipe?.filter((i) => i?.category === "")
-  console.log(rows, "rows")
+  //console.log(rows, "rows")
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
 
   const dispatch = useDispatch();
@@ -288,7 +290,7 @@ const FoodRecipes = () => {
               style={{ margin: 5 }}
               sx={{ width: '100%' }}
               id="outlined-basic"
-              label="Nutrition (Enter comma separated values)"
+              label="Guaranteed Analysis  (Enter comma separated values)"
               variant="outlined"
             />
           </Box>
@@ -326,7 +328,7 @@ const FoodRecipes = () => {
             />
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-            <TextField
+            {/* <TextField
               value={LifeStage}
               onChange={(e) => setLifeStage(e.target.value)}
               style={{ margin: 5 }}
@@ -334,7 +336,15 @@ const FoodRecipes = () => {
               id="outlined-basic"
               label="Life Stage"
               variant="outlined"
-            />
+            /> */}
+              <FormControl sx={{ width: '100%' , marginTop:0.7 }}>
+                  <InputLabel>LifeStage</InputLabel>
+                  <Select  value={LifeStage} label="Adult"  onChange={(e) => setLifeStage(e.target.value)}>
+                          <MenuItem key={1} value="Adult"> Adult</MenuItem>
+                          <MenuItem key={2} value="Pet">Pet </MenuItem>
+                         <MenuItem key={3} value="Senior"> Senior</MenuItem>
+                  </Select>
+                </FormControl>
             <TextField
               value={Details}
               onChange={(e) => setDetails(e.target.value)}
