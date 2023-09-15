@@ -26,7 +26,7 @@ import { DeleteRecipe, GetAllRecipes } from 'store/recipe/recipeAction';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
-  console.log(expand);
+  console.log(expand, "RecipeReviewCard");
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
@@ -44,6 +44,8 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const isLoadingDelete = useSelector((state) => state.RecipeReducer.isLoadingDelete);
 
+  // console.log(data, "data")
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -57,7 +59,6 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
     EditValues(data)
     setOpen(true);
     handleClose();
-    console.log('Edit clicked');
   };
   const handleDelete = () => {
     handleClose();
@@ -171,7 +172,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
         </Typography>}
 
         <Typography variant="body2" color="text.secondary">
-          PricePerKG : {data?.pricePerKG}
+          {data?.category !== "" ? "Price" : "PricePerKG"} : {data?.pricePerKG}
         </Typography>
         <Tooltip title={data?.description}>
           <Typography variant="body2" color="text.secondary">
@@ -201,12 +202,12 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
             <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
               LifeStage : {data?.lifeStage}
             </Typography>
-            <Typography style={{  fontWeight: 'bold',marginTop: 16 }} paragraph>
-            Guaranteed Analysis:  
+            <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
+              Guaranteed Analysis:
             </Typography>
             {data?.nutrition}
             <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
-              Instructions : 
+              Instructions :
             </Typography>
             {data?.instructions}
           </CardContent>

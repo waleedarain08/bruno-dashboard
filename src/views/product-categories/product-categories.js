@@ -51,8 +51,8 @@ const ProductCategories = () => {
   const [Loading, setLoading] = React.useState(false);
   const [Error, setError] = React.useState('');
   const [Condition, setCondition] = React.useState(null);
-  const [PreviewEdit, setPreviewEdit] = React.useState(null);
-  const [selectedFile, setSelectedFile] = React.useState(null);
+  const [PreviewEdit, setPreviewEdit] = React.useState([]);
+  const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [SelectedId, setSelectedId] = React.useState(null);
 
 
@@ -62,8 +62,8 @@ const ProductCategories = () => {
     setDetails("");
     setDescription("");
     setFeatured("");
-    setSelectedFile(null);
-    setPreviewEdit(null);
+    setSelectedFiles([]);
+    setPreviewEdit([]);
     setSelectedId(null)
   }
 
@@ -110,7 +110,7 @@ const ProductCategories = () => {
       setError('');
       setLoading(true);
       if (Condition === "Add") {
-        const newPath = await ImageUpload(selectedFile);
+        const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
         let newdata = {
           name: NameRecipe,
           isFeatured: Featured,
@@ -120,12 +120,11 @@ const ProductCategories = () => {
           media: newPath,
           category: Categoryes,
         };
-        console.log(newdata, "newdata")
         dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
       }
       else {
-        if (selectedFile !== null) {
-          const newPath = await ImageUpload(selectedFile);
+        if (selectedFiles?.length > 0) {
+          const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
           let newdata = {
             name: NameRecipe,
             isFeatured: Featured,
@@ -247,10 +246,10 @@ const ProductCategories = () => {
           <FormControlLabel
             style={{ marginLeft: 7 }}
             required
-            control={<Switch value={Featured} onChange={() => setFeatured(!Featured)} />}
+            control={<Switch checked={Featured} onChange={() => setFeatured(!Featured)} />}
             label="Featured"
           />
-          <ImageUploader PreviewEdit={PreviewEdit} setSelectedFile={setSelectedFile} />
+          <ImageUploader PreviewEdit={PreviewEdit} setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
               {Error}

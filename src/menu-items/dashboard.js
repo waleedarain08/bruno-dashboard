@@ -53,14 +53,6 @@ const dashboard = {
       breadcrumbs: false
     },
     {
-      id: 'cooking-sheet',
-      title: 'Cooking-sheet',
-      type: 'item',
-      url: '/cooking-sheet',
-      icon: BallotIcon,
-      breadcrumbs: false
-    },
-    {
       id: 'product-categories',
       title: 'Product-Categories',
       type: 'item',
@@ -68,6 +60,15 @@ const dashboard = {
       icon: InventoryIcon,
       breadcrumbs: false
     },
+    {
+      id: 'cooking-sheet',
+      title: 'Cooking-sheet',
+      type: 'item',
+      url: '/cooking-sheet',
+      icon: BallotIcon,
+      breadcrumbs: false
+    },
+
     {
       id: 'promo-code&loyality-points',
       title: 'Promo & Loyality',

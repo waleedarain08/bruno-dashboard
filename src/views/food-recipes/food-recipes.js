@@ -57,7 +57,7 @@ const FoodRecipes = () => {
   const [Error, setError] = React.useState('');
   const [Condition, setCondition] = React.useState(null);
   const [PreviewEdit, setPreviewEdit] = React.useState(null);
-  const [selectedFile, setSelectedFile] = React.useState(null);
+  const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [SelectedId, setSelectedId] = React.useState(null);
   const [fields, setFields] = React.useState([{ name: '', aggregate: 0 }]);
 
@@ -78,9 +78,9 @@ const FoodRecipes = () => {
     setInstructions("");
     setDetails("");
     setDescription("");
-    setFeatured("");
-    setSelectedFile(null);
-    setPreviewEdit(null);
+    setFeatured(false);
+    setSelectedFiles([]);
+    setPreviewEdit([]);
     setSelectedId(null);
     setFields([{ name: '', aggregate: 0 }]);
   }
@@ -110,8 +110,7 @@ const FoodRecipes = () => {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const allData = useSelector((state) => state.IngredientsReducer.data);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
-  const rows = filterProdcuts?.recipe?.filter((i) => i?.category === "")
-  //console.log(rows, "rows")
+  const rows = filterProdcuts?.recipe?.filter((i) => i?.category === "");
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
 
   const dispatch = useDispatch();
@@ -156,32 +155,37 @@ const FoodRecipes = () => {
             aggregate: parseInt(i?.aggregate)
           };
         });
-        const newPath = await ImageUpload(selectedFile);
-        let newdata = {
-          name: NameRecipe,
-          isFeatured: Featured,
-          ingredient: NewValues,
-          description: Description,
-          details: Details,
-          instructions: Instructions,
-          nutrition: Nnutrition,
-          pricePerKG: KG,
-          media: newPath,
-          recipeNo: RecipeNo,
-          lifeStage: LifeStage,
-          caloriesContentNo: ContentNo
-        };
-        dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
+        try {
+          const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
+          let newdata = {
+            name: NameRecipe,
+            isFeatured: Featured,
+            ingredient: NewValues,
+            description: Description,
+            details: Details,
+            instructions: Instructions,
+            nutrition: Nnutrition,
+            pricePerKG: KG,
+            media: newPath,
+            recipeNo: RecipeNo,
+            lifeStage: LifeStage,
+            caloriesContentNo: ContentNo
+          };
+          dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
+          // Now you can use newdata with the updated media property.
+        } catch (error) {
+          console.error("Error uploading images:", error);
+        }
       }
       else {
-        if (selectedFile !== null) {
+        if (selectedFiles?.length > 0) {
           let NewValues = fields?.map((i) => {
             return {
               name: i?.name,
               aggregate: parseInt(i?.aggregate)
             };
           });
-          const newPath = await ImageUpload(selectedFile);
+          const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
           let newdata = {
             name: NameRecipe,
             isFeatured: Featured,
@@ -225,7 +229,6 @@ const FoodRecipes = () => {
       }
     } else {
       setError('All Field is Required');
-      // console.log(res?.data, 'res')
     }
   };
 
@@ -237,7 +240,6 @@ const FoodRecipes = () => {
       return error;
     }
   };
-
 
   const EditValues = (data) => {
     setCondition("Edit");
@@ -254,7 +256,6 @@ const FoodRecipes = () => {
     setFeatured(data?.isFeatured);
     setPreviewEdit(data?.media)
     setFields(data?.ingredient);
-    // console.log(data, "data")
   }
   return (
     <Box sx={{ width: '100%' }}>
@@ -337,14 +338,14 @@ const FoodRecipes = () => {
               label="Life Stage"
               variant="outlined"
             /> */}
-              <FormControl sx={{ width: '100%' , marginTop:0.7 }}>
-                  <InputLabel>LifeStage</InputLabel>
-                  <Select  value={LifeStage} label="Adult"  onChange={(e) => setLifeStage(e.target.value)}>
-                          <MenuItem key={1} value="Adult"> Adult</MenuItem>
-                          <MenuItem key={2} value="Pet">Pet </MenuItem>
-                         <MenuItem key={3} value="Senior"> Senior</MenuItem>
-                  </Select>
-                </FormControl>
+            <FormControl sx={{ width: '100%', marginTop: 0.7 }}>
+              <InputLabel>LifeStage</InputLabel>
+              <Select value={LifeStage} onChange={(e) => setLifeStage(e.target.value)}>
+                <MenuItem key={1} value="Adult"> Adult</MenuItem>
+                <MenuItem key={2} value="Pet">Pet </MenuItem>
+                <MenuItem key={3} value="Senior"> Senior</MenuItem>
+              </Select>
+            </FormControl>
             <TextField
               value={Details}
               onChange={(e) => setDetails(e.target.value)}
@@ -415,10 +416,10 @@ const FoodRecipes = () => {
           <FormControlLabel
             style={{ marginLeft: 7 }}
             required
-            control={<Switch value={Featured} onChange={() => setFeatured(!Featured)} />}
+            control={<Switch checked={Featured} onChange={() => setFeatured(!Featured)} />}
             label="Featured"
           />
-          <ImageUploader PreviewEdit={PreviewEdit} setSelectedFile={setSelectedFile} />
+          <ImageUploader PreviewEdit={PreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
               {Error}
