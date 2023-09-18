@@ -152,7 +152,7 @@ const FoodRecipes = () => {
         let NewValues = fields?.map((i) => {
           return {
             name: i?.name,
-            aggregate: parseInt(i?.aggregate)
+            aggregate: i?.aggregate
           };
         });
         try {
@@ -182,7 +182,7 @@ const FoodRecipes = () => {
           let NewValues = fields?.map((i) => {
             return {
               name: i?.name,
-              aggregate: parseInt(i?.aggregate)
+              aggregate: i?.aggregate
             };
           });
           const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
@@ -200,13 +200,14 @@ const FoodRecipes = () => {
             lifeStage: LifeStage,
             caloriesContentNo: ContentNo
           };
+          console.log(newdata,"newdata")
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         }
         else {
           let NewValues = fields?.map((i) => {
             return {
               name: i?.name,
-              aggregate: parseInt(i?.aggregate)
+              aggregate: i?.aggregate
             };
           });
           let newdata = {
@@ -223,6 +224,7 @@ const FoodRecipes = () => {
             lifeStage: LifeStage,
             caloriesContentNo: ContentNo
           };
+          console.log(newdata,"newdata")
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         }
 
