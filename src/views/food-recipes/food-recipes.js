@@ -408,8 +408,8 @@ const FoodRecipes = () => {
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <StyledTextarea
-          value={Details}
-          onChange={(e) => setDetails(e.target.value)}
+              value={Details}
+              onChange={(e) => setDetails(e.target.value)}
               style={{ width: '105%', height: 50, marginTop: 7 }}
               maxRows={5}
               aria-label="maximum height"
