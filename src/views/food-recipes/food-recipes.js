@@ -49,7 +49,7 @@ const StyledTextarea = styled(TextareaAutosize)(
     line-height: 1.5;
     padding: 12px;
     border-radius: 12px 12px 12px 12px;
-    color:#8A93A1;
+    color:#121926;
     background: ${theme.palette.mode === 'dark' ? '#D78809' : '#fff'};
     border: 1px solid ${theme.palette.mode === 'dark' ? '#bfc0c2' : '#bfc0c2'};
     &:hover {
