@@ -12,9 +12,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import RecipeReviewCard from 'ui-component/cards/Recipe';
 import { AddRecipe, EditRecipe, GetAllRecipes } from 'store/recipe/recipeAction';
-// import { styled } from '@mui/system';
+import { styled } from '@mui/system';
 import Grid from '@mui/material/Grid';
-// import { TextareaAutosize } from '@mui/base';
+import { TextareaAutosize } from '@mui/base';
 import ImageUploader from 'ui-component/ImageUploader';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -39,6 +39,35 @@ const style = {
   boxShadow: 24,
   p: 4
 };
+
+const StyledTextarea = styled(TextareaAutosize)(
+  ({ theme }) => `
+    width: 320px;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 12px;
+    border-radius: 12px 12px 12px 12px;
+    color:#8A93A1;
+    background: ${theme.palette.mode === 'dark' ? '#D78809' : '#fff'};
+    border: 1px solid ${theme.palette.mode === 'dark' ? '#bfc0c2' : '#bfc0c2'};
+    &:hover {
+      border:1px solid  #121926;
+    };
+    &:focus {
+      border: 2px solid  #D78809;
+    }
+    // firefox
+    &:focus-visible {
+      outline: 0;
+      border-color: #D78809;
+    }
+    &::placeholder {
+      color: #8A93A1;
+    }
+  `
+);
 
 const FoodRecipes = () => {
   const navigate = useNavigate();
@@ -67,23 +96,22 @@ const FoodRecipes = () => {
     setFields(updatedFields);
   };
 
-
   const InitialState = () => {
-    setNameRecipe("");
+    setNameRecipe('');
     setRecipeNo(0);
-    setNnutrition("");
-    setLifeStage("");
-    setKG("");
+    setNnutrition('');
+    setLifeStage('');
+    setKG('');
     setContentNo(0);
-    setInstructions("");
-    setDetails("");
-    setDescription("");
+    setInstructions('');
+    setDetails('');
+    setDescription('');
     setFeatured(false);
     setSelectedFiles([]);
     setPreviewEdit([]);
     setSelectedId(null);
     setFields([{ name: '', aggregate: 0 }]);
-  }
+  };
 
   const handleNumberChange = (index, value) => {
     const updatedFields = [...fields];
@@ -97,10 +125,10 @@ const FoodRecipes = () => {
   };
 
   const onAddRecipeBtn = () => {
-    setCondition("Add");
+    setCondition('Add');
     InitialState();
     setOpen(true);
-  }
+  };
 
   const handleAddField = () => {
     setFields([...fields, { name: '', aggregate: 0 }]);
@@ -110,7 +138,7 @@ const FoodRecipes = () => {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const allData = useSelector((state) => state.IngredientsReducer.data);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
-  const rows = filterProdcuts?.recipe?.filter((i) => i?.category === "");
+  const rows = filterProdcuts?.recipe?.filter((i) => i?.category === '');
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
 
   const dispatch = useDispatch();
@@ -148,7 +176,7 @@ const FoodRecipes = () => {
     ) {
       setError('');
       setLoading(true);
-      if (Condition === "Add") {
+      if (Condition === 'Add') {
         let NewValues = fields?.map((i) => {
           return {
             name: i?.name,
@@ -169,15 +197,14 @@ const FoodRecipes = () => {
             media: newPath,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
-            caloriesContentNo: ContentNo
+            caloriesContentNo: parseInt(ContentNo)
           };
           dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
           // Now you can use newdata with the updated media property.
         } catch (error) {
-          console.error("Error uploading images:", error);
+          console.error('Error uploading images:', error);
         }
-      }
-      else {
+      } else {
         if (selectedFiles?.length > 0) {
           let NewValues = fields?.map((i) => {
             return {
@@ -198,12 +225,11 @@ const FoodRecipes = () => {
             media: newPath,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
-            caloriesContentNo: ContentNo
+            caloriesContentNo: parseInt(ContentNo)
           };
-          console.log(newdata,"newdata")
+          console.log(newdata, 'newdata');
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
-        }
-        else {
+        } else {
           let NewValues = fields?.map((i) => {
             return {
               name: i?.name,
@@ -222,12 +248,11 @@ const FoodRecipes = () => {
             media: PreviewEdit,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
-            caloriesContentNo: ContentNo
+            caloriesContentNo: parseInt(ContentNo)
           };
-          console.log(newdata,"newdata")
+          console.log(newdata, 'newdata');
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         }
-
       }
     } else {
       setError('All Field is Required');
@@ -244,8 +269,8 @@ const FoodRecipes = () => {
   };
 
   const EditValues = (data) => {
-    setCondition("Edit");
-    setSelectedId(data?._id)
+    setCondition('Edit');
+    setSelectedId(data?._id);
     setNameRecipe(data?.name);
     setRecipeNo(data?.recipeNo);
     setNnutrition(data?.nutrition);
@@ -256,9 +281,9 @@ const FoodRecipes = () => {
     setDetails(data?.details);
     setDescription(data?.description);
     setFeatured(data?.isFeatured);
-    setPreviewEdit(data?.media)
+    setPreviewEdit(data?.media);
     setFields(data?.ingredient);
-  }
+  };
   return (
     <Box sx={{ width: '100%' }}>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
@@ -286,28 +311,7 @@ const FoodRecipes = () => {
               variant="outlined"
             />
           </Box>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-            <TextField
-              value={Nnutrition}
-              onChange={(e) => setNnutrition(e.target.value)}
-              style={{ margin: 5 }}
-              sx={{ width: '100%' }}
-              id="outlined-basic"
-              label="Guaranteed Analysis  (Enter comma separated values)"
-              variant="outlined"
-            />
-          </Box>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-            <TextField
-              value={Instructions}
-              onChange={(e) => setInstructions(e.target.value)}
-              style={{ margin: 5 }}
-              sx={{ width: '100%' }}
-              id="outlined-basic"
-              label="Instructions"
-              variant="outlined"
-            />
-          </Box>
+
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
               value={KG}
@@ -343,20 +347,19 @@ const FoodRecipes = () => {
             <FormControl sx={{ width: '100%', marginTop: 0.7 }}>
               <InputLabel>LifeStage</InputLabel>
               <Select value={LifeStage} onChange={(e) => setLifeStage(e.target.value)}>
-                <MenuItem key={1} value="Adult"> Adult</MenuItem>
-                <MenuItem key={2} value="Pet">Pet </MenuItem>
-                <MenuItem key={3} value="Senior"> Senior</MenuItem>
+                <MenuItem key={1} value="Adult">
+                  {' '}
+                  Adult
+                </MenuItem>
+                <MenuItem key={2} value="Pet">
+                  Pet{' '}
+                </MenuItem>
+                <MenuItem key={3} value="Senior">
+                  {' '}
+                  Senior
+                </MenuItem>
               </Select>
             </FormControl>
-            <TextField
-              value={Details}
-              onChange={(e) => setDetails(e.target.value)}
-              style={{ margin: 5 }}
-              sx={{ width: '100%' }}
-              id="outlined-basic"
-              label="Details"
-              variant="outlined"
-            />
           </Box>
           <Box sx={{ width: '100%', position: 'relative' }}>
             {fields.map((field, index) => (
@@ -403,8 +406,75 @@ const FoodRecipes = () => {
               <AddCircleIcon variant="contained" color="primary" onClick={handleAddField} />
             </div>
           </Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <StyledTextarea
+          value={Details}
+          onChange={(e) => setDetails(e.target.value)}
+              style={{ width: '105%', height: 50, marginTop: 7 }}
+              maxRows={5}
+              aria-label="maximum height"
+              placeholder="Details"
+              defaultValue=""
+            />
+            {/* <TextField
+              value={Details}
+              onChange={(e) => setDetails(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              id="outlined-basic"
+              label="Details"
+              variant="outlined"
+            /> */}
+          </Box>
+
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <StyledTextarea
+              value={Nnutrition}
+              onChange={(e) => setNnutrition(e.target.value)}
+              style={{ width: '105%', height: 50, marginTop: 7 }}
+              maxRows={5}
+              aria-label="maximum height"
+              placeholder="Guaranteed Analysis  (Enter comma separated values)"
+              defaultValue=""
+            />
+            {/* <TextField
+              sx={{ width: '100%' }}
+              id="outlined-basic"
+              label="Guaranteed Analysis  (Enter comma separated values)"
+              variant="outlined"
+            /> */}
+          </Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <StyledTextarea
+              value={Instructions}
+              onChange={(e) => setInstructions(e.target.value)}
+              style={{ width: '105%', height: 50, marginTop: 7 }}
+              maxRows={5}
+              aria-label="maximum height"
+              placeholder="Instructions"
+              defaultValue=""
+            />
+            {/* <TextField
+              value={Instructions}
+              onChange={(e) => setInstructions(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              id="outlined-basic"
+              label="Instructions"
+              variant="outlined"
+            /> */}
+          </Box>
           <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
-            <TextField
+            <StyledTextarea
+              value={Description}
+              onChange={(e) => setDescription(e.target.value)}
+              style={{ width: '105%', height: 50, marginTop: 7 }}
+              maxRows={5}
+              aria-label="maximum height"
+              placeholder="Description"
+              defaultValue=""
+            />
+            {/* <TextField
               value={Description}
               onChange={(e) => setDescription(e.target.value)}
               style={{ marginTop: 5 }}
@@ -412,7 +482,7 @@ const FoodRecipes = () => {
               id="outlined-basic"
               label="Description"
               variant="outlined"
-            />
+            /> */}
             {/* <StyledTextarea sx={{ width: '100%' }} maxRows={5} aria-label="maximum height" placeholder="Description" defaultValue="" /> */}
           </Box>
           <FormControlLabel
@@ -462,7 +532,6 @@ const FoodRecipes = () => {
           <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
             <AnimateButton>
               <Button
-
                 onClick={() => onAddRecipeBtn()}
                 style={{ margin: '12px' }}
                 variant="contained"
