@@ -38,7 +38,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Modal from '@mui/material/Modal';
 
-
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -49,13 +48,13 @@ const PromoLoality = ({ ...others }) => {
   const [open, setOpen] = React.useState(false);
   const [PromoId, setPromoId] = React.useState(null);
   const handleOpen = (id) => {
-    setOpen(true)
-    setPromoId(id)
+    setOpen(true);
+    setPromoId(id);
   };
   const handleClose = () => {
-    setOpen(false)
-    setPromoId(null)
-  }
+    setOpen(false);
+    setPromoId(null);
+  };
   const location = useLocation();
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const data = useSelector((state) => state.PromosReducer.data);
@@ -74,12 +73,13 @@ const PromoLoality = ({ ...others }) => {
 
   const onSuccess = () => {
     dispatch(GetPromos(Userdata?.clientToken));
-    setOpen(false)
-  }
+    setOpen(false);
+  };
   const onDelete = () => {
     dispatch(DeletePromo(PromoId, Userdata?.clientToken, onSuccess));
-  }
+  };
 
+  console.log(rows, 'rows');
 
   return (
     <>
@@ -106,7 +106,7 @@ const PromoLoality = ({ ...others }) => {
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                   try {
                     if (scriptedRef.current) {
-                      alert("Percentage is set")
+                      alert('Percentage is set');
                       setStatus({ success: true });
                       setSubmitting(true);
                     }
@@ -188,6 +188,7 @@ const PromoLoality = ({ ...others }) => {
                   Percentage: '',
                   Code: '',
                   expiry: '',
+                  limit: 0,
                   submit: null
                 }}
                 validationSchema={Yup.object().shape({
@@ -200,16 +201,15 @@ const PromoLoality = ({ ...others }) => {
                       if (newDate !== null) {
                         let data = {
                           name: values?.Code,
-                          discount: values.Percentage,
+                          discount: values?.Percentage,
+                          limit: values?.limit,
                           expireOnDate: newDate
-                        }
+                        };
 
-                        dispatch(AddPromos(data, Userdata?.clientToken, onSuccess, resetForm))
+                        dispatch(AddPromos(data, Userdata?.clientToken, onSuccess, resetForm));
+                      } else {
+                        setErrors({ expiry: 'Expiry feild is required' });
                       }
-                      else {
-                        setErrors({ expiry: "Expiry feild is required" });
-                      }
-
                     }
                   } catch (err) {
                     console.error(err);
@@ -264,9 +264,32 @@ const PromoLoality = ({ ...others }) => {
                         </FormHelperText>
                       )}
                     </FormControl>
+                    <FormControl fullWidth error={Boolean(touched.limit && errors.limit)} sx={{ ...theme.typography.customInput }}>
+                      <InputLabel htmlFor="outlined-adornment-password-login">Max Usage Limit</InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-password-login"
+                        type={'number'}
+                        value={values.limit}
+                        name="limit"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        label="Limit"
+                        inputProps={{}}
+                      />
+                      {touched.limit && errors.limit && (
+                        <FormHelperText error id="standard-weight-helper-text-password-login">
+                          {errors.limit}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
                     <FormControl fullWidth error={Boolean(touched.expiry && errors.expiry)} sx={{ ...theme.typography.customInput }}>
                       <LocalizationProvider dateAdapter={AdapterMoment}>
-                        <DatePicker disablePast={true} type="date" name="expiry" onChange={(e) => setDate(moment(e).format('MM/DD/YYYY'))} />
+                        <DatePicker
+                          disablePast={true}
+                          type="date"
+                          name="expiry"
+                          onChange={(e) => setDate(moment(e).format('MM/DD/YYYY'))}
+                        />
                       </LocalizationProvider>
                       {touched.expiry && errors.expiry && (
                         <FormHelperText error id="standard-weight-helper-text-password-login">
@@ -292,9 +315,21 @@ const PromoLoality = ({ ...others }) => {
                           variant="contained"
                           color="secondary"
                         >
-                          {addLoading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginRight: 30 }}>
-                            <InfinitySpin width="50" height="20" color="#fff" />
-                          </div> : "Save"}
+                          {addLoading ? (
+                            <div
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                marginRight: 30
+                              }}
+                            >
+                              <InfinitySpin width="50" height="20" color="#fff" />
+                            </div>
+                          ) : (
+                            'Save'
+                          )}
                         </Button>
                       </AnimateButton>
                     </Box>
@@ -322,37 +357,36 @@ const PromoLoality = ({ ...others }) => {
           </Paper>
         ) : (
           <TableContainer component={Paper}>
-            <Modal
-              open={open}
-              onClose={handleClose}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: 400,
-                bgcolor: 'background.paper',
-                border: '2px solid #D78809',
-                boxShadow: 24,
-                p: 4,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "column"
-              }}>
+            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: 400,
+                  bgcolor: 'background.paper',
+                  border: '2px solid #D78809',
+                  boxShadow: 24,
+                  p: 4,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexDirection: 'column'
+                }}
+              >
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                   Are you sure you want to delete this promocode
                 </Typography>
-                <Box sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "row",
-                  padding: 1
-                }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'row',
+                    padding: 1
+                  }}
+                >
                   <AnimateButton>
                     <Button
                       onClick={handleClose}
@@ -377,13 +411,18 @@ const PromoLoality = ({ ...others }) => {
                       color="secondary"
                       onClick={() => onDelete()}
                     >
-                      {deleteLoading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginRight: 30 }}>
-                        <InfinitySpin width="50" height="20" color="#fff" />
-                      </div> : "Delete"}
+                      {deleteLoading ? (
+                        <div
+                          style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginRight: 30 }}
+                        >
+                          <InfinitySpin width="50" height="20" color="#fff" />
+                        </div>
+                      ) : (
+                        'Delete'
+                      )}
                     </Button>
                   </AnimateButton>
                 </Box>
-
               </Box>
             </Modal>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -392,6 +431,7 @@ const PromoLoality = ({ ...others }) => {
                   <TableCell> Promo Code </TableCell>
                   <TableCell align="left">Percentage</TableCell>
                   <TableCell align="left">Expiry Date</TableCell>
+                  <TableCell align="left">Max Usage Limit</TableCell>
                   <TableCell align="right">Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -403,8 +443,10 @@ const PromoLoality = ({ ...others }) => {
                     </TableCell>
                     <TableCell align="left">{row?.discount} %</TableCell>
                     <TableCell align="left"> {moment(row?.expireOnDate).format('MMM Do YY')}</TableCell>
-                    <TableCell align="right"><Chip label="Delete" variant="outlined" onClick={() => handleOpen(row?._id)} /> </TableCell>
-
+                    <TableCell align="left"> {row?.limit}</TableCell>
+                    <TableCell align="right">
+                      <Chip label="Delete" variant="outlined" onClick={() => handleOpen(row?._id)} />{' '}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
