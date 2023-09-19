@@ -28,7 +28,7 @@ const PetsProfile = () => {
   const rows = data?.filter((i) => i?.user?._id === location?.state?._id);
   const isLoading = useSelector((state) => state.PetsReducer.isLoading);
   const dispatch = useDispatch();
-
+  console.log(rows, 'rows');
 
   useEffect(() => {
     dispatch(GetPets(Userdata?.clientToken));
@@ -60,6 +60,7 @@ const PetsProfile = () => {
                   <TableCell align="left">Name</TableCell>
                   <TableCell align="left">Breed</TableCell>
                   <TableCell align="left">Born</TableCell>
+                  <TableCell align="left">Feeding-Routine</TableCell>
                   <TableCell align="left">Primary</TableCell>
                   <TableCell align="left">Owner</TableCell>
                   <TableCell align="right">Weight</TableCell>
@@ -75,6 +76,7 @@ const PetsProfile = () => {
                       <TableCell align="left">{row?.name}</TableCell>
                       <TableCell align="left">{row?.breed}</TableCell>
                       <TableCell align="left">{moment(row?.bornOnDate).format('MMM Do YY')}</TableCell>
+                      <TableCell align="left">{row?.feedingRoutine ? row?.feedingRoutine : 1}</TableCell>
                       <TableCell align="left">{row?.isDefault ? <CheckCircleOutlineIcon /> : <CancelIcon />}</TableCell>
                       <TableCell align="left">{row?.user?.fullName}</TableCell>
                       <TableCell align="right">{row?.actualWeight} kg</TableCell>
