@@ -189,19 +189,20 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography style={{ fontWeight: 'bold' }}>Ingredient:</Typography>
+          <Typography style={{ fontWeight: 'bold' }} paragraph>
+              LifeStage : {data?.lifeStage}
+            </Typography>
+            <Typography style={{ fontWeight: 'bold' , marginTop: 16}}>Ingredients:</Typography>
             {data?.ingredient?.map((i, index) => {
               return (
                 <>
-                  <Typography style={{ padding: 4 }} key={index}>
+                  <Typography style={{ marginTop: 10 }} key={index}>
                     {i?.name} - {i?.aggregate}% - {i?.aggregate * 10} grams
                   </Typography>
                 </>
               );
             })}
-            <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
-              LifeStage : {data?.lifeStage}
-            </Typography>
+           
             <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
               Guaranteed Analysis:
             </Typography>
@@ -210,6 +211,10 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
               Instructions :
             </Typography>
             {data?.instructions}
+            <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
+              Ingredients Composition :
+            </Typography>
+            {data?.ingredientsComposition}
           </CardContent>
         </Collapse></>}
 
