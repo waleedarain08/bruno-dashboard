@@ -105,7 +105,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
           }}
         >
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Are you sure you want to delete this {data?.name} recipe
+            Are you sure you want to delete {data?.name}
           </Typography>
           <Box
             sx={{
@@ -189,10 +189,10 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-          <Typography style={{ fontWeight: 'bold' }} paragraph>
+            <Typography style={{ fontWeight: 'bold' }} paragraph>
               LifeStage : {data?.lifeStage}
             </Typography>
-            <Typography style={{ fontWeight: 'bold' , marginTop: 16}}>Ingredients:</Typography>
+            <Typography style={{ fontWeight: 'bold', marginTop: 16 }}>Ingredients:</Typography>
             {data?.ingredient?.map((i, index) => {
               return (
                 <>
@@ -202,7 +202,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
                 </>
               );
             })}
-           
+
             <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
               Guaranteed Analysis:
             </Typography>

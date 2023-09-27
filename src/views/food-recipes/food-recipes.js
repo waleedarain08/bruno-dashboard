@@ -82,11 +82,13 @@ const FoodRecipes = () => {
   const [Details, setDetails] = React.useState('');
   const [Description, setDescription] = React.useState('');
   const [Featured, setFeatured] = React.useState(false);
+  const [isComboRecipe, setisComboRecipe] = React.useState(false);
   const [Loading, setLoading] = React.useState(false);
   const [Error, setError] = React.useState('');
   const [Condition, setCondition] = React.useState(null);
   const [PreviewEdit, setPreviewEdit] = React.useState(null);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
+  const [IngredientsComposition, setIngredientsComposition] = React.useState('');
   const [SelectedId, setSelectedId] = React.useState(null);
   const [fields, setFields] = React.useState([{ name: '', aggregate: 0 }]);
 
@@ -102,6 +104,7 @@ const FoodRecipes = () => {
     setNnutrition('');
     setLifeStage('');
     setKG('');
+    setIngredientsComposition("");
     setContentNo(0);
     setInstructions('');
     setDetails('');
@@ -139,6 +142,7 @@ const FoodRecipes = () => {
   const allData = useSelector((state) => state.IngredientsReducer.data);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
   const rows = filterProdcuts?.recipe?.filter((i) => i?.category === '');
+  console.log(rows, "rows")
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
 
   const dispatch = useDispatch();
@@ -172,6 +176,7 @@ const FoodRecipes = () => {
       ContentNo != 0 &&
       Nnutrition != '' &&
       Instructions != '' &&
+      IngredientsComposition != "" &&
       LifeStage != ''
     ) {
       setError('');
@@ -188,6 +193,7 @@ const FoodRecipes = () => {
           let newdata = {
             name: NameRecipe,
             isFeatured: Featured,
+            isComboRecipe: isComboRecipe,
             ingredient: NewValues,
             description: Description,
             details: Details,
@@ -197,6 +203,7 @@ const FoodRecipes = () => {
             media: newPath,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
+            ingredientsComposition: IngredientsComposition,
             caloriesContentNo: parseInt(ContentNo)
           };
           dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
@@ -216,6 +223,7 @@ const FoodRecipes = () => {
           let newdata = {
             name: NameRecipe,
             isFeatured: Featured,
+            isComboRecipe: isComboRecipe,
             ingredient: NewValues,
             description: Description,
             details: Details,
@@ -225,6 +233,7 @@ const FoodRecipes = () => {
             media: newPath,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
+            ingredientsComposition: IngredientsComposition,
             caloriesContentNo: parseInt(ContentNo)
           };
           console.log(newdata, 'newdata');
@@ -239,6 +248,7 @@ const FoodRecipes = () => {
           let newdata = {
             name: NameRecipe,
             isFeatured: Featured,
+            isComboRecipe: isComboRecipe,
             ingredient: NewValues,
             description: Description,
             details: Details,
@@ -248,9 +258,9 @@ const FoodRecipes = () => {
             media: PreviewEdit,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
+            ingredientsComposition: IngredientsComposition,
             caloriesContentNo: parseInt(ContentNo)
           };
-          console.log(newdata, 'newdata');
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         }
       }
@@ -281,8 +291,10 @@ const FoodRecipes = () => {
     setDetails(data?.details);
     setDescription(data?.description);
     setFeatured(data?.isFeatured);
+    setisComboRecipe(data?.isComboRecipe)
     setPreviewEdit(data?.media);
     setFields(data?.ingredient);
+    setIngredientsComposition(data?.ingredientsComposition);
   };
   return (
     <Box sx={{ width: '100%' }}>
@@ -408,6 +420,26 @@ const FoodRecipes = () => {
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <StyledTextarea
+              value={IngredientsComposition}
+              onChange={(e) => setIngredientsComposition(e.target.value)}
+              style={{ width: '105%', height: 50, marginTop: 7 }}
+              maxRows={5}
+              aria-label="maximum height"
+              placeholder="Ingredients Composition"
+              defaultValue=""
+            />
+            {/* <TextField
+              value={Details}
+              onChange={(e) => setDetails(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              id="outlined-basic"
+              label="Details"
+              variant="outlined"
+            /> */}
+          </Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <StyledTextarea
               value={Details}
               onChange={(e) => setDetails(e.target.value)}
               style={{ width: '105%', height: 50, marginTop: 7 }}
@@ -491,7 +523,13 @@ const FoodRecipes = () => {
             control={<Switch checked={Featured} onChange={() => setFeatured(!Featured)} />}
             label="Featured"
           />
-          <ImageUploader PreviewEdit={PreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
+          <FormControlLabel
+            style={{ marginLeft: 7 }}
+            required
+            control={<Switch checked={isComboRecipe} onChange={() => setisComboRecipe(!isComboRecipe)} />}
+            label="Combo Recipe"
+          />
+          <ImageUploader imageCount={3} PreviewEdit={PreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
               {Error}

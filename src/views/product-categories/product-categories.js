@@ -78,9 +78,7 @@ const ProductCategories = () => {
   const allData = useSelector((state) => state.CategoryReducer.data);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
   const rows = filterProdcuts?.recipe?.filter((i) => i?.category !== "")
-  const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
-
-
+  const isLoading = useSelector((state) => state.RecipeReducer.isLoading)
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetAllRecipes(Userdata?.clientToken));
@@ -120,6 +118,7 @@ const ProductCategories = () => {
           media: newPath,
           category: Categoryes,
         };
+        console.log(newdata, "newdata")
         dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
       }
       else {
@@ -249,7 +248,7 @@ const ProductCategories = () => {
             control={<Switch checked={Featured} onChange={() => setFeatured(!Featured)} />}
             label="Featured"
           />
-          <ImageUploader PreviewEdit={PreviewEdit} setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
+          <ImageUploader imageCount={5} PreviewEdit={PreviewEdit} setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
               {Error}

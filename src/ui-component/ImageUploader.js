@@ -4,11 +4,11 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-const ImageUploader = ({ PreviewEdit, setSelectedFiles, selectedFiles }) => {
+const ImageUploader = ({ PreviewEdit, setSelectedFiles, selectedFiles, imageCount }) => {
   const [previewUrls, setPreviewUrls] = useState([]);
   const handleFileChange = (e) => {
-    if (selectedFiles?.length == 3) {
-      alert("only 3 Images is allowed")
+    if (selectedFiles?.length == imageCount) {
+      alert(`only ${imageCount} Images is allowed`)
     } else {
       const files = e.target.files;
       const newSelectedFiles = Array.from(files).slice(0, 3);
