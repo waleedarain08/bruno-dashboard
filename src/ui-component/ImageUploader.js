@@ -4,14 +4,14 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-const ImageUploader = ({ PreviewEdit, setSelectedFiles, selectedFiles, imageCount }) => {
+const ImageUploader = ({ PreviewEdit, setSelectedFiles, selectedFiles, imageCount, setPreviewEdit }) => {
   const [previewUrls, setPreviewUrls] = useState([]);
   const handleFileChange = (e) => {
     if (selectedFiles?.length == imageCount) {
       alert(`only ${imageCount} Images is allowed`)
     } else {
       const files = e.target.files;
-      const newSelectedFiles = Array.from(files).slice(0, 3);
+      const newSelectedFiles = Array.from(files).slice(0, imageCount);
       setSelectedFiles((prevSelectedFiles) => [...prevSelectedFiles, ...newSelectedFiles]);
       const newPreviewUrls = newSelectedFiles.map((file) => URL.createObjectURL(file));
       setPreviewUrls((prevPreviewUrls) => [...prevPreviewUrls, ...newPreviewUrls]);
@@ -28,10 +28,12 @@ const ImageUploader = ({ PreviewEdit, setSelectedFiles, selectedFiles, imageCoun
 
   }, [PreviewEdit]);
 
+
   const handleRemoveImage = (index) => {
     const newPreviewUrls = [...previewUrls];
     const selectedFilesUrls = [...selectedFiles];
     selectedFilesUrls.splice(index, 1);
+    PreviewEdit?.length > 0 && setPreviewEdit(selectedFilesUrls);
     setSelectedFiles(selectedFilesUrls);
     newPreviewUrls.splice(index, 1);
     setPreviewUrls(newPreviewUrls);

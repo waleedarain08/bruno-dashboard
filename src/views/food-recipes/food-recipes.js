@@ -199,7 +199,7 @@ const FoodRecipes = () => {
             details: Details,
             instructions: Instructions,
             nutrition: Nnutrition,
-            pricePerKG: KG,
+            pricePerKG: parseInt(KG),
             media: newPath,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
@@ -229,14 +229,13 @@ const FoodRecipes = () => {
             details: Details,
             instructions: Instructions,
             nutrition: Nnutrition,
-            pricePerKG: KG,
+            pricePerKG: parseInt(KG),
             media: newPath,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
             caloriesContentNo: parseInt(ContentNo)
           };
-          console.log(newdata, 'newdata');
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         } else {
           let NewValues = fields?.map((i) => {
@@ -254,7 +253,7 @@ const FoodRecipes = () => {
             details: Details,
             instructions: Instructions,
             nutrition: Nnutrition,
-            pricePerKG: KG,
+            pricePerKG: parseInt(KG),
             media: PreviewEdit,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
@@ -529,7 +528,7 @@ const FoodRecipes = () => {
             control={<Switch checked={isComboRecipe} onChange={() => setisComboRecipe(!isComboRecipe)} />}
             label="Combo Recipe"
           />
-          <ImageUploader imageCount={3} PreviewEdit={PreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
+          <ImageUploader imageCount={3} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
               {Error}
