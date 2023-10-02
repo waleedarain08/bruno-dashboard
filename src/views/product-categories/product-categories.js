@@ -139,6 +139,8 @@ const ProductCategories = () => {
           pricePerKG: parseInt(KG),
           media: newPath,
           category: Categoryes,
+          recipeNo: "",
+          ingredientsComposition: "",
           sizes: fields
         };
         dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
@@ -154,6 +156,8 @@ const ProductCategories = () => {
             pricePerKG: parseInt(KG),
             media: newPath,
             category: Categoryes,
+            recipeNo: "",
+            ingredientsComposition: "",
             sizes: fields
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
@@ -167,6 +171,8 @@ const ProductCategories = () => {
             pricePerKG: parseInt(KG),
             media: PreviewEdit,
             category: Categoryes,
+            recipeNo: "",
+            ingredientsComposition: "",
             sizes: fields
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
