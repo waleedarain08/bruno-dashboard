@@ -24,6 +24,8 @@ import { handleUpload } from 'utils/helperFunction';
 import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { GetAllCategories } from 'store/categories/categoriesAction';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const style = {
   position: 'absolute',
@@ -54,6 +56,7 @@ const ProductCategories = () => {
   const [PreviewEdit, setPreviewEdit] = React.useState([]);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [SelectedId, setSelectedId] = React.useState(null);
+  const [fields, setFields] = React.useState([{ name: '', price: 0 }]);
 
 
   const InitialState = () => {
@@ -71,6 +74,25 @@ const ProductCategories = () => {
     setCondition("Add");
     InitialState();
     setOpen(true);
+  };
+
+  const handleSelectChange = (index, value) => {
+    const updatedFields = [...fields];
+    updatedFields[index].name = value;
+    setFields(updatedFields);
+  };
+  const handleNumberChange = (index, value) => {
+    const updatedFields = [...fields];
+    updatedFields[index].price = value;
+    setFields(updatedFields);
+  };
+  const handleRemoveField = (index) => {
+    const updatedFields = [...fields];
+    updatedFields.splice(index, 1);
+    setFields(updatedFields);
+  };
+  const handleAddField = () => {
+    setFields([...fields, { name: '', price: 0 }]);
   };
 
   const handleClose = () => setOpen(false);
@@ -117,6 +139,7 @@ const ProductCategories = () => {
           pricePerKG: parseInt(KG),
           media: newPath,
           category: Categoryes,
+          sizes: fields
         };
         dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
       }
@@ -131,6 +154,7 @@ const ProductCategories = () => {
             pricePerKG: parseInt(KG),
             media: newPath,
             category: Categoryes,
+            sizes: fields
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         }
@@ -143,6 +167,7 @@ const ProductCategories = () => {
             pricePerKG: parseInt(KG),
             media: PreviewEdit,
             category: Categoryes,
+            sizes: fields
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         }
@@ -162,8 +187,22 @@ const ProductCategories = () => {
     }
   };
 
+  let SizesData = [{
+    name: "Small"
+  },
+  {
+    name: "Medium"
+  },
+  {
+    name: "Large"
+  },
+  {
+    name: "Extra Large"
+  }]
+
 
   const EditValues = (data) => {
+    console.log(data, "data")
     setCondition("Edit");
     setSelectedId(data?._id)
     setNameRecipe(data?.name)
@@ -173,6 +212,7 @@ const ProductCategories = () => {
     setFeatured(data?.isFeatured);
     setPreviewEdit(data?.media);
     setCategoryes(data?.category);
+    setFields(data?.sizes);
     // console.log(data, "data")
   }
   return (
@@ -201,6 +241,49 @@ const ProductCategories = () => {
               label="Brand"
               variant="outlined"
             />
+          </Box>
+          <Box sx={{ width: '100%', position: 'relative' }}>
+            {fields.map((field, index) => (
+              <Box key={index} style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+                {fields?.length > 1 && (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: -20, cursor: 'pointer' }}>
+                    <DeleteIcon variant="contained" color="secondary" onClick={() => handleRemoveField(index)} />{' '}
+                  </div>
+                )}
+                <FormControl sx={{ width: '80%' }}>
+                  <InputLabel>Size</InputLabel>
+                  <Select value={field?.name} onChange={(e) => handleSelectChange(index, e.target.value)}>
+                    {SizesData?.map((i, index) => {
+                      return <MenuItem key={index} value={i?.name}>
+                        {i?.name}
+                      </MenuItem>
+                    })}
+                  </Select>
+                </FormControl>
+                <TextField
+                  style={{ marginLeft: 10 }}
+                  sx={{ width: '80%' }}
+                  label="Price"
+                  type="number"
+                  value={field?.price}
+                  onChange={(e) => handleNumberChange(index, e.target.value)}
+                />
+              </Box>
+            ))}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginRight: -20,
+                cursor: 'pointer',
+                position: 'absolute',
+                right: -11,
+                top: 14
+              }}
+            >
+              <AddCircleIcon variant="contained" color="primary" onClick={handleAddField} />
+            </div>
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
