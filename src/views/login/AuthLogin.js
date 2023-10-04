@@ -127,8 +127,13 @@ const FirebaseLogin = ({ ...others }) => {
 
       <Formik
         initialValues={{
+<<<<<<< HEAD
           email: 'test@test.com',
           password: '123456',
+=======
+          email: 'admin@brunokitchen.com',
+          password: 'bruno@kitchen123',
+>>>>>>> feature/Recipe
           submit: null
         }}
         validationSchema={Yup.object().shape({
@@ -136,7 +141,6 @@ const FirebaseLogin = ({ ...others }) => {
           password: Yup.string().max(255).required('Password is required')
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-          console.log(values, 'values');
           try {
             if (scriptedRef.current) {
               setUser(values?.email);
@@ -156,7 +160,7 @@ const FirebaseLogin = ({ ...others }) => {
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit} {...others}>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-              <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
+              <InputLabel htmlFor="outlined-adornment-email-login">Email Address</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-email-login"
                 type="email"

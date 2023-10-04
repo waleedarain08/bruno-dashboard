@@ -1,12 +1,14 @@
 // assets
 // import { IconDashboard } from '@tabler/icons';
 import GroupIcon from '@mui/icons-material/Group';
-import PetsIcon from '@mui/icons-material/Pets';
+// import PetsIcon from '@mui/icons-material/Pets';
 import GridViewIcon from '@mui/icons-material/GridView';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import FeedbackIcon from '@mui/icons-material/Feedback';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
+import BallotIcon from '@mui/icons-material/Ballot';
+import PercentIcon from '@mui/icons-material/Percent';
 
 // constant
 // const icons = { IconDashboard };
@@ -34,14 +36,14 @@ const dashboard = {
       icon: GroupIcon,
       breadcrumbs: false
     },
-    {
-      id: 'pet-profile',
-      title: 'Pets-Profile',
-      type: 'item',
-      url: '/pet-profile',
-      icon: PetsIcon,
-      breadcrumbs: false
-    },
+    // {
+    //   id: 'pet-profile',
+    //   title: 'Pets-Profile',
+    //   type: 'item',
+    //   url: '/pet-profile',
+    //   icon: PetsIcon,
+    //   breadcrumbs: false
+    // },
     {
       id: 'food-recipes',
       title: 'Food-Recipes',
@@ -56,6 +58,23 @@ const dashboard = {
       type: 'item',
       url: '/product-categories',
       icon: InventoryIcon,
+      breadcrumbs: false
+    },
+    {
+      id: 'cooking-sheet',
+      title: 'Cooking-sheet',
+      type: 'item',
+      url: '/cooking-sheet',
+      icon: BallotIcon,
+      breadcrumbs: false
+    },
+
+    {
+      id: 'promo-code&loyality-points',
+      title: 'Promo & Loyality',
+      type: 'item',
+      url: '/promo-code&loyality-points',
+      icon: PercentIcon,
       breadcrumbs: false
     },
     {

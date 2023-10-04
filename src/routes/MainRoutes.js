@@ -1,4 +1,6 @@
 import { lazy } from 'react';
+// import { useSelector } from 'react-redux';
+// const data = useSelector((state) => state.AuthReducer.data);
 
 // project imports
 import MainLayout from 'layout/MainLayout';
@@ -9,6 +11,10 @@ import FoodRecipes from 'views/food-recipes/food-recipes';
 import ProductCategories from 'views/product-categories/product-categories';
 import UsersFeedback from 'views/users-feedback/users-feedback';
 import BlogFAQ from 'views/blog-&-FAQ/blog-&-FAQ';
+import Cookingsheet from 'views/cooking-sheet/cooking-sheet';
+import PromoLoyality from 'views/promo-codes&loyality-points/promo-loyality';
+import Ingredients from 'views/ingredients/Ingredients';
+import Categories from 'views/categories/Categories';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -52,10 +58,10 @@ const MainRoutes = {
       ]
     },
     {
-      path: '/pet-profile',
+      path: '/user-auccounts/pet-profile',
       children: [
         {
-          path: '/pet-profile',
+          path: '/user-auccounts/pet-profile',
           element: <PetsProfile />
         }
       ]
@@ -70,11 +76,47 @@ const MainRoutes = {
       ]
     },
     {
+      path: '/ingredients',
+      children: [
+        {
+          path: '/ingredients',
+          element: <Ingredients />
+        }
+      ]
+    },
+    {
+      path: '/cooking-sheet',
+      children: [
+        {
+          path: '/cooking-sheet',
+          element: <Cookingsheet />
+        }
+      ]
+    },
+    {
+      path: '/promo-code&loyality-points',
+      children: [
+        {
+          path: '/promo-code&loyality-points',
+          element: <PromoLoyality />
+        }
+      ]
+    },
+    {
       path: '/product-categories',
       children: [
         {
           path: '/product-categories',
           element: <ProductCategories />
+        }
+      ]
+    },
+    {
+      path: '/categories',
+      children: [
+        {
+          path: '/categories',
+          element: <Categories />
         }
       ]
     },
