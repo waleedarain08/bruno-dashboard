@@ -9,6 +9,7 @@ import PromosReducer from './promos/promosReducer';
 import RecipeReducer from './recipe/recipeReducer';
 import IngredientsReducer from './ingredients/ingredientsReducer';
 import CategoryReducer from './categories/categoriesReducer';
+import BlogsfaqsReducer from './blogs&faqs/blogs&faqsReducer';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
@@ -20,7 +21,8 @@ const reducer = combineReducers({
   PromosReducer: PromosReducer,
   RecipeReducer: RecipeReducer,
   IngredientsReducer: IngredientsReducer,
-  CategoryReducer: CategoryReducer
+  CategoryReducer: CategoryReducer,
+  BlogsfaqsReducer: BlogsfaqsReducer
 });
 
 export default reducer;

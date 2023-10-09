@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://65.2.168.32:4000/bruno/api/v1/';
+export const BASE_URL = 'http://api.brunos.kitchen/bruno/api/v1/';
