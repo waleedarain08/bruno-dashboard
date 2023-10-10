@@ -427,15 +427,6 @@ const FoodRecipes = () => {
               placeholder="Ingredients Composition"
               defaultValue=""
             />
-            {/* <TextField
-              value={Details}
-              onChange={(e) => setDetails(e.target.value)}
-              style={{ margin: 5 }}
-              sx={{ width: '100%' }}
-              id="outlined-basic"
-              label="Details"
-              variant="outlined"
-            /> */}
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <StyledTextarea
