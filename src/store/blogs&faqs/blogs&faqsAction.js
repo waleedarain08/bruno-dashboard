@@ -2,10 +2,10 @@
 import * as actionTypes from './blogs&faqsType';
 import { Get, Post, Delete, Patch } from '../../helpers/apicalls/apicalls';
 
-export const GetAllBlogs_News = (data) => {
+export const GetAllBlogs_News = (data, view) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoading });
-    Get(`news-FAQ/type/newsAndBlog`, data)
+    Get(`news-FAQ/type/${view}`, data)
       .then(function (response) {
         if (response?.isSuccess) {
           dispatch({

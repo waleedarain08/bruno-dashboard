@@ -8,8 +8,8 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
-import { styled } from '@mui/system';
-import { TextareaAutosize } from '@mui/base';
+// import { styled } from '@mui/system';
+// import { TextareaAutosize } from '@mui/base';
 import TextField from '@mui/material/TextField';
 import Switch from '@mui/material/Switch';
 import MenuItem from '@mui/material/MenuItem';
@@ -22,6 +22,7 @@ import { InfinitySpin } from 'react-loader-spinner';
 import square from "../../assets/images/square.jpeg";
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import Select from '@mui/material/Select';
+
 import * as actionTypes from '../../store/blogs&faqs/blogs&faqsType';
 import {
   Box,
@@ -42,6 +43,7 @@ import { useEffect } from 'react';
 import { AddBlogsNnews, DeleteBlogsNnews, EditBlogsNnews, GetAllBlogs_News } from 'store/blogs&faqs/blogs&faqsAction';
 import ImageUploader from 'ui-component/ImageUploader';
 import { handleUpload } from 'utils/helperFunction';
+import RichTextEditor from 'components/RichTextEditor';
 
 const style = {
   position: 'absolute',
@@ -50,7 +52,7 @@ const style = {
   transform: 'translate(-50%, -50%)',
   maxHeight: '100vh',
   width: '100%',
-  maxWidth: "400px", // Set the maximum height with a viewport-relative unit (vh)
+  maxWidth: "600px", // Set the maximum height with a viewport-relative unit (vh)
   overflowY: 'auto', // Enable vertical scrolling if content overflows
   overflowX: 'hidden',
   bgcolor: 'background.paper',
@@ -58,34 +60,34 @@ const style = {
   boxShadow: 24,
   p: 4
 };
-const StyledTextarea = styled(TextareaAutosize)(
-  ({ theme }) => `
-    width: 320px;
-    font-family: inherit;
-    font-size: 0.875rem;
-    font-weight: 400;
-    line-height: 1.5;
-    padding: 12px;
-    border-radius: 12px 12px 12px 12px;
-    color:#121926;
-    background: ${theme.palette.mode === 'dark' ? '#D78809' : '#fff'};
-    border: 1px solid ${theme.palette.mode === 'dark' ? '#bfc0c2' : '#bfc0c2'};
-    &:hover {
-      border:1px solid  #121926;
-    };
-    &:focus {
-      border: 2px solid  #D78809;
-    }
-    // firefox
-    &:focus-visible {
-      outline: 0;
-      border-color: #D78809;
-    }
-    &::placeholder {
-      color: #8A93A1;
-    }
-  `
-);
+// const StyledTextarea = styled(TextareaAutosize)(
+//   ({ theme }) => `
+//     width: 320px;
+//     font-family: inherit;
+//     font-size: 0.875rem;
+//     font-weight: 400;
+//     line-height: 1.5;
+//     padding: 12px;
+//     border-radius: 12px 12px 12px 12px;
+//     color:#121926;
+//     background: ${theme.palette.mode === 'dark' ? '#D78809' : '#fff'};
+//     border: 1px solid ${theme.palette.mode === 'dark' ? '#bfc0c2' : '#bfc0c2'};
+//     &:hover {
+//       border:1px solid  #121926;
+//     };
+//     &:focus {
+//       border: 2px solid  #D78809;
+//     }
+//     // firefox
+//     &:focus-visible {
+//       outline: 0;
+//       border-color: #D78809;
+//     }
+//     &::placeholder {
+//       color: #8A93A1;
+//     }
+//   `
+// );
 
 const BlogFAQ = () => {
 
@@ -104,13 +106,16 @@ const BlogFAQ = () => {
   const Loading = useSelector((state) => state.BlogsfaqsReducer.addLoading);
   const delLoading = useSelector((state) => state.BlogsfaqsReducer.deleteLoading);
   const [open, setOpen] = React.useState(false);
+  const [typeforView, settypeforView] = React.useState("FAQ");
   const [openDelete, setOpenDelete] = React.useState(false);
   const [Delete_Id, setDelete_Id] = React.useState(null);
   const [Process, setProcess] = React.useState("Add");
   const [Error, setError] = React.useState('');
   const handleOpen = () => {
     setOpen(true);
-    setProcess("Add")
+    setProcess("Add");
+    InitialState();
+
   };
   const handleClose = () => {
     setOpen(false);
@@ -119,8 +124,8 @@ const BlogFAQ = () => {
   const handleCloseDelete = () => setOpenDelete(!openDelete);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(GetAllBlogs_News(Userdata?.clientToken));
-  }, []);
+    dispatch(GetAllBlogs_News(Userdata?.clientToken, typeforView));
+  }, [typeforView]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -131,28 +136,28 @@ const BlogFAQ = () => {
     setPage(0);
   };
 
-
   const handleChange = (event) => {
     setTypes(event.target.value);
   };
 
   const onSave = async () => {
-    if (title !== "" && description !== "" && selectedFiles?.length > 0 || PreviewEdit?.length > 0) {
+    if (title !== "" && description !== "") {
       setError("");
-      dispatch({ type: actionTypes.isLoadingadd });
       const newPath = selectedFiles?.length > 0 && await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
       let newdata = {
         title: title,
         isFeatured: Featured,
         description: description,
         type: Types,
-        media: newPath
+        media: Types === "FAQ" ? [] : selectedFiles?.length > 0 ? newPath : PreviewEdit?.length > 0 ? PreviewEdit : setError("Please Select Image")
       };
       if (Process === "Add") {
+        dispatch({ type: actionTypes.isLoadingadd });
         dispatch(AddBlogsNnews(newdata, Userdata?.clientToken, onSuccess));
       }
       else {
-        dispatch(EditBlogsNnews(newdata, Userdata?.clientToken, onSuccess));
+        console.log(newdata, "newdata")
+        dispatch(EditBlogsNnews(Delete_Id, newdata, Userdata?.clientToken, onSuccess));
       }
     }
     else {
@@ -171,7 +176,7 @@ const BlogFAQ = () => {
   };
 
   const onSuccess = () => {
-    dispatch(GetAllBlogs_News(Userdata?.clientToken));
+    dispatch(GetAllBlogs_News(Userdata?.clientToken, typeforView));
     InitialState();
     handleClose();
   };
@@ -185,6 +190,7 @@ const BlogFAQ = () => {
     setFeatured(data?.isFeatured);
     setTypes(data?.type);
     setOpen(true);
+    setError("");
   }
   const onDeleteClick = (id) => {
     setOpenDelete(true)
@@ -197,15 +203,19 @@ const BlogFAQ = () => {
     setFeatured(false);
     setSelectedFiles([]);
     setPreviewEdit([]);
-    setTypes("FAQ");
+    setTypes("");
+    setError("");
     setOpenDelete(false);
+    setDelete_Id(null);
 
     // setSelectedId(null);
   }
   const onDelete = () => {
     dispatch(DeleteBlogsNnews(Userdata?.clientToken, Delete_Id, onSuccess));
   }
-
+  const handleChangeValue = (value) => {
+    setdescription(value);
+  }
 
   return <Box sx={{ width: '100%' }}>
     {isLoading ? (
@@ -224,7 +234,7 @@ const BlogFAQ = () => {
         >
           <Box sx={style}>
             <Typography style={{ textAlign: 'center', paddingBottom: 20 }} variant="h4" component="h2">
-              {Process} Blogs & FAQs
+              {Process} News & FAQs
             </Typography>
             <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
               <TextField
@@ -239,27 +249,23 @@ const BlogFAQ = () => {
               <FormControl style={{ marginTop: 5 }} fullWidth>
                 <InputLabel id="demo-simple-select-label">Type</InputLabel>
                 <Select
+                  disabled={Delete_Id !== null ? true : false}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={Types}
                   label="Age"
                   onChange={handleChange}
                 >
-                  <MenuItem value={"FAQ"}>FAQ</MenuItem>
-                  <MenuItem value={"newsAndBlog"}>News And Blog</MenuItem>
+                  <MenuItem value={"FAQ"}>FAQs</MenuItem>
+                  <MenuItem value={"newsAndBlog"}>News</MenuItem>
                 </Select>
               </FormControl>
             </Box>
-            <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-              <StyledTextarea
-                value={description}
-                onChange={(e) => setdescription(e.target.value)}
-                style={{ width: '105%', height: 50, marginTop: 7 }}
-                maxRows={5}
-                aria-label="maximum height"
-                placeholder="Description"
-                defaultValue=""
-              />
+            <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
+              <div style={{ marginLeft: 10, maxHeight: 300, overflowY: 'scroll', width: '100%' }}>
+                <RichTextEditor value={description}
+                  onChange={handleChangeValue} />
+              </div>
             </Box>
             <FormControlLabel
               style={{ marginLeft: 7 }}
@@ -267,7 +273,7 @@ const BlogFAQ = () => {
               control={<Switch checked={Featured} onChange={() => setFeatured(!Featured)} />}
               label="Featured"
             />
-            <ImageUploader imageCount={5} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
+            {Types !== "FAQ" && <ImageUploader imageCount={5} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />}
             {Error && (
               <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
                 {Error}
@@ -319,7 +325,7 @@ const BlogFAQ = () => {
             flexDirection: "column"
           }}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Are you sure you want to delete this Blog or FAQs
+              Are you sure you want to delete this News or FAQs
             </Typography>
             <Box sx={{
               display: "flex",
@@ -370,9 +376,22 @@ const BlogFAQ = () => {
               color="primary"
               sx={{ boxShadow: 'none' }}
             >
-              Add Blog & FAQs
+              Add News & FAQs
             </Button>
           </AnimateButton>
+          <FormControl style={{ marginTop: 5, width: 150, marginRight: 10, }}>
+            <InputLabel id="demo-simple-select-label">Type</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={typeforView}
+              label="Age"
+              onChange={(e) => settypeforView(e.target.value)}
+            >
+              <MenuItem value={"FAQ"}>FAQs</MenuItem>
+              <MenuItem value={"newsAndBlog"}>News</MenuItem>
+            </Select>
+          </FormControl>
         </Box>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -380,7 +399,7 @@ const BlogFAQ = () => {
               <TableRow>
                 <TableCell align="left">Title</TableCell>
                 <TableCell align="center">Description</TableCell>
-                <TableCell align="center">Media</TableCell>
+                {typeforView !== "FAQ" && <TableCell align="center">Media</TableCell>}
                 <TableCell align="center">Type</TableCell>
                 <TableCell align="center">isFeature</TableCell>
                 <TableCell align="right">Actions</TableCell>
@@ -392,8 +411,16 @@ const BlogFAQ = () => {
                   <TableCell component="th" scope="row">
                     {row?.title}
                   </TableCell>
-                  <TableCell align="center">{row?.description}</TableCell>
-                  <TableCell align="center">
+                  <TableCell align="center">  {row?.description.length > 30 ? (
+                    <>
+                      {row?.description.substring(0, 30)}...
+                    </>
+                  ) : (
+                    <>
+                      {row?.description}
+                    </>
+                  )}</TableCell>
+                  {typeforView !== "FAQ" && <TableCell align="center">
                     {row?.media?.length > 0 ?
                       <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <AvatarGroup max={2}>
@@ -405,8 +432,9 @@ const BlogFAQ = () => {
                         <Avatar key={index} alt="Remy Sharp" src={square} />
                       </div>
                     }
-                  </TableCell>
-                  <TableCell align="center">{row?.type}</TableCell>
+                  </TableCell>}
+
+                  <TableCell align="center">{row?.type == "newsAndBlog" ? "News" : "FAQs"}</TableCell>
                   <TableCell align="center">{row?.isFeatured === true ? "true" : "false"}</TableCell>
                   <TableCell align="right">
                     <BorderColorIcon onClick={() => onEditClick(row)} style={{ marginRight: 2, cursor: 'pointer' }} />

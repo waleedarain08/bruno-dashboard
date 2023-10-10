@@ -70,18 +70,18 @@ const BlogsfaqsReducer = (state = initialState, action) => {
     case actionTypes.isLoadingupdate:
       return {
         ...state,
-        updateLoading: true
+        addLoading: true
       };
     case actionTypes.updateBlogsSuccess:
       return {
         ...state,
-        updateLoading: false,
+        addLoading: false,
         updateData: action.payload
       };
     case actionTypes.updateBlogsFailed:
       return {
         ...state,
-        updateLoading: false
+        addLoading: false
       };
     default:
       return state;
