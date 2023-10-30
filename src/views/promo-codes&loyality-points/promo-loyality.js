@@ -202,7 +202,7 @@ const PromoLoality = ({ ...others }) => {
                         let data = {
                           name: values?.Code,
                           discount: values?.Percentage,
-                          limit: values?.limit,
+                          redemptionLimit: values?.limit,
                           expireOnDate: newDate
                         };
 
@@ -443,7 +443,7 @@ const PromoLoality = ({ ...others }) => {
                     </TableCell>
                     <TableCell align="left">{row?.discount} %</TableCell>
                     <TableCell align="left"> {moment(row?.expireOnDate).format('MMM Do YY')}</TableCell>
-                    <TableCell align="left"> {row?.limit}</TableCell>
+                    <TableCell align="left"> {row?.redemptionLimit}</TableCell>
                     <TableCell align="right">
                       <Chip label="Delete" variant="outlined" onClick={() => handleOpen(row?._id)} />{' '}
                     </TableCell>
