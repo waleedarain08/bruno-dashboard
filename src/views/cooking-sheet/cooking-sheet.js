@@ -146,7 +146,7 @@ const Cookingsheet = () => {
               <TableBody>
                 <StyledTableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <StyledTableCell onClick={handleOpen} style={{ textDecoration: "underline", cursor: "pointer", borderRightWidth: 1, borderRightColor: "#D78809" }} component="th" align="center" scope="row">
-                    111
+                    110
                   </StyledTableCell>
                   <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">Day 1</StyledTableCell>
                   <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">11:02 AM </StyledTableCell>
@@ -155,6 +155,78 @@ const Cookingsheet = () => {
                     Ahmed Mushtaq
                   </StyledTableCell>
                   <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">Milio</StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    1
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    Mighty Chicken
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    10,500
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    30
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    2 times / day
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    60 pouches x 175g
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    Day 3
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    Please call before delivery
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <StyledTableCell onClick={handleOpen} style={{ textDecoration: "underline", cursor: "pointer", borderRightWidth: 1, borderRightColor: "#D78809" }} component="th" align="center" scope="row">
+                    111
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">Day 1</StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">11:02 AM </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">23485</StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    Ahmed Mushtaq
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">Axis</StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    1
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    Mighty Chicken
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    10,500
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    30
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    2 times / day
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    60 pouches x 175g
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    Day 3
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    Please call before delivery
+                  </StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <StyledTableCell onClick={handleOpen} style={{ textDecoration: "underline", cursor: "pointer", borderRightWidth: 1, borderRightColor: "#D78809" }} component="th" align="center" scope="row">
+                    112
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">Day 1</StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">11:02 AM </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">23485</StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    Ahmed Mushtaq
+                  </StyledTableCell>
+                  <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">Bruno</StyledTableCell>
                   <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
                     1
                   </StyledTableCell>

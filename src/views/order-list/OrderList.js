@@ -29,7 +29,7 @@ function createData(name, calories, fat, price) {
             },
             {
                 date: '2020-01-02',
-                customerId: 'Anonymous',
+                customerId: '11091700',
                 amount: 1,
             },
         ],
@@ -56,6 +56,7 @@ function Row(props) {
                     {row.name}
                 </TableCell>
                 <TableCell align="right">{row.calories}</TableCell>
+                <TableCell align="right">{row.fat}</TableCell>
                 <TableCell align="center">
                     <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
                         <AnimateButton>
@@ -94,7 +95,7 @@ function Row(props) {
                                         <TableCell>Date</TableCell>
                                         <TableCell>Customer</TableCell>
                                         <TableCell align="right">Amount</TableCell>
-                                        <TableCell align="right">Total price ($)</TableCell>
+                                        <TableCell align="right">Total price (AED)</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -122,8 +123,8 @@ function Row(props) {
 
 
 const rows = [
-    createData('111$', "House #1 Uk"),
-    createData('12$', "House #2 Uk"),
+    createData('234','111 AED', "House #160 Street al ghurair Dubai"),
+    createData('123','12 AED' ,"Flat A 045 Jumairah Dubai")
 ];
 
 export default function OrderList() {
@@ -133,8 +134,9 @@ export default function OrderList() {
                 <TableHead>
                     <TableRow style={{ backgroundColor: "#D78809" }}>
                         <TableCell />
-                        <TableCell style={{ color: "#fff" }}>Total Amount</TableCell>
-                        <TableCell style={{ color: "#fff" }} align="right">Delivery</TableCell>
+                        <TableCell style={{ color: "#fff" }}>Order #</TableCell>
+                        <TableCell style={{ color: "#fff" }} align="right">Total Amount</TableCell>
+                        <TableCell style={{ color: "#fff" }} align="right" >Delivery Address</TableCell>
                         <TableCell style={{ color: "#fff" }} align="right">Actions</TableCell>
                     </TableRow>
                 </TableHead>
