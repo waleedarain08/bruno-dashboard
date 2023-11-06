@@ -1,0 +1,149 @@
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import AnimateButton from 'ui-component/extended/AnimateButton';
+import { Button } from '@mui/material';
+
+function createData(name, calories, fat, price) {
+    return {
+        name,
+        calories,
+        fat,
+        price,
+        history: [
+            {
+                date: '2020-01-05',
+                customerId: '11091700',
+                amount: 3,
+            },
+            {
+                date: '2020-01-02',
+                customerId: 'Anonymous',
+                amount: 1,
+            },
+        ],
+    };
+}
+
+function Row(props) {
+    const { row } = props;
+    const [open, setOpen] = React.useState(false);
+
+    return (
+        <React.Fragment>
+            <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+                <TableCell>
+                    <IconButton
+                        aria-label="expand row"
+                        size="small"
+                        onClick={() => setOpen(!open)}
+                    >
+                        {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                </TableCell>
+                <TableCell component="th" scope="row">
+                    {row.name}
+                </TableCell>
+                <TableCell align="right">{row.calories}</TableCell>
+                <TableCell align="center">
+                    <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+                        <AnimateButton>
+                            <Button
+                                style={{ margin: '12px' }}
+                                variant="contained"
+                                color="primary"
+                                sx={{ boxShadow: 'none' }}
+                            >
+                                Dispatch Now
+                            </Button>
+                        </AnimateButton>
+                        <AnimateButton>
+                            <Button
+                                style={{ margin: '12px' }}
+                                variant="contained"
+                                color="primary"
+                                sx={{ boxShadow: 'none' }}
+                            >
+                                Mark as Delivered
+                            </Button>
+                        </AnimateButton>
+                    </div>
+                </TableCell>
+            </TableRow>
+            <TableRow>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <Box sx={{ margin: 1 }}>
+                            <Typography variant="h6" gutterBottom component="div">
+                                Order
+                            </Typography>
+                            <Table size="small" aria-label="purchases">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Date</TableCell>
+                                        <TableCell>Customer</TableCell>
+                                        <TableCell align="right">Amount</TableCell>
+                                        <TableCell align="right">Total price ($)</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {row.history.map((historyRow) => (
+                                        <TableRow key={historyRow.date}>
+                                            <TableCell component="th" scope="row">
+                                                {historyRow.date}
+                                            </TableCell>
+                                            <TableCell>{historyRow.customerId}</TableCell>
+                                            <TableCell align="right">{historyRow.amount}</TableCell>
+                                            <TableCell align="right">
+                                                {Math.round(historyRow.amount * row.price * 100) / 100}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Box>
+                    </Collapse>
+                </TableCell>
+            </TableRow>
+        </React.Fragment>
+    );
+}
+
+
+const rows = [
+    createData('111$', "House #1 Uk"),
+    createData('12$', "House #2 Uk"),
+];
+
+export default function OrderList() {
+    return (
+        <TableContainer component={Paper}>
+            <Table aria-label="collapsible table">
+                <TableHead>
+                    <TableRow style={{ backgroundColor: "#D78809" }}>
+                        <TableCell />
+                        <TableCell style={{ color: "#fff" }}>Total Amount</TableCell>
+                        <TableCell style={{ color: "#fff" }} align="right">Delivery</TableCell>
+                        <TableCell style={{ color: "#fff" }} align="right">Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {rows.map((row) => (
+                        <Row key={row.name} row={row} />
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
+}

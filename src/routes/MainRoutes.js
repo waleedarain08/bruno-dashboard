@@ -15,6 +15,7 @@ import Cookingsheet from 'views/cooking-sheet/cooking-sheet';
 import PromoLoyality from 'views/promo-codes&loyality-points/promo-loyality';
 import Ingredients from 'views/ingredients/Ingredients';
 import Categories from 'views/categories/Categories';
+import OrderList from 'views/order-list/OrderList';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -106,6 +107,16 @@ const MainRoutes = {
         }
       ]
     },
+    {
+      path: '/order-list',
+      children: [
+        {
+          path: '/order-list',
+          element: <OrderList />
+        }
+      ]
+    },
+
     {
       path: '/product-categories',
       children: [

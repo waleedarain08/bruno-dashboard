@@ -9,6 +9,7 @@ import FeedbackIcon from '@mui/icons-material/Feedback';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import BallotIcon from '@mui/icons-material/Ballot';
 import PercentIcon from '@mui/icons-material/Percent';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
 
 // constant
 // const icons = { IconDashboard };
@@ -91,6 +92,14 @@ const dashboard = {
       type: 'item',
       url: '/blog-&-FAQ',
       icon: NoteAltIcon,
+      breadcrumbs: false
+    },
+    {
+      id: 'order-list',
+      title: `${`Order's`}`,
+      type: 'item',
+      url: '/order-list',
+      icon: FactCheckIcon,
       breadcrumbs: false
     }
   ]
