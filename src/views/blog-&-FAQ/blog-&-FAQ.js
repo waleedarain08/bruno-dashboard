@@ -238,7 +238,7 @@ const BlogFAQ = () => {
                   style={{ margin: 5 }}
                   sx={{ width: '100%' }}
                   id="outlined-basic"
-                  label="Name"
+                  label="Title"
                   variant="outlined"
                 />
                 <FormControl style={{ marginTop: 5 }} fullWidth>
@@ -295,6 +295,9 @@ const BlogFAQ = () => {
                   {Error}
                 </Typography>
               )}
+              <Typography style={{ textAlign: 'left', color: 'orange' }} variant="h6" component="h6">
+                  * Featured will show at home screen of mobile app.
+                </Typography>
               <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
                 <AnimateButton>
                   <Button
