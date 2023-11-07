@@ -14,31 +14,38 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { Button } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import { ChangeOrder, GetAllOrder } from 'store/orders/ordersAction';
+import { InfinitySpin } from 'react-loader-spinner';
 
-function createData(name, calories, fat, price) {
-    return {
-        name,
-        calories,
-        fat,
-        price,
-        history: [
-            {
-                date: '2020-01-05',
-                customerId: '11091700',
-                amount: 3,
-            },
-            {
-                date: '2020-01-02',
-                customerId: 'Anonymous',
-                amount: 1,
-            },
-        ],
-    };
-}
 
 function Row(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
+    const Userdata = useSelector((state) => state.AuthReducer.data);
+    const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
+    const orderDataChange = useSelector((state) => state.OrderReducer.orderDataChange);
+    console.log(isLoadingOrderChange, orderDataChange)
+    const dispatch = useDispatch();
+
+    const OrderCooked = (id, name) => {
+        if (name === "isCooked") {
+            let data = {
+                isCooked: true
+            }
+            dispatch(ChangeOrder(id, data, Userdata?.clientToken, onSuccess))
+        }
+        else {
+            let data = {
+                isCompleted: true
+            }
+            dispatch(ChangeOrder(id, data, Userdata?.clientToken, onSuccess))
+        }
+    }
+
+    const onSuccess = () => {
+        dispatch(GetAllOrder(Userdata?.clientToken));
+    }
 
     return (
         <React.Fragment>
@@ -53,29 +60,35 @@ function Row(props) {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    {row.name}
+                    {row.totalAmount}$
                 </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
+                <TableCell align="right">{row.deliveryDate}</TableCell>
                 <TableCell align="center">
                     <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
                         <AnimateButton>
                             <Button
+                                onClick={() => OrderCooked(row?._id, "isCooked")}
+                                disabled={row?.isCooked}
                                 style={{ margin: '12px' }}
                                 variant="contained"
                                 color="primary"
                                 sx={{ boxShadow: 'none' }}
                             >
-                                Dispatch Now
+                                {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : !row?.isCooked ? "Order Cooked" : "Order Dispatch"}
+
                             </Button>
                         </AnimateButton>
                         <AnimateButton>
                             <Button
+                                onClick={() => OrderCooked(row?._id, "isCompleted")}
+                                disabled={row.isCompleted}
                                 style={{ margin: '12px' }}
                                 variant="contained"
                                 color="primary"
                                 sx={{ boxShadow: 'none' }}
                             >
-                                Mark as Delivered
+                                {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : " Mark as Delivered"}
+
                             </Button>
                         </AnimateButton>
                     </div>
@@ -85,51 +98,99 @@ function Row(props) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
-                            <Typography variant="h6" gutterBottom component="div">
+                            <Typography variant="h4" gutterBottom component="div">
                                 Order
                             </Typography>
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Date</TableCell>
-                                        <TableCell>Customer</TableCell>
-                                        <TableCell align="right">Amount</TableCell>
+                                        <TableCell>Type</TableCell>
                                         <TableCell align="right">Total price ($)</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {row.history.map((historyRow) => (
-                                        <TableRow key={historyRow.date}>
-                                            <TableCell component="th" scope="row">
-                                                {historyRow.date}
-                                            </TableCell>
-                                            <TableCell>{historyRow.customerId}</TableCell>
-                                            <TableCell align="right">{historyRow.amount}</TableCell>
-                                            <TableCell align="right">
-                                                {Math.round(historyRow.amount * row.price * 100) / 100}
-                                            </TableCell>
-                                        </TableRow>
+                                    {row.orderItems.map((historyRow, index) => (
+                                        <>
+                                            <TableRow key={index}>
+                                                <TableCell component="th" scope="row">
+                                                    {historyRow.planType}
+                                                </TableCell>
+                                                <TableCell align="right">
+                                                    {historyRow.planTotal}$
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                                                    <Collapse in={open} timeout="auto" unmountOnExit>
+                                                        <Box sx={{ margin: 1 }}>
+                                                            <Typography variant="h4" gutterBottom component="div">
+                                                                Details
+                                                            </Typography>
+                                                            <Table size="small" aria-label="purchases">
+                                                                <TableHead>
+                                                                    <TableRow>
+                                                                        <TableCell>Category</TableCell>
+                                                                        <TableCell align="center">Name</TableCell>
+                                                                        <TableCell align="center">Quantity</TableCell>
+                                                                        <TableCell align="right">Price ($)</TableCell>
+                                                                    </TableRow>
+                                                                </TableHead>
+                                                                <TableBody>
+                                                                    {historyRow?.recipes?.map((item, index) => (
+                                                                        <TableRow key={index}>
+                                                                            <TableCell component="th" scope="row">
+                                                                                {item.category}
+                                                                            </TableCell>
+                                                                            <TableCell align="center">
+                                                                                {item.name}
+                                                                            </TableCell>
+                                                                            <TableCell align="center">
+                                                                                {item.quantity}
+                                                                            </TableCell>
+                                                                            <TableCell align="right">
+                                                                                {item.finalPrice}$
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    ))}
+                                                                </TableBody>
+                                                            </Table>
+                                                        </Box>
+                                                    </Collapse>
+                                                </TableCell>
+                                            </TableRow>
+                                        </>
+
                                     ))}
                                 </TableBody>
+
                             </Table>
                         </Box>
                     </Collapse>
                 </TableCell>
             </TableRow>
+
         </React.Fragment>
     );
 }
 
 
-const rows = [
-    createData('111$', "House #1 Uk"),
-    createData('12$', "House #2 Uk"),
-];
 
 export default function OrderList() {
+    const dispatch = useDispatch();
+    const Userdata = useSelector((state) => state.AuthReducer.data);
+    const isLoading = useSelector((state) => state.OrderReducer.isLoadingOrder);
+    const dataOrders = useSelector((state) => state.OrderReducer.orderData);
+
+    React.useEffect(() => {
+        dispatch(GetAllOrder(Userdata?.clientToken));
+    }, []);
     return (
         <TableContainer component={Paper}>
-            <Table aria-label="collapsible table">
+            {isLoading ? <Paper sx={{ width: '100%', mb: 2 }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                    <InfinitySpin width="200" color="#D78809" />
+                </div>
+            </Paper> : <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow style={{ backgroundColor: "#D78809" }}>
                         <TableCell />
@@ -139,11 +200,12 @@ export default function OrderList() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {dataOrders?.map((row) => (
                         <Row key={row.name} row={row} />
                     ))}
                 </TableBody>
-            </Table>
+            </Table>}
+
         </TableContainer>
     );
 }

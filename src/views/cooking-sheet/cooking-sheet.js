@@ -11,13 +11,9 @@ import { styled } from '@mui/material/styles';
 import { InfinitySpin } from 'react-loader-spinner';
 import {
   Box,
-
   Typography
-  // useMediaQuery
 } from '@mui/material';
 import Modal from '@mui/material/Modal';
-// import { useNavigate } from 'react-router-dom';
-
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { GetUsers } from 'store/users/usersAction';
