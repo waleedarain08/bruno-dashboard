@@ -5,7 +5,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import GridViewIcon from '@mui/icons-material/GridView';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import InventoryIcon from '@mui/icons-material/Inventory';
-import FeedbackIcon from '@mui/icons-material/Feedback';
+//import FeedbackIcon from '@mui/icons-material/Feedback';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import BallotIcon from '@mui/icons-material/Ballot';
 import PercentIcon from '@mui/icons-material/Percent';
@@ -61,6 +61,39 @@ const dashboard = {
       icon: InventoryIcon,
       breadcrumbs: false
     },
+
+    {
+      id: 'promo-code&loyality-points',
+      title: 'Promo Codes & Loyalty Points',
+      type: 'item',
+      url: '/promo-code&loyality-points',
+      icon: PercentIcon,
+      breadcrumbs: false
+    },
+    // {
+    //   id: 'users-feedback',
+    //   title: 'Users-Feedback',
+    //   type: 'item',
+    //   url: '/users-feedback',
+    //   icon: FeedbackIcon,
+    //   breadcrumbs: false
+    // },
+    {
+      id: 'blog-&-FAQ',
+      title: 'News & FAQs',
+      type: 'item',
+      url: '/blog-&-FAQ',
+      icon: NoteAltIcon,
+      breadcrumbs: false
+    },
+    {
+      id: 'order-list',
+      title: 'Orders',
+      type: 'item',
+      url: '/order-list',
+      icon: FactCheckIcon,
+      breadcrumbs: false
+    },
     {
       id: 'cooking-sheet',
       title: 'Cooking-sheet',
@@ -69,39 +102,6 @@ const dashboard = {
       icon: BallotIcon,
       breadcrumbs: false
     },
-
-    {
-      id: 'promo-code&loyality-points',
-      title: 'Promo & Loyality',
-      type: 'item',
-      url: '/promo-code&loyality-points',
-      icon: PercentIcon,
-      breadcrumbs: false
-    },
-    {
-      id: 'users-feedback',
-      title: 'Users-Feedback',
-      type: 'item',
-      url: '/users-feedback',
-      icon: FeedbackIcon,
-      breadcrumbs: false
-    },
-    {
-      id: 'blog-&-FAQ',
-      title: 'Blog & FAQ',
-      type: 'item',
-      url: '/blog-&-FAQ',
-      icon: NoteAltIcon,
-      breadcrumbs: false
-    },
-    {
-      id: 'order-list',
-      title: `${`Order's`}`,
-      type: 'item',
-      url: '/order-list',
-      icon: FactCheckIcon,
-      breadcrumbs: false
-    }
   ]
 };
 

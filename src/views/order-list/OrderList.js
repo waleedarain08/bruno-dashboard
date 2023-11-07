@@ -63,7 +63,8 @@ function Row(props) {
                     {row.totalAmount}$
                 </TableCell>
                 <TableCell align="right">{row.deliveryDate}</TableCell>
-                <TableCell align="center">
+                <TableCell align="center">----</TableCell>
+                <TableCell align="right">
                     <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
                         <AnimateButton>
                             <Button
@@ -180,6 +181,7 @@ export default function OrderList() {
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const isLoading = useSelector((state) => state.OrderReducer.isLoadingOrder);
     const dataOrders = useSelector((state) => state.OrderReducer.orderData);
+    console.log(dataOrders, "dataOrders")
 
     React.useEffect(() => {
         dispatch(GetAllOrder(Userdata?.clientToken));
@@ -194,14 +196,15 @@ export default function OrderList() {
                 <TableHead>
                     <TableRow style={{ backgroundColor: "#D78809" }}>
                         <TableCell />
-                        <TableCell style={{ color: "#fff" }}>Total Amount</TableCell>
-                        <TableCell style={{ color: "#fff" }} align="right">Delivery</TableCell>
+                        <TableCell style={{ color: "#fff" }}>Order #</TableCell>
+                        <TableCell style={{ color: "#fff" }} align="right">Total Amount</TableCell>
+                        <TableCell style={{ color: "#fff" }} align="right" >Delivery Address</TableCell>
                         <TableCell style={{ color: "#fff" }} align="right">Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {dataOrders?.map((row) => (
-                        <Row key={row.name} row={row} />
+                    {dataOrders?.map((row, index) => (
+                        <Row key={index} row={row} />
                     ))}
                 </TableBody>
             </Table>}
