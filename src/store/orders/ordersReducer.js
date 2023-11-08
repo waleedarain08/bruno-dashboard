@@ -6,8 +6,8 @@ export const initialState = {
   orderData: [],
   isLoadingOrderChange: false,
   orderDataChange: [],
-
-
+  isLoadingLocation: false,
+  LocationDataChange: [],
 };
 
 // ==============================|| OrderReducer REDUCER ||============================== //
@@ -47,6 +47,25 @@ const OrderReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoadingOrderChange: false
+      };
+    ///////////////////////////////////////////////////////////
+
+
+    case actionTypes.isLoadingOrderLocation:
+      return {
+        ...state,
+        isLoadingLocation: true
+      };
+    case actionTypes.SuccessOrderLocation:
+      return {
+        ...state,
+        isLoadingLocation: false,
+        LocationDataChange: action.payload
+      };
+    case actionTypes.FailedOrderLocation:
+      return {
+        ...state,
+        isLoadingLocation: false
       };
     ///////////////////////////////////////////////////////////
 

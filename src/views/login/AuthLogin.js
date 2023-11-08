@@ -91,7 +91,7 @@ const FirebaseLogin = ({ ...others }) => {
                 password: values?.password,
                 deviceToken: 'deviceToken',
                 deviceType: 'deviceType',
-                role: 'admin'
+                role: 'user'
               };
               dispatch(Login(data));
               // setUser(values?.email);

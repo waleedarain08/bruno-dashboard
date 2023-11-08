@@ -47,5 +47,28 @@ export const ChangeOrder = (id, data, token, onSuccess) => {
   };
 };
 
+export const ViewOrderLocation = (id, data) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.isLoadingOrderLocation });
+    Get(`user/location/${id}`, data)
+      .then(function (response) {
+        if (response?.isSuccess) {
+          dispatch({
+            type: actionTypes.SuccessOrderLocation,
+            payload: response?.data
+          });
+        } else {
+          dispatch({ type: actionTypes.FailedOrderLocation });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.FailedOrderLocation });
+      });
+  };
+};
+
+
 
 

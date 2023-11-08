@@ -15,17 +15,20 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { Button } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
-import { ChangeOrder, GetAllOrder } from 'store/orders/ordersAction';
+import { ChangeOrder, GetAllOrder, ViewOrderLocation } from 'store/orders/ordersAction';
 import { InfinitySpin } from 'react-loader-spinner';
+import LocationModal from 'components/LocationModal';
 
 
 function Row(props) {
     const { row } = props;
     const [open, setOpen] = React.useState(false);
+    const [modalOpen, setModalOpen] = React.useState(false);
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
-    const orderDataChange = useSelector((state) => state.OrderReducer.orderDataChange);
-    console.log(isLoadingOrderChange, orderDataChange)
+    const LocationDataChange = useSelector((state) => state.OrderReducer.LocationDataChange);
+    // const orderDataChange = useSelector((state) => state.OrderReducer.orderDataChange);
+    console.log(LocationDataChange, "LocationDataChange")
     const dispatch = useDispatch();
 
     const OrderCooked = (id, name) => {
@@ -46,9 +49,19 @@ function Row(props) {
     const onSuccess = () => {
         dispatch(GetAllOrder(Userdata?.clientToken));
     }
+    const ViewLocation = (id) => {
+        dispatch(ViewOrderLocation(id, Userdata?.clientToken));
+        setModalOpen(true);
+    }
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    };
 
     return (
         <React.Fragment>
+            <LocationModal open={modalOpen}
+                onClose={handleCloseModal}
+                location={LocationDataChange} />
             <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
                 <TableCell>
                     <IconButton
@@ -60,10 +73,22 @@ function Row(props) {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    {row.totalAmount}$
+                    {row.totalAmount}-AED
                 </TableCell>
                 <TableCell align="right">{row.deliveryDate}</TableCell>
-                <TableCell align="center">----</TableCell>
+                <TableCell align="center">
+                    <AnimateButton>
+                        <Button
+                            onClick={() => ViewLocation(row?.locationId)}
+                            disabled={row?.isCooked}
+                            style={{ margin: '12px' }}
+                            variant="contained"
+                            color="primary"
+                            sx={{ boxShadow: 'none' }}
+                        >
+                            View Location
+                        </Button>
+                    </AnimateButton></TableCell>
                 <TableCell align="right">
                     <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
                         <AnimateButton>
@@ -75,7 +100,7 @@ function Row(props) {
                                 color="primary"
                                 sx={{ boxShadow: 'none' }}
                             >
-                                {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : !row?.isCooked ? "Order Cooked" : "Order Dispatch"}
+                                {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : !row?.isCooked ? "Order Cooked" : "Order Dispatched"}
 
                             </Button>
                         </AnimateButton>
@@ -106,7 +131,7 @@ function Row(props) {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Type</TableCell>
-                                        <TableCell align="right">Total price ($)</TableCell>
+                                        <TableCell align="right">Total price (AED)</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -117,7 +142,7 @@ function Row(props) {
                                                     {historyRow.planType}
                                                 </TableCell>
                                                 <TableCell align="right">
-                                                    {historyRow.planTotal}$
+                                                    {historyRow.planTotal}-AED
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow>
@@ -133,7 +158,7 @@ function Row(props) {
                                                                         <TableCell>Category</TableCell>
                                                                         <TableCell align="center">Name</TableCell>
                                                                         <TableCell align="center">Quantity</TableCell>
-                                                                        <TableCell align="right">Price ($)</TableCell>
+                                                                        <TableCell align="right">Price (AED)</TableCell>
                                                                     </TableRow>
                                                                 </TableHead>
                                                                 <TableBody>
@@ -149,7 +174,7 @@ function Row(props) {
                                                                                 {item.quantity}
                                                                             </TableCell>
                                                                             <TableCell align="right">
-                                                                                {item.finalPrice}$
+                                                                                {item.finalPrice}-AED
                                                                             </TableCell>
                                                                         </TableRow>
                                                                     ))}
@@ -198,7 +223,7 @@ export default function OrderList() {
                         <TableCell />
                         <TableCell style={{ color: "#fff" }}>Order #</TableCell>
                         <TableCell style={{ color: "#fff" }} align="right">Total Amount</TableCell>
-                        <TableCell style={{ color: "#fff" }} align="right" >Delivery Address</TableCell>
+                        <TableCell style={{ color: "#fff" }} align="center" >Delivery Address</TableCell>
                         <TableCell style={{ color: "#fff" }} align="right">Actions</TableCell>
                     </TableRow>
                 </TableHead>
