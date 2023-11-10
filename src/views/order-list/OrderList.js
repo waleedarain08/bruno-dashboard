@@ -75,9 +75,10 @@ function Row(props) {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    {row.totalAmount}-AED
+                    n/a
+                    {/* {row.deliveryDate} */}
                 </TableCell>
-                <TableCell align="right">{row.deliveryDate}</TableCell>
+                <TableCell align="right">{row.totalAmount}-AED</TableCell>
                 <TableCell align="center">
                     <AnimateButton>
                         <Button
