@@ -80,7 +80,7 @@ const dashboard = {
     // },
     {
       id: 'blog-&-FAQ',
-      title: 'News & FAQs',
+      title: 'News,FAQs & Feedbacks',
       type: 'item',
       url: '/blog-&-FAQ',
       icon: NoteAltIcon,

@@ -75,8 +75,7 @@ function Row(props) {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    n/a
-                    {/* {row.deliveryDate} */}
+                    {row._id.substr(row._id.length - 5)}
                 </TableCell>
                 <TableCell align="right">{row.totalAmount}-AED</TableCell>
                 <TableCell align="center">
