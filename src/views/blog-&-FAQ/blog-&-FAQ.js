@@ -99,6 +99,7 @@ const BlogFAQ = () => {
   const [Types, setTypes] = React.useState('');
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const rows = useSelector((state) => state.BlogsfaqsReducer.data);
+  console.log(rows, "rows")
   const isLoading = useSelector((state) => state.BlogsfaqsReducer.isLoading);
   const Loading = useSelector((state) => state.BlogsfaqsReducer.addLoading);
   const delLoading = useSelector((state) => state.BlogsfaqsReducer.deleteLoading);
@@ -149,10 +150,10 @@ const BlogFAQ = () => {
           Types === 'FAQ'
             ? []
             : selectedFiles?.length > 0
-            ? newPath
-            : PreviewEdit?.length > 0
-            ? PreviewEdit
-            : setError('Please Select Image')
+              ? newPath
+              : PreviewEdit?.length > 0
+                ? PreviewEdit
+                : setError('Please Select Image')
       };
       if (Process === 'Add') {
         dispatch({ type: actionTypes.isLoadingadd });
@@ -296,8 +297,8 @@ const BlogFAQ = () => {
                 </Typography>
               )}
               <Typography style={{ textAlign: 'left', color: 'orange' }} variant="h6" component="h6">
-                  * Featured will show at home screen of mobile app.
-                </Typography>
+                * Featured will show at home screen of mobile app.
+              </Typography>
               <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
                 <AnimateButton>
                   <Button
@@ -420,6 +421,7 @@ const BlogFAQ = () => {
               >
                 <MenuItem value={'FAQ'}>FAQs</MenuItem>
                 <MenuItem value={'newsAndBlog'}>News</MenuItem>
+                <MenuItem value={'feedback'}>Feedback</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -468,7 +470,7 @@ const BlogFAQ = () => {
                       </TableCell>
                     )}
 
-                    <TableCell align="center">{row?.type == 'newsAndBlog' ? 'News' : 'FAQs'}</TableCell>
+                    <TableCell align="center">{row?.type == 'newsAndBlog' ? 'News' : row?.type == "feedback" ? 'Feedback' : 'FAQs'}</TableCell>
                     <TableCell align="center">{row?.isFeatured === true ? 'true' : 'false'}</TableCell>
                     <TableCell align="right">
                       <BorderColorIcon onClick={() => onEditClick(row)} style={{ marginRight: 2, cursor: 'pointer' }} />

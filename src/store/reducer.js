@@ -11,6 +11,7 @@ import IngredientsReducer from './ingredients/ingredientsReducer';
 import CategoryReducer from './categories/categoriesReducer';
 import BlogsfaqsReducer from './blogs&faqs/blogs&faqsReducer';
 import OrderReducer from './orders/ordersReducer';
+import CookingSheetReducer from './cookingSheet/cookingSheetReducer';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
@@ -24,7 +25,8 @@ const reducer = combineReducers({
   IngredientsReducer: IngredientsReducer,
   CategoryReducer: CategoryReducer,
   BlogsfaqsReducer: BlogsfaqsReducer,
-  OrderReducer: OrderReducer
+  OrderReducer: OrderReducer,
+  CookingSheetReducer: CookingSheetReducer
 });
 
 export default reducer;

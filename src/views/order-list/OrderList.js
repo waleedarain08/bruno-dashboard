@@ -9,6 +9,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import Avatar from '@mui/material/Avatar';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -27,8 +29,8 @@ function Row(props) {
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
     const LocationDataChange = useSelector((state) => state.OrderReducer.LocationDataChange);
-    // const orderDataChange = useSelector((state) => state.OrderReducer.orderDataChange);
-    console.log(LocationDataChange, "LocationDataChange")
+    console.log(row, "row")
+
     const dispatch = useDispatch();
 
     const OrderCooked = (id, name) => {
@@ -152,6 +154,46 @@ function Row(props) {
                                                             <Typography variant="h4" gutterBottom component="div">
                                                                 Details
                                                             </Typography>
+                                                            {historyRow?.pet && <Table size="small" aria-label="purchases">
+                                                                <TableHead>
+                                                                    <TableRow>
+                                                                        <TableCell align="left">Pet Name</TableCell>
+                                                                        <TableCell align="center">Breed</TableCell>
+                                                                        <TableCell align="center">Media</TableCell>
+                                                                        <TableCell align="center">Feeding Routine</TableCell>
+                                                                        <TableCell align="center">Current Weight</TableCell>
+                                                                        <TableCell align="right">Actual Weight</TableCell>
+                                                                    </TableRow>
+                                                                </TableHead>
+                                                                <TableBody>
+                                                                    <TableRow>
+                                                                        <TableCell align="left">
+                                                                            {historyRow?.pet?.name}
+                                                                        </TableCell>
+                                                                        <TableCell align="center">
+                                                                            {historyRow?.pet?.breed}
+                                                                        </TableCell>
+                                                                        <TableCell align="center">
+                                                                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                                                <AvatarGroup max={2}>
+                                                                                    <Avatar key={index} alt="Remy Sharp" src={historyRow?.pet?.media} />
+                                                                                </AvatarGroup>
+                                                                            </div>
+                                                                        </TableCell>
+                                                                        <TableCell align="center">
+                                                                            {historyRow?.pet?.feedingRoutine}
+                                                                        </TableCell>
+
+                                                                        <TableCell align="center">
+                                                                            {historyRow?.pet?.currentWeight}
+                                                                        </TableCell>
+                                                                        <TableCell align="right">
+                                                                            {historyRow?.pet?.actualWeight}
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                            </Table>}
+
                                                             <Table size="small" aria-label="purchases">
                                                                 <TableHead>
                                                                     <TableRow>
@@ -165,7 +207,7 @@ function Row(props) {
                                                                     {historyRow?.recipes?.map((item, index) => (
                                                                         <TableRow key={index}>
                                                                             <TableCell component="th" scope="row">
-                                                                                {item.category}
+                                                                                {item.category !== "" ? item.category : "---"}
                                                                             </TableCell>
                                                                             <TableCell align="center">
                                                                                 {item.name}
@@ -206,8 +248,6 @@ export default function OrderList() {
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const isLoading = useSelector((state) => state.OrderReducer.isLoadingOrder);
     const dataOrders = useSelector((state) => state.OrderReducer.orderData);
-    console.log(dataOrders, "dataOrders")
-
     React.useEffect(() => {
         dispatch(GetAllOrder(Userdata?.clientToken));
     }, []);
