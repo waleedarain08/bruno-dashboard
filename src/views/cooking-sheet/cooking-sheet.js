@@ -123,35 +123,35 @@ const Cookingsheet = () => {
               <TableBody>
                 {allData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) =>
                   <StyledTableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <StyledTableCell style={{ textDecoration: "underline", cursor: "pointer", borderRightWidth: 1, borderRightColor: "#D78809" }} component="th" align="center" scope="row">
-                      110
+                    <StyledTableCell component="th" align="center" scope="row">
+                      {row._id.substr(row._id.length - 5)}
                     </StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">N/A</StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">11:02 AM </StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">23485</StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    <StyledTableCell align="center">N/A</StyledTableCell>
+                    <StyledTableCell align="center">11:02 AM </StyledTableCell>
+                    <StyledTableCell align="center">23485</StyledTableCell>
+                    <StyledTableCell align="center">
                       Ahmed Mushtaq
                     </StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">Milio</StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    <StyledTableCell align="center">Milio</StyledTableCell>
+                    <StyledTableCell align="center">
                       1
                     </StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    <StyledTableCell align="center">
                       Mighty Chicken
                     </StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    <StyledTableCell align="center">
                       {row?.totalAmount}
                     </StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    <StyledTableCell align="center">
                       30
                     </StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    <StyledTableCell align="center">
                       2 times / day
                     </StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    <StyledTableCell align="center">
                       60 pouches x 175g
                     </StyledTableCell>
-                    <StyledTableCell style={{ borderRightWidth: 1, borderRightColor: "#D78809" }} align="center">
+                    <StyledTableCell align="center">
                       Day 3
                     </StyledTableCell>
                     <StyledTableCell align="center">

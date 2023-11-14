@@ -5,7 +5,7 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
-import UserAccounts from 'views/user-accounts/user_accounts';
+// import UserAccounts from 'views/user-accounts/user_accounts';
 import PetsProfile from 'views/pets-profile/pets-profile';
 import FoodRecipes from 'views/food-recipes/food-recipes';
 import ProductCategories from 'views/product-categories/product-categories';
@@ -18,9 +18,10 @@ import Categories from 'views/categories/Categories';
 import OrderList from 'views/order-list/OrderList';
 import IngredientsPortioningSheet from 'views/cooking-sheet/IngredientsPortioningSheet';
 import IngredientsQuantitySheet from 'views/cooking-sheet/IngredientsQuantitySheet';
+import DeliveryReport from 'views/delivery-report/DeliveryReport';
 
 // dashboard routing
-const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
+// const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
@@ -32,6 +33,8 @@ const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
+const UserAccounts = Loadable(lazy(() => import('views/user-accounts/user_accounts')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -40,21 +43,21 @@ const MainRoutes = {
   children: [
     {
       path: '/',
-      element: <DashboardDefault />
+      element: <UserAccounts />
     },
     {
       path: '*',
-      element: <DashboardDefault />
+      element: <UserAccounts />
     },
-    {
-      path: '/dashboard',
-      children: [
-        {
-          path: 'dashboard',
-          element: <DashboardDefault />
-        }
-      ]
-    },
+    // {
+    //   path: '/dashboard',
+    //   children: [
+    //     {
+    //       path: 'dashboard',
+    //       element: <DashboardDefault />
+    //     }
+    //   ]
+    // },
     {
       path: '/user-auccounts',
       children: [
@@ -114,6 +117,15 @@ const MainRoutes = {
         {
           path: '/promo-code&loyality-points',
           element: <PromoLoyality />
+        }
+      ]
+    },
+    {
+      path: '/delivery-report',
+      children: [
+        {
+          path: '/delivery-report',
+          element: <DeliveryReport />
         }
       ]
     },

@@ -2,7 +2,7 @@
 // import { IconDashboard } from '@tabler/icons';
 import GroupIcon from '@mui/icons-material/Group';
 // import PetsIcon from '@mui/icons-material/Pets';
-import GridViewIcon from '@mui/icons-material/GridView';
+// import GridViewIcon from '@mui/icons-material/GridView';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import InventoryIcon from '@mui/icons-material/Inventory';
 //import FeedbackIcon from '@mui/icons-material/Feedback';
@@ -10,6 +10,7 @@ import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import BallotIcon from '@mui/icons-material/Ballot';
 import PercentIcon from '@mui/icons-material/Percent';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
+import SummarizeIcon from '@mui/icons-material/Summarize';
 
 // constant
 // const icons = { IconDashboard };
@@ -21,14 +22,14 @@ const dashboard = {
   title: 'Dashboard',
   type: 'group',
   children: [
-    {
-      id: 'default',
-      title: 'Dashboard',
-      type: 'item',
-      url: '/',
-      icon: GridViewIcon,
-      breadcrumbs: false
-    },
+    // {
+    //   id: 'default',
+    //   title: 'Dashboard',
+    //   type: 'item',
+    //   url: '/',
+    //   icon: GridViewIcon,
+    //   breadcrumbs: false
+    // },
     {
       id: 'userAccounts',
       title: 'User-Accounts',
@@ -100,6 +101,14 @@ const dashboard = {
       type: 'item',
       url: '/cooking-sheet',
       icon: BallotIcon,
+      breadcrumbs: false
+    },
+    {
+      id: 'delivery-report',
+      title: 'Delivery-Report',
+      type: 'item',
+      url: '/delivery-report',
+      icon: SummarizeIcon,
       breadcrumbs: false
     },
   ]

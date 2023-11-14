@@ -7,6 +7,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import AvatarGroup from '@mui/material/AvatarGroup';
@@ -29,9 +30,11 @@ function Row(props) {
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
     const LocationDataChange = useSelector((state) => state.OrderReducer.LocationDataChange);
-    console.log(row, "row")
+
 
     const dispatch = useDispatch();
+
+
 
     const OrderCooked = (id, name) => {
         if (name === "isCooked") {
@@ -126,19 +129,22 @@ function Row(props) {
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
-                            <Typography variant="h4" gutterBottom component="div">
-                                Order
-                            </Typography>
-                            <Table size="small" aria-label="purchases">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>Type</TableCell>
-                                        <TableCell align="right">Total price (AED)</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {row.orderItems.map((historyRow, index) => (
-                                        <>
+                            {row.orderItems.map((historyRow, index) => {
+                                let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
+                                const content = historyRow?.pouchesDetail && newpouchesDetail?.slice(2, -2);
+                                const resultArray = historyRow?.pouchesDetail && content?.split('\\n');
+                                return <>
+                                    <Typography variant="h4" gutterBottom component="div">
+                                        Order
+                                    </Typography>
+                                    <Table size="small" aria-label="purchases">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Type</TableCell>
+                                                <TableCell align="right">Total price (AED)</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
                                             <TableRow key={index}>
                                                 <TableCell component="th" scope="row">
                                                     {historyRow.planType}
@@ -197,10 +203,10 @@ function Row(props) {
                                                             <Table size="small" aria-label="purchases">
                                                                 <TableHead>
                                                                     <TableRow>
-                                                                        <TableCell>Category</TableCell>
-                                                                        <TableCell align="center">Name</TableCell>
-                                                                        <TableCell align="center">Quantity</TableCell>
-                                                                        <TableCell align="right">Price (AED)</TableCell>
+                                                                        <TableCell style={{ fontWeight: "bold" }}>Category</TableCell>
+                                                                        <TableCell style={{ fontWeight: "bold" }} align="center">Name</TableCell>
+                                                                        <TableCell style={{ fontWeight: "bold" }} align="center">Quantity</TableCell>
+                                                                        <TableCell style={{ fontWeight: "bold" }} align="right">Price (AED)</TableCell>
                                                                     </TableRow>
                                                                 </TableHead>
                                                                 <TableBody>
@@ -222,16 +228,28 @@ function Row(props) {
                                                                     ))}
                                                                 </TableBody>
                                                             </Table>
+                                                            <Table size="small" aria-label="purchases">
+                                                                <TableHead>
+                                                                    <TableRow>
+                                                                        <TableCell style={{ fontWeight: "bold" }}>Pouches Detail</TableCell>
+                                                                    </TableRow>
+                                                                </TableHead>
+                                                                <TableBody>
+                                                                    <TableRow >
+                                                                        <TableCell component="th" scope="row">
+                                                                            {resultArray?.map((x, index) => <p key={index}>{x}</p>)}
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                </TableBody>
+                                                            </Table>
                                                         </Box>
                                                     </Collapse>
                                                 </TableCell>
                                             </TableRow>
-                                        </>
-
-                                    ))}
-                                </TableBody>
-
-                            </Table>
+                                        </TableBody>
+                                    </Table>
+                                </>
+                            })}
                         </Box>
                     </Collapse>
                 </TableCell>
@@ -244,6 +262,16 @@ function Row(props) {
 
 
 export default function OrderList() {
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
     const dispatch = useDispatch();
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const isLoading = useSelector((state) => state.OrderReducer.isLoadingOrder);
@@ -268,11 +296,21 @@ export default function OrderList() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {dataOrders?.map((row, index) => (
+                    {dataOrders?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
                         <Row key={index} row={row} />
                     ))}
                 </TableBody>
             </Table>}
+
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                component="div"
+                count={dataOrders?.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
 
         </TableContainer>
     );
