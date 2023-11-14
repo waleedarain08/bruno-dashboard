@@ -78,9 +78,9 @@ function Row(props) {
                     </IconButton>
                 </TableCell>
                 <TableCell component="th" scope="row">
-                    {row._id.substr(row._id.length - 5)}
+                    {row?._id.substr(row?._id?.length - 5)}
                 </TableCell>
-                <TableCell align="right">{row.totalAmount}-AED</TableCell>
+                <TableCell align="right">{row?.totalAmount}-AED</TableCell>
                 <TableCell align="center">
                     <AnimateButton>
                         <Button
@@ -147,10 +147,10 @@ function Row(props) {
                                         <TableBody>
                                             <TableRow key={index}>
                                                 <TableCell component="th" scope="row">
-                                                    {historyRow.planType}
+                                                    {historyRow?.planType}
                                                 </TableCell>
                                                 <TableCell align="right">
-                                                    {historyRow.planTotal}-AED
+                                                    {historyRow?.planTotal}-AED
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow>
@@ -213,16 +213,16 @@ function Row(props) {
                                                                     {historyRow?.recipes?.map((item, index) => (
                                                                         <TableRow key={index}>
                                                                             <TableCell component="th" scope="row">
-                                                                                {item.category !== "" ? item.category : "---"}
+                                                                                {item?.category !== "" ? item?.category : "---"}
                                                                             </TableCell>
                                                                             <TableCell align="center">
-                                                                                {item.name}
+                                                                                {item?.name}
                                                                             </TableCell>
                                                                             <TableCell align="center">
-                                                                                {item.quantity}
+                                                                                {item?.quantity}
                                                                             </TableCell>
                                                                             <TableCell align="right">
-                                                                                {item.finalPrice}-AED
+                                                                                {item?.finalPrice}-AED
                                                                             </TableCell>
                                                                         </TableRow>
                                                                     ))}
