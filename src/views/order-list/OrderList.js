@@ -132,7 +132,7 @@ function Row(props) {
                             {row.orderItems.map((historyRow, index) => {
                                 let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
                                 const content = historyRow?.pouchesDetail && newpouchesDetail?.slice(2, -2);
-                                const resultArray = historyRow?.pouchesDetail && content?.split('\\n');
+                                const resultArray = historyRow?.pouchesDetail && content?.split(/\\n|\|/);
                                 return <>
                                     <Typography variant="h4" gutterBottom component="div">
                                         Order
@@ -228,7 +228,7 @@ function Row(props) {
                                                                     ))}
                                                                 </TableBody>
                                                             </Table>
-                                                            <Table size="small" aria-label="purchases">
+                                                            {historyRow?.pouchesDetail && <Table size="small" aria-label="purchases">
                                                                 <TableHead>
                                                                     <TableRow>
                                                                         <TableCell style={{ fontWeight: "bold" }}>Pouches Detail</TableCell>
@@ -241,7 +241,8 @@ function Row(props) {
                                                                         </TableCell>
                                                                     </TableRow>
                                                                 </TableBody>
-                                                            </Table>
+                                                            </Table>}
+
                                                         </Box>
                                                     </Collapse>
                                                 </TableCell>
