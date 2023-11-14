@@ -31,11 +31,7 @@ function Row(props) {
     const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
     const LocationDataChange = useSelector((state) => state.OrderReducer.LocationDataChange);
 
-
     const dispatch = useDispatch();
-
-
-
     const OrderCooked = (id, name) => {
         if (name === "isCooked") {
             let data = {
@@ -130,6 +126,7 @@ function Row(props) {
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             {row.orderItems.map((historyRow, index) => {
+                                console.log(historyRow, "historyRow")
                                 let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
                                 const content = historyRow?.pouchesDetail && newpouchesDetail?.slice(2, -2);
                                 const resultArray = historyRow?.pouchesDetail && content?.split(/\\n|\|/);
@@ -169,6 +166,7 @@ function Row(props) {
                                                                         <TableCell align="center">Feeding Routine</TableCell>
                                                                         <TableCell align="center">Current Weight</TableCell>
                                                                         <TableCell align="right">Actual Weight</TableCell>
+
                                                                     </TableRow>
                                                                 </TableHead>
                                                                 <TableBody>
@@ -201,32 +199,41 @@ function Row(props) {
                                                             </Table>}
 
                                                             <Table size="small" aria-label="purchases">
-                                                                <TableHead>
-                                                                    <TableRow>
-                                                                        <TableCell style={{ fontWeight: "bold" }}>Category</TableCell>
-                                                                        <TableCell style={{ fontWeight: "bold" }} align="center">Name</TableCell>
-                                                                        <TableCell style={{ fontWeight: "bold" }} align="center">Quantity</TableCell>
-                                                                        <TableCell style={{ fontWeight: "bold" }} align="right">Price (AED)</TableCell>
-                                                                    </TableRow>
-                                                                </TableHead>
-                                                                <TableBody>
-                                                                    {historyRow?.recipes?.map((item, index) => (
-                                                                        <TableRow key={index}>
-                                                                            <TableCell component="th" scope="row">
-                                                                                {item?.category !== "" ? item?.category : "---"}
-                                                                            </TableCell>
-                                                                            <TableCell align="center">
-                                                                                {item?.name}
-                                                                            </TableCell>
-                                                                            <TableCell align="center">
-                                                                                {item?.quantity}
-                                                                            </TableCell>
-                                                                            <TableCell align="right">
-                                                                                {item?.finalPrice}-AED
-                                                                            </TableCell>
-                                                                        </TableRow>
-                                                                    ))}
-                                                                </TableBody>
+
+                                                                {historyRow?.recipes?.map((item, index) => (
+                                                                    <>
+                                                                        <TableHead key={index}>
+                                                                            <TableRow>
+                                                                                <TableCell style={{ fontWeight: "bold" }}>Category</TableCell>
+                                                                                <TableCell style={{ fontWeight: "bold" }} align="center">Name</TableCell>
+                                                                                <TableCell style={{ fontWeight: "bold" }} align="center">Quantity</TableCell>
+                                                                                <TableCell style={{ fontWeight: "bold" }} align="right">Price (AED)</TableCell>
+                                                                                {item?.selectedItemSize && <TableCell style={{ fontWeight: "bold" }} align="right">Selected Size</TableCell>}
+                                                                            </TableRow>
+                                                                        </TableHead>
+                                                                        <TableBody>
+                                                                            <TableRow >
+                                                                                <TableCell component="th" scope="row">
+                                                                                    {item?.category !== "" ? item?.category : "---"}
+                                                                                </TableCell>
+                                                                                <TableCell align="center">
+                                                                                    {item?.name}
+                                                                                </TableCell>
+                                                                                <TableCell align="center">
+                                                                                    {item?.quantity}
+                                                                                </TableCell>
+                                                                                <TableCell align="right">
+                                                                                    {item?.finalPrice}-AED
+                                                                                </TableCell>
+                                                                                {item?.selectedItemSize && <TableCell align="right">
+                                                                                    {item?.selectedItemSize?.price}-AED <br></br>
+                                                                                    {item?.selectedItemSize?.name}
+                                                                                </TableCell>}
+                                                                            </TableRow>
+                                                                        </TableBody>
+                                                                    </>
+                                                                ))}
+
                                                             </Table>
                                                             {historyRow?.pouchesDetail && <Table size="small" aria-label="purchases">
                                                                 <TableHead>
