@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { GetAllCookingSheet } from 'store/cookingSheet/cookingSheetAction';
+import { GetDeliveryReport } from 'store/cookingSheet/cookingSheetAction';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -44,14 +44,14 @@ const DeliveryReport = () => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const Userdata = useSelector((state) => state.AuthReducer.data);
-    const allData = useSelector((state) => state.CookingSheetReducer.cookingSheetData);
-    const isLoading = useSelector((state) => state.CookingSheetReducer.isLoadingcookingSheet);
+    const allData = useSelector((state) => state.CookingSheetReducer.DeliveryReportData);
+    const isLoading = useSelector((state) => state.CookingSheetReducer.isLoadingDeliveryReport);
     console.log(allData, "allData");
 
 
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(GetAllCookingSheet(Userdata?.clientToken));
+        dispatch(GetDeliveryReport(Userdata?.clientToken));
     }, []);
 
     const handleChangePage = (event, newPage) => {

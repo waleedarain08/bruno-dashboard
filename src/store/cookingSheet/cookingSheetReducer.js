@@ -4,6 +4,8 @@ import * as actionTypes from './cookingSheetType';
 export const initialState = {
   isLoadingcookingSheet: false,
   cookingSheetData: [],
+  DeliveryReportData: [],
+  isLoadingDeliveryReport: false
 
 };
 
@@ -27,6 +29,24 @@ const CookingSheetReducer = (state = initialState, action) => {
         ...state,
         isLoadingcookingSheet: false
       };
+    ///////////////////////////////////////////////////////////
+    case actionTypes.isLoadingDeliveryReport:
+      return {
+        ...state,
+        isLoadingDeliveryReport: true
+      };
+    case actionTypes.SuccessDeliveryReport:
+      return {
+        ...state,
+        isLoadingDeliveryReport: false,
+        DeliveryReportData: action.payload
+      };
+    case actionTypes.FailedDeliveryReport:
+      return {
+        ...state,
+        isLoadingDeliveryReport: false
+      };
+
 
     default:
       return state;

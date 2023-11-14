@@ -11,8 +11,3 @@ export const FailedOrderChange = 'FailedOrderChange';
 export const isLoadingOrderLocation = 'isLoadingOrderLocation';
 export const SuccessOrderLocation = 'SuccessOrderLocation';
 export const FailedOrderLocation = 'FailedOrderLocation';
-
-
-export const isLoadingDeliveryReport = 'isLoadingDeliveryReport';
-export const SuccessDeliveryReport = 'SuccessDeliveryReport';
-export const FailedDeliveryReport = 'FailedDeliveryReport';

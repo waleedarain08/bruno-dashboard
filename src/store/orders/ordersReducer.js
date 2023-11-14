@@ -7,7 +7,6 @@ export const initialState = {
   isLoadingOrderChange: false,
   orderDataChange: [],
   isLoadingLocation: false,
-  LocationDataChange: [],
 };
 
 // ==============================|| OrderReducer REDUCER ||============================== //
@@ -68,6 +67,8 @@ const OrderReducer = (state = initialState, action) => {
         isLoadingLocation: false
       };
     ///////////////////////////////////////////////////////////
+
+
 
 
 

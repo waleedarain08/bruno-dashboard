@@ -24,6 +24,28 @@ export const GetAllCookingSheet = (data) => {
   };
 };
 
+export const GetDeliveryReport = (data) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.isLoadingDeliveryReport });
+    Get(`order/cooked`, data)
+      .then(function (response) {
+        if (response?.isSuccess) {
+          dispatch({
+            type: actionTypes.SuccessDeliveryReport,
+            payload: response?.data
+          });
+        } else {
+          dispatch({ type: actionTypes.FailedDeliveryReport });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.FailedDeliveryReport });
+      });
+  };
+};
+
 
 
 
