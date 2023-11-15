@@ -150,7 +150,7 @@ const Cookingsheet = () => {
                     </StyledTableCell>
                     {row?.orderItems?.map((i, index) => <StyledTableCell key={index} align="center">{i?.pet?.name}</StyledTableCell>)}
                     {row?.orderItems?.map((i, index) => <StyledTableCell key={index} align="center">{i?.recipes?.map((u) => u?.recipeNo)}</StyledTableCell>)}
-                    {row?.orderItems?.map((i, index) => <StyledTableCell key={index} align="center">{i?.recipes?.map((u) => u?.name)}</StyledTableCell>)}
+                    {row?.orderItems?.map((i, index) => <StyledTableCell key={index} align="center">{i?.recipes?.map((u, x) => <p key={x}>{u?.name}<br></br></p>)}</StyledTableCell>)}
                     <StyledTableCell align="center">
                       {row?.totalAmount}
                     </StyledTableCell>
@@ -160,16 +160,14 @@ const Cookingsheet = () => {
                       let newpouchesDetail = i?.pouchesDetail && i?.pouchesDetail;
                       const content = i?.pouchesDetail && newpouchesDetail?.slice(2, -2);
                       const resultArray = i?.pouchesDetail && content?.split(/\\n|\|/);
-                      return <StyledTableCell key={index} align="center">
-                        <Tooltip title={resultArray}>
-                          <div>
-                            {resultArray?.map((t) => truncateString(t, 15))}
-                          </div>
-                        </Tooltip>
+                      return <StyledTableCell style={{ cursor: "pointer" }} key={index} align="center">
+                        {resultArray?.map((t, l) => <Tooltip key={l} title={t}>
+                          <div><p >{truncateString(t, 20)}<br></br></p> </div>
+                        </Tooltip>)}
                       </StyledTableCell>
                     })}
                     <StyledTableCell align="center">{row?.deliveryDate}</StyledTableCell>
-                    {row?.orderItems?.map((i, index) => <StyledTableCell key={index} align="center">{i?.recipes?.map((u, j) => <Tooltip key={j} title={u?.instructions}><div>{truncateString(u?.instructions, 25)}</div></Tooltip>)}</StyledTableCell>)}
+                    {row?.orderItems?.map((i, index) => <StyledTableCell style={{ cursor: "pointer" }} key={index} align="center">{i?.recipes?.map((u, j) => <Tooltip key={j} title={u?.instructions}><div><p>{truncateString(u?.instructions, 25)}<br></br></p></div></Tooltip>)}</StyledTableCell>)}
                   </StyledTableRow>
                 )}
               </TableBody>
