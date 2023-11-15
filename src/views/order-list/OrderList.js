@@ -82,7 +82,6 @@ function Row(props) {
                     <AnimateButton>
                         <Button
                             onClick={() => ViewLocation(row?.locationId)}
-                            disabled={row?.isCooked}
                             style={{ margin: '12px' }}
                             variant="contained"
                             color="primary"
