@@ -148,7 +148,7 @@ const DeliveryReport = () => {
                                             </StyledTableCell>
                                             <StyledTableCell align="center">{row?.user?.phoneNumber}</StyledTableCell>
                                             <StyledTableCell align="center">
-                                                1
+                                                n/a
                                             </StyledTableCell>
                                             {row?.orderItems?.map((i, index) => {
                                                 let newpouchesDetail = i?.pouchesDetail && i?.pouchesDetail;
