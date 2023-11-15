@@ -77,6 +77,7 @@ function Row(props) {
                     {row?._id.substr(row?._id?.length - 5)}
                 </TableCell>
                 <TableCell align="right">{row?.totalAmount}-AED</TableCell>
+                <TableCell align="right">{row?.deliveryDate}</TableCell>
                 <TableCell align="center">
                     <AnimateButton>
                         <Button
@@ -126,7 +127,6 @@ function Row(props) {
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             {row.orderItems.map((historyRow, index) => {
-                                console.log(historyRow, "historyRow")
                                 let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
                                 const content = historyRow?.pouchesDetail && newpouchesDetail?.slice(2, -2);
                                 const resultArray = historyRow?.pouchesDetail && content?.split(/\\n|\|/);
@@ -299,6 +299,7 @@ export default function OrderList() {
                         <TableCell />
                         <TableCell style={{ color: "#fff" }}>Order #</TableCell>
                         <TableCell style={{ color: "#fff" }} align="right">Total Amount</TableCell>
+                        <TableCell style={{ color: "#fff" }} align="right">Delivery Date</TableCell>
                         <TableCell style={{ color: "#fff" }} align="center" >Delivery Address</TableCell>
                         <TableCell style={{ color: "#fff" }} align="right">Actions</TableCell>
                     </TableRow>

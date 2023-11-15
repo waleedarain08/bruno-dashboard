@@ -12,12 +12,14 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { InfinitySpin } from 'react-loader-spinner';
 import { useNavigate } from 'react-router-dom';
+import Tooltip from '@mui/material/Tooltip';
 import {
   Box,
 } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { GetAllCookingSheet } from 'store/cookingSheet/cookingSheetAction';
+import moment from 'moment';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -64,6 +66,18 @@ const Cookingsheet = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  // Function to truncate string to a specified number of words
+  function truncateString(str, maxWords) {
+    const words = str.split('');
+
+    if (words.length > maxWords) {
+      const truncatedWords = words.slice(0, maxWords);
+      return truncatedWords.join('') + '...';
+    } else {
+      return str;
+    }
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -124,39 +138,38 @@ const Cookingsheet = () => {
                 {allData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) =>
                   <StyledTableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <StyledTableCell component="th" align="center" scope="row">
-                      {row._id.substr(row._id.length - 5)}
+                      {row?._id.substr(row?._id?.length - 5)}
                     </StyledTableCell>
-                    <StyledTableCell align="center">N/A</StyledTableCell>
-                    <StyledTableCell align="center">11:02 AM </StyledTableCell>
-                    <StyledTableCell align="center">23485</StyledTableCell>
+                    <StyledTableCell align="center">{moment(row?.updatedOnDate).format('DD MMM YYYY')}</StyledTableCell>
+                    <StyledTableCell align="center">{moment(row?.updatedOnDate).format('hh:mm a')}</StyledTableCell>
                     <StyledTableCell align="center">
-                      Ahmed Mushtaq
-                    </StyledTableCell>
-                    <StyledTableCell align="center">Milio</StyledTableCell>
-                    <StyledTableCell align="center">
-                      1
+                      {row?.user?._id.substr(row?._id?.length - 5)}
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      Mighty Chicken
+                      {row?.user?.fullName}
                     </StyledTableCell>
+                    {row?.orderItems?.map((i, index) => <StyledTableCell key={index} align="center">{i?.pet?.name}</StyledTableCell>)}
+                    {row?.orderItems?.map((i, index) => <StyledTableCell key={index} align="center">{i?.recipes?.map((u) => u?.recipeNo)}</StyledTableCell>)}
+                    {row?.orderItems?.map((i, index) => <StyledTableCell key={index} align="center">{i?.recipes?.map((u) => u?.name)}</StyledTableCell>)}
                     <StyledTableCell align="center">
                       {row?.totalAmount}
                     </StyledTableCell>
-                    <StyledTableCell align="center">
-                      30
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      2 times / day
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      60 pouches x 175g
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      Day 3
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      Please call before delivery
-                    </StyledTableCell>
+                    {row?.orderItems?.map((i, index) => <StyledTableCell key={index} align="center">{i?.recipes?.map((u) => u?.totalDays)}</StyledTableCell>)}
+                    {row?.orderItems?.map((i, index) => <StyledTableCell key={index} align="center">{i?.pet?.feedingRoutine} times / day</StyledTableCell>)}
+                    {row?.orderItems?.map((i, index) => {
+                      let newpouchesDetail = i?.pouchesDetail && i?.pouchesDetail;
+                      const content = i?.pouchesDetail && newpouchesDetail?.slice(2, -2);
+                      const resultArray = i?.pouchesDetail && content?.split(/\\n|\|/);
+                      return <StyledTableCell key={index} align="center">
+                        <Tooltip title={resultArray}>
+                          <div>
+                            {resultArray?.map((t) => truncateString(t, 15))}
+                          </div>
+                        </Tooltip>
+                      </StyledTableCell>
+                    })}
+                    <StyledTableCell align="center">{row?.deliveryDate}</StyledTableCell>
+                    {row?.orderItems?.map((i, index) => <StyledTableCell key={index} align="center">{i?.recipes?.map((u, j) => <Tooltip key={j} title={u?.instructions}><div>{truncateString(u?.instructions, 25)}</div></Tooltip>)}</StyledTableCell>)}
                   </StyledTableRow>
                 )}
               </TableBody>
