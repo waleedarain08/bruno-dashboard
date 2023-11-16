@@ -16,8 +16,8 @@ import PromoLoyality from 'views/promo-codes&loyality-points/promo-loyality';
 import Ingredients from 'views/ingredients/Ingredients';
 import Categories from 'views/categories/Categories';
 import OrderList from 'views/order-list/OrderList';
-import IngredientsPortioningSheet from 'views/cooking-sheet/IngredientsPortioningSheet';
-import IngredientsQuantitySheet from 'views/cooking-sheet/IngredientsQuantitySheet';
+import IngredientsQuantitySheet from "views/cooking-sheet/IngredientsQuantitySheet"
+import IngredientsPortioningSheet from "views/cooking-sheet/IngredientsPortioningSheet"
 import DeliveryReport from 'views/delivery-report/DeliveryReport';
 
 // dashboard routing

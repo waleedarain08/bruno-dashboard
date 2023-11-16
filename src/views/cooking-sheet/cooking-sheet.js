@@ -77,9 +77,9 @@ const Cookingsheet = () => {
   return (
     <Box sx={{ width: '100%' }}>
       <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
-        <AnimateButton>
+        {/* <AnimateButton>
           <Button
-            onClick={() => navigate('/cooking-sheet/ingredients-portioning-sheet')}
+             onClick={() => navigate('/cooking-sheet/ingredients-portioning-sheet')}
             style={{ margin: '12px' }}
             variant="contained"
             color="primary"
@@ -87,7 +87,7 @@ const Cookingsheet = () => {
           >
             Ingredients Portioning Sheet
           </Button>
-        </AnimateButton>
+        </AnimateButton> */}
         <AnimateButton>
           <Button
             onClick={() => navigate('/cooking-sheet/ingredients-quantity-sheet')}

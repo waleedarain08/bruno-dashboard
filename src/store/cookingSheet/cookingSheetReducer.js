@@ -5,8 +5,9 @@ export const initialState = {
   isLoadingcookingSheet: false,
   cookingSheetData: [],
   DeliveryReportData: [],
-  isLoadingDeliveryReport: false
-
+  isLoadingDeliveryReport: false,
+  IngredientSumData: null,
+  isLoadingIngredientSum: false
 };
 
 // ==============================|| OrderReducer REDUCER ||============================== //
@@ -46,7 +47,23 @@ const CookingSheetReducer = (state = initialState, action) => {
         ...state,
         isLoadingDeliveryReport: false
       };
-
+    ///////////////////////////////////////////////////////////
+    case actionTypes.isLoadingIngredientSum:
+      return {
+        ...state,
+        isLoadingIngredientSum: true
+      };
+    case actionTypes.SuccessIngredientSum:
+      return {
+        ...state,
+        isLoadingIngredientSum: false,
+        IngredientSumData: action.payload
+      };
+    case actionTypes.FailedIngredientSum:
+      return {
+        ...state,
+        isLoadingIngredientSum: false
+      };
 
     default:
       return state;

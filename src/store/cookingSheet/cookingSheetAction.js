@@ -46,7 +46,24 @@ export const GetDeliveryReport = (data) => {
   };
 };
 
-
-
-
-
+export const GetIngredientSum = (data) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.isLoadingIngredientSum });
+    Get(`order/ingredient-sum`, data)
+      .then(function (response) {
+        if (response?.isSuccess) {
+          dispatch({
+            type: actionTypes.SuccessIngredientSum,
+            payload: response?.data
+          });
+        } else {
+          dispatch({ type: actionTypes.FailedIngredientSum });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.FailedIngredientSum });
+      });
+  };
+};
