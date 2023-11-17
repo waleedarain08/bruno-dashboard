@@ -48,6 +48,7 @@ const IngredientsQuantitySheet = () => {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const allData = useSelector((state) => state.CookingSheetReducer.IngredientSumData);
   const isLoading = useSelector((state) => state.CookingSheetReducer.isLoadingIngredientSum);
+  console.log(allData, "allData")
 
 
   const handleChangePage = (event, newPage) => {
@@ -56,10 +57,10 @@ const IngredientsQuantitySheet = () => {
   useEffect(() => {
     if (allData !== null) {
       let dataArray = Object.entries(allData).map(([key, value]) => {
-        const { sum, CookingContingencyFactor } = value;
+        const { sum, CookingContingencyFactor, ingredientReference } = value;
         const percentage = parseInt(CookingContingencyFactor) / 100;
         const total = sum + sum * percentage;
-        return { key, sum, CookingContingencyFactor, total };
+        return { key, ingredientReference, sum, CookingContingencyFactor, total };
       });
       // let dataArray = allData !== null && Object?.entries(allData)?.map(([key, value]) => ({ key, ...value }));
       setALLDATAS(dataArray);
@@ -159,10 +160,15 @@ const IngredientsQuantitySheet = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {ALLDATAS?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
-                  <StyledTableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                {ALLDATAS?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => {
+                  let CookingContingencyFactor = row?.key === "Chicken Hearts" ? "-25%" : row?.key === "Beef" ? "-25%" : row?.key === "Spinach" ? "-10%" : row?.key === "Fish Oil" ? "0%" : row?.key === "Bruno Adult Premix" ? "0%"
+                    : row?.key === "Macaroni Elbow" ? "+50%" : "-15%"
+                  const percentage = parseInt(CookingContingencyFactor) / 100;
+                  const total = row?.sum + row?.sum * percentage;
+                  console.log(total, "total")
+                  return <StyledTableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <StyledTableCell component="th" align="center" scope="row">
-                      {index}
+                      {row?.ingredientReference}
                     </StyledTableCell>
                     <StyledTableCell style={{}} align="center">
                       {row?.key}
@@ -171,13 +177,16 @@ const IngredientsQuantitySheet = () => {
                       {row?.sum}
                     </StyledTableCell>
                     <StyledTableCell style={{}} align="center">
-                      {row?.CookingContingencyFactor}
+                      {/* {row?.CookingContingencyFactor} */}
+                      {row?.key === "Chicken Hearts" ? "-25%" : row?.key === "Beef" ? "-25%" : row?.key === "Spinach" ? "-10%" : row?.key === "Fish Oil" ? "0%" : row?.key === "Bruno Adult Premix" ? "0%"
+                        : row?.key === "Macaroni Elbow" ? "+50%" : "-15%"}
                     </StyledTableCell>
                     <StyledTableCell style={{}} align="center">
-                      {row?.total}
+                      {total}
+                      {/* {row?.total} */}
                     </StyledTableCell>
                   </StyledTableRow>
-                ))}
+                })}
               </TableBody>
             </Table>
           </TableContainer>
