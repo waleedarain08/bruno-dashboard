@@ -49,7 +49,7 @@ const IngredientsQuantitySheet = () => {
   const allData = useSelector((state) => state.CookingSheetReducer.IngredientSumData);
   const isLoading = useSelector((state) => state.CookingSheetReducer.isLoadingIngredientSum);
 
-  console.log(allData);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -104,7 +104,7 @@ const IngredientsQuantitySheet = () => {
                     Batch No:
                   </TableCell>
                   <TableCell align="left">
-                    Auto Number
+                    Batch-[724]
                   </TableCell>
                   <TableCell align="left">
 
@@ -114,30 +114,30 @@ const IngredientsQuantitySheet = () => {
               <TableBody>
                 <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" align="left" scope="row">
-                    Order Data :
+                    Order Date :
                   </TableCell>
                   <TableCell style={{}} align="left">
                     Day 1
                   </TableCell>
                   <TableCell style={{}} align="left">
-                    11/11/2024
+                    06 Nov 2023
                   </TableCell>
                 </TableRow>
                 <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell component="th" align="left" scope="row">
-                    Production Data:
+                    Production Date:
                   </TableCell>
                   <TableCell style={{}} align="left">
                     Day 2
                   </TableCell>
                   <TableCell style={{}} align="left">
-                    11/11/2024
+                    19 Nov 2023
                   </TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
-          <TableContainer  component={Paper}>
+          <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow style={{ backgroundColor: '#D78809' }}>

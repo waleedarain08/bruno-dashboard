@@ -51,6 +51,7 @@ export const GetIngredientSum = (data) => {
     dispatch({ type: actionTypes.isLoadingIngredientSum });
     Get(`order/ingredient-sum`, data)
       .then(function (response) {
+        console.log(response, "response")
         if (response?.isSuccess) {
           dispatch({
             type: actionTypes.SuccessIngredientSum,

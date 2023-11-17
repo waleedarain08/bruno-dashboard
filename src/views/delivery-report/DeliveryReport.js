@@ -147,14 +147,15 @@ const DeliveryReport = () => {
                                                 </AnimateButton>
                                             </StyledTableCell>
                                             <StyledTableCell align="center">{row?.user?.phoneNumber}</StyledTableCell>
-                                            <StyledTableCell align="center"> n/a </StyledTableCell>
+                                            <StyledTableCell align="center">{row?.orderWeight}</StyledTableCell>
                                             <StyledTableCell style={{ cursor: "pointer" }} align="center">
                                                 {row?.orderItems?.recipes?.map((i) => {
-                                                    let newpouchesDetail = i?.pouchesDetail && i?.pouchesDetail;
-                                                    const content = i?.pouchesDetail && newpouchesDetail?.slice(2, -2);
-                                                    const resultArray = i?.pouchesDetail && content?.split(/\\n|\|/);
+                                                    let newpouchesDetail = row?.orderItems?.pouchesDetail && row?.orderItems?.pouchesDetail;
+                                                    const content = row?.orderItems?.pouchesDetail && newpouchesDetail?.slice(2, -2);
+                                                    const resultArray = row?.orderItems?.pouchesDetail && content?.split(/\\n|\|/);
+                                                    console.log(i, "resultArray")
                                                     return <>
-                                                        {resultArray?.map((t, l) => <Tooltip key={l} title={t}>
+                                                        {resultArray?.map((t, l) => <Tooltip key={l} title={row?.orderItems?.pouchesDetail}>
                                                             <div><p >{truncateString(t, 20)}<br></br></p> </div>
                                                         </Tooltip>)}
                                                     </>
