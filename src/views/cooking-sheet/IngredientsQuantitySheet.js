@@ -117,7 +117,7 @@ const IngredientsQuantitySheet = () => {
                     Order Date :
                   </TableCell>
                   <TableCell style={{}} align="left">
-                    Day 1
+
                   </TableCell>
                   <TableCell style={{}} align="left">
                     06 Nov 2023
@@ -128,7 +128,7 @@ const IngredientsQuantitySheet = () => {
                     Production Date:
                   </TableCell>
                   <TableCell style={{}} align="left">
-                    Day 2
+
                   </TableCell>
                   <TableCell style={{}} align="left">
                     19 Nov 2023
