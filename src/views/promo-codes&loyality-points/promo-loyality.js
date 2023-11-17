@@ -91,7 +91,7 @@ const PromoLoality = ({ ...others }) => {
               <Grid container direction="column" justifyContent="center" spacing={2}>
                 <Grid item xs={12} container alignItems="center" justifyContent="center">
                   <Box sx={{ mb: 2, mt: 2 }}>
-                    <Typography variant="subtitle1">Set Loyalty Points Percentage Below</Typography>
+                    <Typography variant="subtitle1">Enter % of discount per Loyalty Points</Typography>
                   </Box>
                 </Grid>
               </Grid>
@@ -127,7 +127,7 @@ const PromoLoality = ({ ...others }) => {
                       error={Boolean(touched.Percentage && errors.Percentage)}
                       sx={{ ...theme.typography.customInput }}
                     >
-                      <InputLabel htmlFor="outlined-adornment-email-login">Enter % below that you want to apply.</InputLabel>
+                      <InputLabel htmlFor="outlined-adornment-email-login">Enter amount in AED </InputLabel>
                       <OutlinedInput
                         id="outlined-adornment-email-login"
                         type="text"
@@ -247,7 +247,7 @@ const PromoLoality = ({ ...others }) => {
                       error={Boolean(touched.Percentage && errors.Percentage)}
                       sx={{ ...theme.typography.customInput }}
                     >
-                      <InputLabel htmlFor="outlined-adornment-password-login">Enter % of discount</InputLabel>
+                      <InputLabel htmlFor="outlined-adornment-password-login">Enter AED of discount</InputLabel>
                       <OutlinedInput
                         id="outlined-adornment-password-login"
                         type={'text'}
@@ -429,7 +429,7 @@ const PromoLoality = ({ ...others }) => {
               <TableHead>
                 <TableRow>
                   <TableCell> Promo Code </TableCell>
-                  <TableCell align="left">Percentage</TableCell>
+                  <TableCell align="left">Amount</TableCell>
                   <TableCell align="left">Expiry Date</TableCell>
                   <TableCell align="left">Max Usage Limit</TableCell>
                   <TableCell align="right">Action</TableCell>
@@ -439,13 +439,13 @@ const PromoLoality = ({ ...others }) => {
                 {rows.map((row) => (
                   <TableRow key={row?.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell component="th" scope="row">
-                      {row.name}
+                      {row?.name}
                     </TableCell>
-                    <TableCell align="left">{row?.discount} %</TableCell>
+                    <TableCell align="left">{row?.discount} AED</TableCell>
                     <TableCell align="left"> {moment(row?.expireOnDate).format('MMM Do YY')}</TableCell>
                     <TableCell align="left"> {row?.redemptionLimit}</TableCell>
                     <TableCell align="right">
-                      <Chip label="Delete" variant="outlined" onClick={() => handleOpen(row?._id)} />{' '}
+                      <Chip label="Delete" variant="outlined" onClick={() => handleOpen(row?._id)} />
                     </TableCell>
                   </TableRow>
                 ))}

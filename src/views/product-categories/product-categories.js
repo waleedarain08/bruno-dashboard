@@ -56,7 +56,7 @@ const ProductCategories = () => {
   const [PreviewEdit, setPreviewEdit] = React.useState([]);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [SelectedId, setSelectedId] = React.useState(null);
-  const [fields, setFields] = React.useState([{ name: '', price: 0 }]);
+  const [fields, setFields] = React.useState([{ name: '', price: null }]);
 
 
   const InitialState = () => {
@@ -92,7 +92,7 @@ const ProductCategories = () => {
     setFields(updatedFields);
   };
   const handleAddField = () => {
-    setFields([...fields, { name: '', price: 0 }]);
+    setFields([...fields, { name: '', price: null }]);
   };
 
   const handleClose = () => setOpen(false);
@@ -120,12 +120,15 @@ const ProductCategories = () => {
     handleClose();
   };
 
+  console.log(fields, "fields")
+
   const onSave = async () => {
     if (
       NameRecipe !== '' &&
       Description !== '' &&
       KG != 0 &&
-      Details != ''
+      Details != '' &&
+      (fields.length === 0 || fields.some(field => field.name !== '' && field.price > 0))
     ) {
       setError('');
       setLoading(true);
@@ -143,6 +146,7 @@ const ProductCategories = () => {
           ingredientsComposition: "",
           sizes: fields
         };
+        console.log(newdata, "newdata")
         dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
       }
       else {

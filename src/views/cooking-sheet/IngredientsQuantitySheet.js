@@ -49,7 +49,7 @@ const IngredientsQuantitySheet = () => {
   const allData = useSelector((state) => state.CookingSheetReducer.IngredientSumData);
   const isLoading = useSelector((state) => state.CookingSheetReducer.isLoadingIngredientSum);
 
-  console.log(ALLDATAS);
+  console.log(allData);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -99,6 +99,47 @@ const IngredientsQuantitySheet = () => {
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
+                <TableRow >
+                  <TableCell align="left">
+                    Batch No:
+                  </TableCell>
+                  <TableCell align="left">
+                    Auto Number
+                  </TableCell>
+                  <TableCell align="left">
+
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" align="left" scope="row">
+                    Order Data :
+                  </TableCell>
+                  <TableCell style={{}} align="left">
+                    Day 1
+                  </TableCell>
+                  <TableCell style={{}} align="left">
+                    11/11/2024
+                  </TableCell>
+                </TableRow>
+                <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell component="th" align="left" scope="row">
+                    Production Data:
+                  </TableCell>
+                  <TableCell style={{}} align="left">
+                    Day 2
+                  </TableCell>
+                  <TableCell style={{}} align="left">
+                    11/11/2024
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TableContainer  component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
                 <TableRow style={{ backgroundColor: '#D78809' }}>
                   <TableCell style={{ color: '#fff' }} align="center">
                     Ingredient id.
@@ -133,7 +174,7 @@ const IngredientsQuantitySheet = () => {
                       {row?.CookingContingencyFactor}
                     </StyledTableCell>
                     <StyledTableCell style={{}} align="center">
-                      {row?.total }
+                      {row?.total}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}

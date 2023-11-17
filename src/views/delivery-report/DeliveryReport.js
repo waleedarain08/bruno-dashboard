@@ -147,20 +147,28 @@ const DeliveryReport = () => {
                                                 </AnimateButton>
                                             </StyledTableCell>
                                             <StyledTableCell align="center">{row?.user?.phoneNumber}</StyledTableCell>
-                                            <StyledTableCell align="center">
-                                                n/a
+                                            <StyledTableCell align="center"> n/a </StyledTableCell>
+                                            <StyledTableCell style={{ cursor: "pointer" }} align="center">
+                                                {row?.orderItems?.recipes?.map((i) => {
+                                                    let newpouchesDetail = i?.pouchesDetail && i?.pouchesDetail;
+                                                    const content = i?.pouchesDetail && newpouchesDetail?.slice(2, -2);
+                                                    const resultArray = i?.pouchesDetail && content?.split(/\\n|\|/);
+                                                    return <>
+                                                        {resultArray?.map((t, l) => <Tooltip key={l} title={t}>
+                                                            <div><p >{truncateString(t, 20)}<br></br></p> </div>
+                                                        </Tooltip>)}
+                                                    </>
+                                                })}
                                             </StyledTableCell>
-                                            {row?.orderItems?.map((i, index) => {
-                                                let newpouchesDetail = i?.pouchesDetail && i?.pouchesDetail;
-                                                const content = i?.pouchesDetail && newpouchesDetail?.slice(2, -2);
-                                                const resultArray = i?.pouchesDetail && content?.split(/\\n|\|/);
-                                                return <StyledTableCell style={{ cursor: "pointer" }} key={index} align="center">
-                                                    {resultArray?.map((t, l) => <Tooltip key={l} title={t}>
-                                                        <div><p >{truncateString(t, 20)}<br></br></p> </div>
-                                                    </Tooltip>)}
-                                                </StyledTableCell>
-                                            })}
-                                            {row?.orderItems?.map((i, index) => <StyledTableCell style={{ cursor: "pointer" }} key={index} align="center">{i?.recipes?.map((u, j) => <Tooltip key={j} title={u?.instructions}><div><p>{truncateString(u?.instructions, 25)}<br></br></p></div></Tooltip>)}</StyledTableCell>)}
+
+                                            <StyledTableCell style={{ cursor: "pointer" }} align="center">
+                                                {row?.orderItems?.recipes?.map((i, j) =>
+                                                    <>
+                                                        <Tooltip key={j} title={i?.instructions}><div><p>{truncateString(i?.instructions, 25)}<br></br></p></div></Tooltip>
+                                                    </>
+                                                )}
+                                            </StyledTableCell>
+
                                         </StyledTableRow>
                                     )}
                                 </TableBody>
