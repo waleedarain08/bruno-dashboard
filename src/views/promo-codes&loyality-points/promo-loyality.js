@@ -5,6 +5,9 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import moment from 'moment/moment';
 import Chip from '@mui/material/Chip';
 import { useTheme } from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+
 import {
   Box,
   Button,
@@ -41,7 +44,7 @@ import Modal from '@mui/material/Modal';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { AddPromos, DeletePromo, GetPromos } from 'store/promos/promosAction';
+import { AddPromos, DeletePromo, GetDiscount, GetPromos, UpdateDiscount } from 'store/promos/promosAction';
 import { InfinitySpin } from 'react-loader-spinner';
 
 const PromoLoality = ({ ...others }) => {
@@ -62,10 +65,21 @@ const PromoLoality = ({ ...others }) => {
   const isLoading = useSelector((state) => state.PromosReducer.isLoading);
   const addLoading = useSelector((state) => state.PromosReducer.addLoading);
   const deleteLoading = useSelector((state) => state.PromosReducer.deleteLoading);
+  const dicountdata = useSelector((state) => state.PromosReducer.discountdata);
+  const isDiscountLoading = useSelector((state) => state.PromosReducer.discountLoading);
+  const updateDiscountLoading = useSelector((state) => state.PromosReducer.updateDiscountLoading);
+
   const [newDate, setDate] = React.useState(null);
+  const [snackOpen, setsnackOpen] = React.useState(false);
+  // const [OnMonth, setOnMonth] = React.useState([]);
+  // const [Ratio, setRatio] = React.useState([]);
+  // const [Redeem, setRedeem] = React.useState([]);
+
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetPromos(Userdata?.clientToken));
+    dispatch(GetDiscount(Userdata?.clientToken))
   }, []);
 
   const theme = useTheme();
@@ -75,22 +89,40 @@ const PromoLoality = ({ ...others }) => {
     dispatch(GetPromos(Userdata?.clientToken));
     setOpen(false);
   };
+
+  const handleClosee = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setsnackOpen(false);
+  };
+  // const onSuccessUpated = () => {
+  //   dispatch(GetDiscount(Userdata?.clientToken));
+  // }
   const onDelete = () => {
     dispatch(DeletePromo(PromoId, Userdata?.clientToken, onSuccess));
   };
 
-  console.log(rows, 'rows');
+
+  let discountPercentageOn = dicountdata?.filter((i) => i?.name === "discountPercentageOnMonthlyPlan");
+  let discountOnPointsRedeem = dicountdata?.filter((i) => i?.name === "discountOnPointsRedeem");
+  let pointsToAEDRatio = dicountdata?.filter((i) => i?.name === "pointsToAEDRatio");
+
 
   return (
     <>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={snackOpen} autoHideDuration={6000} onClose={handleClosee}>
+        <Alert onClose={handleClosee} severity="success" sx={{ width: '100%' }}>
+        Successfully updated the value.
+        </Alert>
+      </Snackbar>
       <Grid container spacing={2}>
-        <Grid item xs={1}></Grid>
-        <Grid item xs={4}>
+        {/* <Grid item xs={4}>
           <Card>
             <CardContent>
               <Grid container direction="column" justifyContent="center" spacing={2}>
                 <Grid item xs={12} container alignItems="center" justifyContent="center">
-                  <Box sx={{ mb: 2, mt: 2 }}>
+                  <Box sx={{ mb: 2 }}>
                     <Typography variant="subtitle1">Enter % of discount per Loyalty Points</Typography>
                   </Box>
                 </Grid>
@@ -171,14 +203,257 @@ const PromoLoality = ({ ...others }) => {
               </Formik>
             </CardContent>
           </Card>
-        </Grid>
+        </Grid> */}
         <Grid item xs={2}></Grid>
+        <Grid item xs={4}>
+          <Card>
+            {!isDiscountLoading && <CardContent>
+              <Grid container direction="column" justifyContent="center" spacing={2}>
+                <Grid item xs={12} container alignItems="center" justifyContent="center">
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle1">Discount</Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+              <Formik
+                initialValues={{
+                  DiscountPercentage: parseInt(discountPercentageOn?.[0]?.aggregate),
+                  submit: null
+                }}
+
+                onSubmit={async (values, { setStatus, setSubmitting }) => {
+                  try {
+                    if (scriptedRef.current) {
+                      let data = {
+                        name: discountPercentageOn?.[0]?.name,
+                        aggregate: parseInt(values?.DiscountPercentage),
+
+                      };
+                      dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    if (scriptedRef.current) {
+                      setStatus({ success: false });
+                      // setErrors({ submit: err.message });
+                      setSubmitting(false);
+                    }
+                  }
+                }}
+              >
+                {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
+                  <form noValidate onSubmit={handleSubmit} {...others}>
+                    <FormControl
+                      fullWidth
+                      error={Boolean(touched.DiscountPercentage && errors.DiscountPercentage)}
+                      sx={{ ...theme.typography.customInput }}
+                    >
+                      <InputLabel htmlFor="outlined-adornment-email-login">Discount Percentage On Monthly Plan</InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-email-login"
+                        type="text"
+                        value={values.DiscountPercentage}
+                        name="DiscountPercentage"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        label="Discount Percentage On Monthly Plan"
+                        inputProps={{}}
+                      />
+                      {touched.DiscountPercentage && errors.DiscountPercentage && (
+                        <FormHelperText error id="standard-weight-helper-text-email-login">
+                          {errors.DiscountPercentage}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                    {errors.submit && (
+                      <Box sx={{ mt: 3 }}>
+                        <FormHelperText error>{errors.submit}</FormHelperText>
+                      </Box>
+                    )}
+                    <Box sx={{ mt: 2 }}>
+                      <AnimateButton>
+                        <Button
+                          disableElevation
+                          disabled={updateDiscountLoading}
+                          fullWidth
+                          size="large"
+                          type="submit"
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Box>
+                  </form>
+                )}
+              </Formik>
+              <Formik
+                initialValues={{
+                  PointsRedeem: parseInt(discountOnPointsRedeem?.[0]?.aggregate),
+                  submit: null
+                }}
+                validationSchema={Yup.object().shape({
+                  PointsRedeem: Yup.string().required('Points Redeem is required'),
+                })}
+                onSubmit={async (values, { setStatus, setSubmitting }) => {
+                  try {
+                    if (scriptedRef.current) {
+                      let data = {
+                        name: discountOnPointsRedeem?.[0]?.name,
+                        aggregate: parseInt(values?.PointsRedeem),
+
+                      };
+                      dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    if (scriptedRef.current) {
+                      setStatus({ success: false });
+                      // setErrors({ submit: err.message });
+                      setSubmitting(false);
+                    }
+                  }
+                }}
+              >
+                {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
+                  <form noValidate onSubmit={handleSubmit} {...others}>
+                    <FormControl
+
+                      fullWidth
+                      error={Boolean(touched.PointsRedeem && errors.PointsRedeem)}
+                      sx={{ ...theme.typography.customInput, mt: 2 }}
+                    >
+                      <InputLabel htmlFor="outlined-adornment-email-login">Discount On Points Redeem</InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-email-login"
+                        type="text"
+                        value={values.PointsRedeem}
+                        name="PointsRedeem"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        label="Discount On Points Redeem"
+                        inputProps={{}}
+                      />
+                      {touched.PointsRedeem && errors.PointsRedeem && (
+                        <FormHelperText error id="standard-weight-helper-text-email-login">
+                          {errors.PointsRedeem}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                    {errors.submit && (
+                      <Box sx={{ mt: 3 }}>
+                        <FormHelperText error>{errors.submit}</FormHelperText>
+                      </Box>
+                    )}
+
+                    <Box sx={{ mt: 2 }}>
+                      <AnimateButton>
+                        <Button
+                          disableElevation
+                          disabled={updateDiscountLoading}
+                          fullWidth
+                          size="large"
+                          type="submit"
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Box>
+                  </form>
+                )}
+              </Formik>
+              <Formik
+                initialValues={{
+                  PointsToAED: parseInt(pointsToAEDRatio?.[0]?.aggregate),
+                  submit: null
+                }}
+                validationSchema={Yup.object().shape({
+                  PointsToAED: Yup.string().required('Points To AED is required')
+                })}
+                onSubmit={async (values, { setStatus, setSubmitting }) => {
+                  try {
+                    if (scriptedRef.current) {
+                      let data = {
+                        name: pointsToAEDRatio?.[0]?.name,
+                        aggregate: parseInt(values?.PointsToAED),
+
+                      };
+                      dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    if (scriptedRef.current) {
+                      setStatus({ success: false });
+                      // setErrors({ submit: err.message });
+                      setSubmitting(false);
+                    }
+                  }
+                }}
+              >
+                {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
+                  <form noValidate onSubmit={handleSubmit} {...others}>
+                    <FormControl
+                      fullWidth
+                      error={Boolean(touched.PointsToAED && errors.PointsToAED)}
+                      sx={{ ...theme.typography.customInput, mt: 2 }}
+                    >
+                      <InputLabel htmlFor="outlined-adornment-email-login">Points To AED Ratio</InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-email-login"
+                        type="text"
+                        value={values.PointsToAED}
+                        name="PointsToAED"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        label="Points To AED Ratio"
+                        inputProps={{}}
+                      />
+                      {touched.PointsToAED && errors.PointsToAED && (
+                        <FormHelperText error id="standard-weight-helper-text-email-login">
+                          {errors.PointsToAED}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+
+                    {errors.submit && (
+                      <Box sx={{ mt: 3 }}>
+                        <FormHelperText error>{errors.submit}</FormHelperText>
+                      </Box>
+                    )}
+
+                    <Box sx={{ mt: 2 }}>
+                      <AnimateButton>
+                        <Button
+                          disableElevation
+                          disabled={updateDiscountLoading}
+                          fullWidth
+                          size="large"
+                          type="submit"
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Box>
+                  </form>
+                )}
+              </Formik>
+
+            </CardContent>}
+
+          </Card>
+        </Grid>
+
         <Grid item xs={4}>
           <Card>
             <CardContent>
               <Grid container direction="column" justifyContent="center" spacing={2}>
                 <Grid item xs={12} container alignItems="center" justifyContent="center">
-                  <Box sx={{ mb: 2, mt: 2 }}>
+                  <Box sx={{ mb: 2 }}>
                     <Typography variant="subtitle1">Enter Promo Code Detail Below</Typography>
                   </Box>
                 </Grid>
@@ -339,7 +614,7 @@ const PromoLoality = ({ ...others }) => {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={1}></Grid>
+        <Grid item xs={2}></Grid>
       </Grid>
       <Grid sx={{ mt: 5 }} container spacing={2}>
         <Grid container direction="column" justifyContent="center" spacing={2}>
