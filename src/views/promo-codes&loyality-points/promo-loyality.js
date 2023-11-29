@@ -217,7 +217,7 @@ const PromoLoality = ({ ...others }) => {
               </Grid>
               <Formik
                 initialValues={{
-                  DiscountPercentage: parseInt(discountPercentageOn?.[0]?.aggregate),
+                  DiscountPercentage: parseFloat(discountPercentageOn?.[0]?.aggregate),
                   submit: null
                 }}
 
@@ -226,7 +226,7 @@ const PromoLoality = ({ ...others }) => {
                     if (scriptedRef.current) {
                       let data = {
                         name: discountPercentageOn?.[0]?.name,
-                        aggregate: parseInt(values?.DiscountPercentage),
+                        aggregate: parseFloat(values?.DiscountPercentage),
 
                       };
                       dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));
@@ -290,7 +290,7 @@ const PromoLoality = ({ ...others }) => {
               </Formik>
               <Formik
                 initialValues={{
-                  PointsRedeem: parseInt(discountOnPointsRedeem?.[0]?.aggregate),
+                  PointsRedeem: parseFloat(discountOnPointsRedeem?.[0]?.aggregate),
                   submit: null
                 }}
                 validationSchema={Yup.object().shape({
@@ -301,7 +301,7 @@ const PromoLoality = ({ ...others }) => {
                     if (scriptedRef.current) {
                       let data = {
                         name: discountOnPointsRedeem?.[0]?.name,
-                        aggregate: parseInt(values?.PointsRedeem),
+                        aggregate: parseFloat(values?.PointsRedeem),
 
                       };
                       dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));
@@ -367,7 +367,7 @@ const PromoLoality = ({ ...others }) => {
               </Formik>
               <Formik
                 initialValues={{
-                  PointsToAED: parseInt(pointsToAEDRatio?.[0]?.aggregate),
+                  PointsToAED: parseFloat(pointsToAEDRatio?.[0]?.aggregate),
                   submit: null
                 }}
                 validationSchema={Yup.object().shape({
@@ -378,7 +378,7 @@ const PromoLoality = ({ ...others }) => {
                     if (scriptedRef.current) {
                       let data = {
                         name: pointsToAEDRatio?.[0]?.name,
-                        aggregate: parseInt(values?.PointsToAED),
+                        aggregate: parseFloat(values?.PointsToAED),
 
                       };
                       dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));

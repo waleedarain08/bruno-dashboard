@@ -21,6 +21,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { ChangeOrder, GetAllOrder, ViewOrderLocation } from 'store/orders/ordersAction';
 import { InfinitySpin } from 'react-loader-spinner';
 import LocationModal from 'components/LocationModal';
+import Checkbox from '@mui/material/Checkbox';
 
 
 function Row(props) {
@@ -118,8 +119,10 @@ function Row(props) {
 
                             </Button>
                         </AnimateButton>
+
                     </div>
                 </TableCell>
+                <TableCell align="right"><Checkbox defaultChecked /></TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -292,24 +295,61 @@ export default function OrderList() {
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
                     <InfinitySpin width="200" color="#D78809" />
                 </div>
-            </Paper> : <Table aria-label="collapsible table">
-                <TableHead>
-                    <TableRow style={{ backgroundColor: "#D78809" }}>
-                        <TableCell />
-                        <TableCell style={{ color: "#fff" }}>Order #</TableCell>
-                        <TableCell style={{ color: "#fff" }} align="right">Total Amount</TableCell>
-                        <TableCell style={{ color: "#fff" }} align="right">Delivery Date</TableCell>
-                        <TableCell style={{ color: "#fff" }} align="center" >Delivery Address</TableCell>
-                        <TableCell style={{ color: "#fff" }} align="right">Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {dataOrders?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
-                        <Row key={index} row={row} />
-                    ))}
-                </TableBody>
-            </Table>}
-
+            </Paper>
+                :
+                <>
+                    <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", width: "100%" }}>
+                        <AnimateButton>
+                            <Button
+                                style={{ margin: '12px' }}
+                                variant="contained"
+                                color="primary"
+                                sx={{ boxShadow: 'none' }}
+                            >
+                                Export
+                            </Button>
+                        </AnimateButton>
+                        <AnimateButton>
+                            <Button
+                                style={{ margin: '12px' }}
+                                variant="contained"
+                                color="primary"
+                                sx={{ boxShadow: 'none' }}
+                            >
+                                Print
+                            </Button>
+                        </AnimateButton>
+                        <AnimateButton>
+                            <Button
+                                style={{ margin: '12px' }}
+                                variant="contained"
+                                color="primary"
+                                sx={{ boxShadow: 'none' }}
+                            >
+                                Generate Cooking Batch
+                            </Button>
+                        </AnimateButton>
+                    </div>
+                    <Table aria-label="collapsible table">
+                        <TableHead>
+                            <TableRow style={{ backgroundColor: "#D78809" }}>
+                                <TableCell />
+                                <TableCell style={{ color: "#fff" }}>Order #</TableCell>
+                                <TableCell style={{ color: "#fff" }} align="right">Total Amount</TableCell>
+                                <TableCell style={{ color: "#fff" }} align="right">Delivery Date</TableCell>
+                                <TableCell style={{ color: "#fff" }} align="center" >Delivery Address</TableCell>
+                                <TableCell style={{ color: "#fff" }} align="right">Actions</TableCell>
+                                <TableCell style={{ color: "#fff" }} align="right">Add to Cooking Batch</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {dataOrders?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
+                                <Row key={index} row={row} />
+                            ))}
+                        </TableBody>
+                    </Table>
+                </>
+            }
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25, 50, 100]}
                 component="div"
