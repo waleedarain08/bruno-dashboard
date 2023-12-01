@@ -324,7 +324,7 @@ const PromoLoality = ({ ...others }) => {
                       error={Boolean(touched.PointsRedeem && errors.PointsRedeem)}
                       sx={{ ...theme.typography.customInput, mt: 2 }}
                     >
-                      <InputLabel htmlFor="outlined-adornment-email-login">Discount On Points Redeem</InputLabel>
+                      <InputLabel htmlFor="outlined-adornment-email-login">Points Awarded Ratio Per AED Spending</InputLabel>
                       <OutlinedInput
                         id="outlined-adornment-email-login"
                         type="text"
@@ -400,7 +400,7 @@ const PromoLoality = ({ ...others }) => {
                       error={Boolean(touched.PointsToAED && errors.PointsToAED)}
                       sx={{ ...theme.typography.customInput, mt: 2 }}
                     >
-                      <InputLabel htmlFor="outlined-adornment-email-login">Points To AED Ratio</InputLabel>
+                      <InputLabel htmlFor="outlined-adornment-email-login">1 Loyality Point To AED Conversion Ratio</InputLabel>
                       <OutlinedInput
                         id="outlined-adornment-email-login"
                         type="text"
@@ -408,7 +408,7 @@ const PromoLoality = ({ ...others }) => {
                         name="PointsToAED"
                         onBlur={handleBlur}
                         onChange={handleChange}
-                        label="Points To AED Ratio"
+                        label="1 Loyality Point To AED"
                         inputProps={{}}
                       />
                       {touched.PointsToAED && errors.PointsToAED && (

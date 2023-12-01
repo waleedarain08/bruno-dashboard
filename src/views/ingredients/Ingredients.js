@@ -197,11 +197,11 @@ const Ingredients = () => {
             </Box>
             <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
               <TextField value={Fector} onChange={(e) => setFector(e.target.value)} id="outlined-basic" label="Cooking Contingency Fector" variant="outlined" />
-              <TextField type={"number"} value={Quantity} onChange={(e) => setQuantity(e.target.value)} id="outlined-basic" label="Last Added Quantity" variant="outlined" />
+              {/* <TextField type={"number"} value={Quantity} onChange={(e) => setQuantity(e.target.value)} id="outlined-basic" label="Last Added Quantity" variant="outlined" /> */}
             </Box>
             <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-              <TextField type={"number"} value={Remaing} onChange={(e) => setRemaing(e.target.value)} id="outlined-basic" label="Remaing Quantity" variant="outlined" />
-              <TextField type={"number"} value={Consmption} onChange={(e) => setConsmption(e.target.value)} id="outlined-basic" label="Total Consmption" variant="outlined" />
+              {/* <TextField type={"number"} value={Remaing} onChange={(e) => setRemaing(e.target.value)} id="outlined-basic" label="Remaing Quantity" variant="outlined" />
+              <TextField type={"number"} value={Consmption} onChange={(e) => setConsmption(e.target.value)} id="outlined-basic" label="Total Consmption" variant="outlined" /> */}
             </Box>
             <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
               {/* <StyledTextarea value={Description} onChange={(e) => setDescription(e.target.value)} maxRows={5} aria-label="maximum height" placeholder="Description" defaultValue="" /> */}
@@ -315,8 +315,8 @@ const Ingredients = () => {
                   <TableRow>
                     <TableCell align="left">Ingredient Reference</TableCell>
                     <TableCell>Name</TableCell>
-                    <TableCell align="left">Stock Level</TableCell>
-                    <TableCell align="left">Total Consmption</TableCell>
+                    {/* <TableCell align="left">Stock Level</TableCell>
+                    <TableCell align="left">Total Consmption</TableCell> */}
                     {/* <TableCell align="left">Last Added Quantity</TableCell> */}
                     <TableCell align="left">Ingredient Cooking Method</TableCell>
                     <TableCell align="left">Cooking Contingency Factor</TableCell>
@@ -330,8 +330,8 @@ const Ingredients = () => {
                       <TableCell component="th" scope="row">
                         {row?.name}
                       </TableCell>
-                      <TableCell align="left">{row?.remaingQuantity}</TableCell>
-                      <TableCell align="left">{row?.totalConsmption} </TableCell>
+                      {/* <TableCell align="left">{row?.remaingQuantity}</TableCell>
+                      <TableCell align="left">{row?.totalConsmption} </TableCell> */}
                       {/* <TableCell align="left">{row?.lastAddedQuantity}</TableCell> */}
                       <TableCell align="left">{row?.description}</TableCell>
                       <TableCell align="left">{row?.CookingContingencyFactor}</TableCell>
