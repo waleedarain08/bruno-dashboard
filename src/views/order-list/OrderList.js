@@ -96,8 +96,9 @@ function Row(props) {
                         </Button>
                     </AnimateButton></TableCell>
                 <TableCell align="center">
+                    {row?.isCooked ? "Yes" : "No"}
                     {/* <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}> */}
-                    <AnimateButton>
+                    {/* <AnimateButton>
                         <Button
                             onClick={() => OrderCooked(row?._id, "isCooked")}
                             disabled={row?.isCooked}
@@ -109,7 +110,7 @@ function Row(props) {
                             {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : !row?.isCooked ? "Order Cooked" : "Order Dispatched"}
 
                         </Button>
-                    </AnimateButton>
+                    </AnimateButton> */}
                     {/* </div> */}
                 </TableCell>
                 <TableCell align="center">--</TableCell>
@@ -123,7 +124,7 @@ function Row(props) {
                             color="primary"
                             sx={{ boxShadow: 'none' }}
                         >
-                            {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : " Mark as Delivered"}
+                            {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" />Yes</div> : " No"}
 
                         </Button>
                     </AnimateButton></TableCell>
@@ -137,7 +138,7 @@ function Row(props) {
                                 let typeofPouch = typeof historyRow?.pouchesDetail;
                                 let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
                                 const content = newpouchesDetail && typeofPouch === "string" && newpouchesDetail?.slice(2, -2);
-                                const resultArray = newpouchesDetail && typeofPouch === "string" ? content?.split(/\\n|\|/) :  historyRow?.pouchesDetail[0]?.split('|');
+                                const resultArray = newpouchesDetail && typeofPouch === "string" ? content?.split(/\\n|\|/) : historyRow?.pouchesDetail[0]?.split('|');
                                 return <>
                                     <Typography variant="h4" gutterBottom component="div">
                                         Order
@@ -251,14 +252,13 @@ function Row(props) {
                                                                 </TableHead>
                                                                 <TableBody>
                                                                     <TableRow>
-                                                                            <TableCell component="th" scope="row">
-                                                                                {resultArray?.map((x, index) => <p key={index}>{x}</p>)}
-                                                                            </TableCell>
-                                                               
+                                                                        <TableCell component="th" scope="row">
+                                                                            {resultArray?.map((x, index) => <p key={index}>{x}</p>)}
+                                                                        </TableCell>
+
                                                                     </TableRow>
                                                                 </TableBody>
                                                             </Table>}
-
                                                         </Box>
                                                     </Collapse>
                                                 </TableCell>
@@ -341,12 +341,12 @@ export default function OrderList() {
                         <TableHead>
                             <TableRow style={{ backgroundColor: "#D78809" }}>
                                 <TableCell />
-                                <TableCell style={{ color: "#fff" }}>Order #</TableCell>
+                                <TableCell style={{ color: "#fff" }}>Order No.</TableCell>
                                 <TableCell style={{ color: "#fff" }}>Order Date / Time</TableCell>
                                 <TableCell style={{ color: "#fff" }}>User Name</TableCell>
                                 <TableCell style={{ color: "#fff" }} align="right">Order Total (AED)</TableCell>
                                 <TableCell style={{ color: "#fff" }} align="right">Delivery Date</TableCell>
-                                <TableCell style={{ color: "#fff" }} align="center" >Delivery Address</TableCell>
+                                <TableCell style={{ color: "#fff" }} align="center" >Delivery Location</TableCell>
                                 {/* <TableCell style={{ color: "#fff" }} align="center">Actions</TableCell> */}
                                 <TableCell style={{ color: "#fff" }} align="center">Cooked</TableCell>
                                 <TableCell style={{ color: "#fff" }} align="center">Batch No.</TableCell>
