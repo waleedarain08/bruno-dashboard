@@ -22,6 +22,7 @@ import { ChangeOrder, GetAllOrder, ViewOrderLocation } from 'store/orders/orders
 import { InfinitySpin } from 'react-loader-spinner';
 import LocationModal from 'components/LocationModal';
 import Checkbox from '@mui/material/Checkbox';
+import moment from 'moment';
 
 
 function Row(props) {
@@ -31,6 +32,7 @@ function Row(props) {
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
     const LocationDataChange = useSelector((state) => state.OrderReducer.LocationDataChange);
+    console.log(row, "row");
 
     const dispatch = useDispatch();
     const OrderCooked = (id, name) => {
@@ -77,8 +79,10 @@ function Row(props) {
                 <TableCell component="th" scope="row">
                     {row?._id.substr(row?._id?.length - 5)}
                 </TableCell>
-                <TableCell align="right">{row?.totalAmount}-AED</TableCell>
-                <TableCell align="right">{row?.deliveryDate}</TableCell>
+                <TableCell align="center">{moment(row?.updatedOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
+                <TableCell align="center">{row?.user?.fullName}</TableCell>
+                <TableCell align="center">{row?.totalAmount}-AED</TableCell>
+                <TableCell align="center">{row?.deliveryDate}</TableCell>
                 <TableCell align="center">
                     <AnimateButton>
                         <Button
@@ -91,8 +95,8 @@ function Row(props) {
                             View Location
                         </Button>
                     </AnimateButton></TableCell>
-                <TableCell align="right">
-                    <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+                <TableCell align="center">
+                    {/* <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}> */}
                         <AnimateButton>
                             <Button
                                 onClick={() => OrderCooked(row?._id, "isCooked")}
@@ -106,32 +110,33 @@ function Row(props) {
 
                             </Button>
                         </AnimateButton>
-                        <AnimateButton>
-                            <Button
-                                onClick={() => OrderCooked(row?._id, "isCompleted")}
-                                disabled={row.isCompleted}
-                                style={{ margin: '12px' }}
-                                variant="contained"
-                                color="primary"
-                                sx={{ boxShadow: 'none' }}
-                            >
-                                {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : " Mark as Delivered"}
-
-                            </Button>
-                        </AnimateButton>
-
-                    </div>
+                    {/* </div> */}
                 </TableCell>
-                <TableCell align="right"><Checkbox defaultChecked /></TableCell>
+                <TableCell align="center">--</TableCell>
+                <TableCell align="center">
+                    <AnimateButton>
+                        <Button
+                            onClick={() => OrderCooked(row?._id, "isCompleted")}
+                            disabled={row.isCompleted}
+                            style={{ margin: '12px' }}
+                            variant="contained"
+                            color="primary"
+                            sx={{ boxShadow: 'none' }}
+                        >
+                            {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : " Mark as Delivered"}
+
+                        </Button>
+                    </AnimateButton></TableCell>
+                <TableCell align="right"><Checkbox /></TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             {row.orderItems.map((historyRow, index) => {
-                                let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
-                                const content = historyRow?.pouchesDetail && newpouchesDetail?.slice(2, -2);
-                                const resultArray = historyRow?.pouchesDetail && content?.split(/\\n|\|/);
+                                // let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
+                                // const content = historyRow?.pouchesDetail && newpouchesDetail?.slice(2, -2);
+                                // const resultArray = historyRow?.pouchesDetail && content?.split(/\\n|\|/);
                                 return <>
                                     <Typography variant="h4" gutterBottom component="div">
                                         Order
@@ -246,7 +251,7 @@ function Row(props) {
                                                                 <TableBody>
                                                                     <TableRow >
                                                                         <TableCell component="th" scope="row">
-                                                                            {resultArray?.map((x, index) => <p key={index}>{x}</p>)}
+                                                                            {/* {resultArray?.map((x, index) => <p key={index}>{x}</p>)}     */}
                                                                         </TableCell>
                                                                     </TableRow>
                                                                 </TableBody>
@@ -335,10 +340,15 @@ export default function OrderList() {
                             <TableRow style={{ backgroundColor: "#D78809" }}>
                                 <TableCell />
                                 <TableCell style={{ color: "#fff" }}>Order #</TableCell>
-                                <TableCell style={{ color: "#fff" }} align="right">Total Amount</TableCell>
+                                <TableCell style={{ color: "#fff" }}>Order Date / Time</TableCell>
+                                <TableCell style={{ color: "#fff" }}>User Name</TableCell>
+                                <TableCell style={{ color: "#fff" }} align="right">Order Total (AED)</TableCell>
                                 <TableCell style={{ color: "#fff" }} align="right">Delivery Date</TableCell>
                                 <TableCell style={{ color: "#fff" }} align="center" >Delivery Address</TableCell>
-                                <TableCell style={{ color: "#fff" }} align="right">Actions</TableCell>
+                                {/* <TableCell style={{ color: "#fff" }} align="center">Actions</TableCell> */}
+                                <TableCell style={{ color: "#fff" }} align="center">Cooked</TableCell>
+                                <TableCell style={{ color: "#fff" }} align="center">Batch No.</TableCell>
+                                <TableCell style={{ color: "#fff" }} align="center">Delivered</TableCell>
                                 <TableCell style={{ color: "#fff" }} align="right">Add to Cooking Batch</TableCell>
                             </TableRow>
                         </TableHead>
