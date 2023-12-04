@@ -138,7 +138,6 @@ function Row(props) {
                                 let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
                                 const content = newpouchesDetail && typeofPouch === "string" && newpouchesDetail?.slice(2, -2);
                                 const resultArray = newpouchesDetail && typeofPouch === "string" ? content?.split(/\\n|\|/) :  historyRow?.pouchesDetail[0]?.split('|');
-                                console.log(historyRow?.pouchesDetail,"resultArray")
                                 return <>
                                     <Typography variant="h4" gutterBottom component="div">
                                         Order

@@ -8,9 +8,16 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Box } from '@mui/material';
+import { InfinitySpin } from 'react-loader-spinner';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { GetAllCookingSheet } from 'store/cookingSheet/cookingSheetAction';
+import TablePagination from '@mui/material/TablePagination';
+// import Tooltip from '@mui/material/Tooltip';
+import moment from 'moment';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -32,72 +39,154 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 const CookingSheet = () => {
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const Userdata = useSelector((state) => state.AuthReducer.data);
+    const allData = useSelector((state) => state.CookingSheetReducer.cookingSheetData);
+    const isLoading = useSelector((state) => state.CookingSheetReducer.isLoadingcookingSheet);
     const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(GetAllCookingSheet(Userdata?.clientToken));
+    }, []);
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    console.log(allData, "allData")
     return (
-        <TableContainer component={Paper}>
-            <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
-                {/* <AnimateButton>
-          <Button
-             onClick={() => navigate('/cooking-sheet/ingredients-portioning-sheet')}
-            style={{ margin: '12px' }}
-            variant="contained"
-            color="primary"
-            sx={{ boxShadow: 'none' }}
-          >
-            Ingredients Portioning Sheet
-          </Button>
-        </AnimateButton> */}
-                <AnimateButton>
-                    <Button
-                        onClick={() => navigate('/cooking-sheet/ingredients-quantity-sheet')}
-                        style={{ margin: '12px' }}
-                        variant="contained"
-                        color="primary"
-                        sx={{ boxShadow: 'none' }}
-                    >
-                        Ingredients Quantity Sheet
-                    </Button>
-                </AnimateButton>
-            </Box>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                <TableHead>
-                    <TableRow>
-                        <StyledTableCell align="left">Ingredient Ref</StyledTableCell>
-                        <StyledTableCell align="left">Ingredient Description</StyledTableCell>
-                        <StyledTableCell align="left">Cooking Volume (grams)</StyledTableCell>
-                        <StyledTableCell align="left">Carbs&nbsp;(g)</StyledTableCell>
-                        <StyledTableCell align="left">Protein&nbsp;(g)</StyledTableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <StyledTableRow key={row.name}>
-                            <StyledTableCell component="th" scope="row">
-                                {row.name}
-                            </StyledTableCell>
-                            <StyledTableCell align="left">{row.calories}</StyledTableCell>
-                            <StyledTableCell align="left">{row.fat}</StyledTableCell>
-                            <StyledTableCell align="left">{row.carbs}</StyledTableCell>
-                            <StyledTableCell align="left">{row.protein}</StyledTableCell>
-                        </StyledTableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <Box sx={{ width: '100%' }}>
+            {isLoading ? (
+                <Paper sx={{ width: '100%', mb: 2 }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+                        <InfinitySpin width="200" color="#D78809" />
+                    </div>
+                </Paper>
+            ) : (
+                <Paper sx={{ width: '100%', mb: 2 }}>
+                    <TableContainer component={Paper}>
+                        <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
+                            <AnimateButton>
+                                <Button
+                                    onClick={() => navigate('/cooking-sheet/ingredients-quantity-sheet')}
+                                    style={{ margin: '12px' }}
+                                    variant="contained"
+                                    color="primary"
+                                    sx={{ boxShadow: 'none' }}
+                                >
+                                    Ingredients Quantity Sheet
+                                </Button>
+                            </AnimateButton>
+                        </Box>
+                        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                            <TableHead>
+                                <TableRow>
+                                    <StyledTableCell align="left">Batch No.</StyledTableCell>
+                                    <StyledTableCell align="center">Production Date</StyledTableCell>
+                                    <StyledTableCell align="center">Expiry Date</StyledTableCell>
+                                    <StyledTableCell align="center">No. of Orders </StyledTableCell>
+                                    <StyledTableCell align="center">Total amount of Orders</StyledTableCell>
+                                    <StyledTableCell align="center">Status</StyledTableCell>
+                                    <StyledTableCell align="center"></StyledTableCell>
+                                    <StyledTableCell align="center">Cooking Sheet</StyledTableCell>
+                                    <StyledTableCell align="center">Edit</StyledTableCell>
+                                    <StyledTableCell align="center">Delete</StyledTableCell>
+                                    <StyledTableCell align="center">Batch Label</StyledTableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {allData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => {
+                                    const givenDate = moment(row?.updatedOnDate);
+                                    const futureDate = givenDate.add(30, 'days');
+                                    const formattedFutureDate = futureDate.format('DD MMM YYYY');
+                                    return <StyledTableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                        <StyledTableCell component="th" align="center" scope="row">
+                                            {row?._id.substr(row?._id?.length - 5)}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="center">{moment(row?.updatedOnDate).format('DD MMM YYYY')}</StyledTableCell>
+                                        <StyledTableCell align="center">{formattedFutureDate}</StyledTableCell>
+                                        <StyledTableCell align="center">{row?.user?._id.substr(row?._id?.length - 5)}</StyledTableCell>
+                                        <StyledTableCell align="center">{row?.totalAmount}-AED</StyledTableCell>
+                                        <StyledTableCell align="center">--</StyledTableCell>
+                                        <StyledTableCell align="center"></StyledTableCell>
+                                        <StyledTableCell align="center">
+                                            <AnimateButton>
+                                                <Button
+                                                    style={{ margin: '12px' }}
+                                                    variant="contained"
+                                                    color="primary"
+                                                    sx={{ boxShadow: 'none' }}
+                                                >
+                                                    Cooking Sheet
+                                                </Button>
+                                            </AnimateButton>
+                                        </StyledTableCell>
+                                        <StyledTableCell align="center">
+                                            <AnimateButton>
+                                                <Button
+                                                    style={{ margin: '12px' }}
+                                                    variant="contained"
+                                                    color="primary"
+                                                    sx={{ boxShadow: 'none' }}
+                                                >
+                                                    Edit
+                                                </Button>
+                                            </AnimateButton>
+                                        </StyledTableCell>
+                                        <StyledTableCell align="center">
+                                            <AnimateButton>
+                                                <Button
+                                                    style={{ margin: '12px' }}
+                                                    variant="contained"
+                                                    color="primary"
+                                                    sx={{ boxShadow: 'none' }}
+                                                >
+                                                    Delete
+                                                </Button>
+                                            </AnimateButton>
+                                        </StyledTableCell>
+                                        <StyledTableCell align="center">
+                                            <AnimateButton>
+                                                <Button
+                                                    style={{ margin: '12px' }}
+                                                    variant="contained"
+                                                    color="primary"
+                                                    sx={{ boxShadow: 'none' }}
+                                                >
+                                                    Batch Label
+                                                </Button>
+                                            </AnimateButton>
+                                        </StyledTableCell>
+
+                                    </StyledTableRow>
+                                })}
+                            </TableBody>
+                        </Table>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                            component="div"
+                            count={allData?.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            onRowsPerPageChange={handleChangeRowsPerPage}
+                        />
+                    </TableContainer>
+                </Paper>
+            )}
+        </Box>
     );
+
 }
 
 export default CookingSheet;
