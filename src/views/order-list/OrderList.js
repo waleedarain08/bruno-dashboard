@@ -32,7 +32,7 @@ function Row(props) {
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
     const LocationDataChange = useSelector((state) => state.OrderReducer.LocationDataChange);
-    console.log(row, "row");
+
 
     const dispatch = useDispatch();
     const OrderCooked = (id, name) => {
@@ -97,19 +97,19 @@ function Row(props) {
                     </AnimateButton></TableCell>
                 <TableCell align="center">
                     {/* <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}> */}
-                        <AnimateButton>
-                            <Button
-                                onClick={() => OrderCooked(row?._id, "isCooked")}
-                                disabled={row?.isCooked}
-                                style={{ margin: '12px' }}
-                                variant="contained"
-                                color="primary"
-                                sx={{ boxShadow: 'none' }}
-                            >
-                                {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : !row?.isCooked ? "Order Cooked" : "Order Dispatched"}
+                    <AnimateButton>
+                        <Button
+                            onClick={() => OrderCooked(row?._id, "isCooked")}
+                            disabled={row?.isCooked}
+                            style={{ margin: '12px' }}
+                            variant="contained"
+                            color="primary"
+                            sx={{ boxShadow: 'none' }}
+                        >
+                            {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : !row?.isCooked ? "Order Cooked" : "Order Dispatched"}
 
-                            </Button>
-                        </AnimateButton>
+                        </Button>
+                    </AnimateButton>
                     {/* </div> */}
                 </TableCell>
                 <TableCell align="center">--</TableCell>
@@ -130,13 +130,15 @@ function Row(props) {
                 <TableCell align="right"><Checkbox /></TableCell>
             </TableRow>
             <TableRow>
-                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{ margin: 1 }}>
                             {row.orderItems.map((historyRow, index) => {
-                                // let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
-                                // const content = historyRow?.pouchesDetail && newpouchesDetail?.slice(2, -2);
-                                // const resultArray = historyRow?.pouchesDetail && content?.split(/\\n|\|/);
+                                let typeofPouch = typeof historyRow?.pouchesDetail;
+                                let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
+                                const content = newpouchesDetail && typeofPouch === "string" && newpouchesDetail?.slice(2, -2);
+                                const resultArray = newpouchesDetail && typeofPouch === "string" ? content?.split(/\\n|\|/) :  historyRow?.pouchesDetail[0]?.split('|');
+                                console.log(historyRow?.pouchesDetail,"resultArray")
                                 return <>
                                     <Typography variant="h4" gutterBottom component="div">
                                         Order
@@ -242,17 +244,18 @@ function Row(props) {
                                                                 ))}
 
                                                             </Table>
-                                                            {historyRow?.pouchesDetail && <Table size="small" aria-label="purchases">
+                                                            {resultArray?.length > 0 && <Table size="small" aria-label="purchases">
                                                                 <TableHead>
                                                                     <TableRow>
                                                                         <TableCell style={{ fontWeight: "bold" }}>Pouches Detail</TableCell>
                                                                     </TableRow>
                                                                 </TableHead>
                                                                 <TableBody>
-                                                                    <TableRow >
-                                                                        <TableCell component="th" scope="row">
-                                                                            {/* {resultArray?.map((x, index) => <p key={index}>{x}</p>)}     */}
-                                                                        </TableCell>
+                                                                    <TableRow>
+                                                                            <TableCell component="th" scope="row">
+                                                                                {resultArray?.map((x, index) => <p key={index}>{x}</p>)}
+                                                                            </TableCell>
+                                                               
                                                                     </TableRow>
                                                                 </TableBody>
                                                             </Table>}
