@@ -19,6 +19,7 @@ import OrderList from 'views/order-list/OrderList';
 import IngredientsQuantitySheet from "views/cooking-sheet/IngredientsQuantitySheet"
 import IngredientsPortioningSheet from "views/cooking-sheet/IngredientsPortioningSheet"
 import DeliveryReport from 'views/delivery-report/DeliveryReport';
+import CookingBatch from 'views/cooking-sheet/cookingBatch';
 
 // dashboard routing
 // const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -175,6 +176,18 @@ const MainRoutes = {
         }
       ]
     },
+    {
+      path: '/cooking-sheet-template',
+      children: [
+        {
+          path: '/cooking-sheet-template',
+          element: <CookingBatch />
+        }
+      ]
+    },
+
+
+    
 
     {
       path: 'utils',

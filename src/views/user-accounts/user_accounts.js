@@ -84,7 +84,6 @@ const UserAccounts = () => {
                     </TableCell>
                     <TableCell align="center">{row?.availablePoints}</TableCell>
                     <TableCell align="right">
-                      {' '}
                       <Switch value={row?.isBlock} color="warning" />
                     </TableCell>
                   </TableRow>

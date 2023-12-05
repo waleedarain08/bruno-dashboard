@@ -75,7 +75,7 @@ const CookingSheet = () => {
             ) : (
                 <Paper sx={{ width: '100%', mb: 2 }}>
                     <TableContainer component={Paper}>
-                        <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
+                        {/* <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
                             <AnimateButton>
                                 <Button
                                     onClick={() => navigate('/cooking-sheet/ingredients-quantity-sheet')}
@@ -87,7 +87,7 @@ const CookingSheet = () => {
                                     Ingredients Quantity Sheet
                                 </Button>
                             </AnimateButton>
-                        </Box>
+                        </Box> */}
                         <Table sx={{ minWidth: 700 }} aria-label="customized table">
                             <TableHead>
                                 <TableRow>
@@ -110,7 +110,7 @@ const CookingSheet = () => {
                                     const futureDate = givenDate.add(30, 'days');
                                     const formattedFutureDate = futureDate.format('DD MMM YYYY');
                                     return <StyledTableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                        <StyledTableCell component="th" align="center" scope="row">
+                                        <StyledTableCell onClick={() => navigate('/cooking-sheet-template')} style={{ textDecoration: "underline", cursor: "pointer" }} component="th" align="center" scope="row">
                                             {row?._id.substr(row?._id?.length - 5)}
                                         </StyledTableCell>
                                         <StyledTableCell align="center">{moment(row?.updatedOnDate).format('DD MMM YYYY')}</StyledTableCell>

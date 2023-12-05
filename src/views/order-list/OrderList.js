@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Avatar from '@mui/material/Avatar';
+import Switch from '@mui/material/Switch';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
@@ -30,12 +31,12 @@ function Row(props) {
     const [open, setOpen] = React.useState(false);
     const [modalOpen, setModalOpen] = React.useState(false);
     const Userdata = useSelector((state) => state.AuthReducer.data);
-    const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
+    // const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
     const LocationDataChange = useSelector((state) => state.OrderReducer.LocationDataChange);
 
 
     const dispatch = useDispatch();
-    const OrderCooked = (id, name) => {
+    const OrderCooked = (id, name,check) => {
         if (name === "isCooked") {
             let data = {
                 isCooked: true
@@ -44,7 +45,7 @@ function Row(props) {
         }
         else {
             let data = {
-                isCompleted: true
+                isCompleted: !check
             }
             dispatch(ChangeOrder(id, data, Userdata?.clientToken, onSuccess))
         }
@@ -115,9 +116,10 @@ function Row(props) {
                 </TableCell>
                 <TableCell align="center">--</TableCell>
                 <TableCell align="center">
-                    <AnimateButton>
+                    <Switch onChange={() => OrderCooked(row?._id, "isCompleted", row.isCompleted)} checked={row.isCompleted} />
+                    {/* <AnimateButton>
                         <Button
-                            onClick={() => OrderCooked(row?._id, "isCompleted")}
+                            onClick={() => }
                             disabled={row.isCompleted}
                             style={{ margin: '12px' }}
                             variant="contained"
@@ -127,7 +129,8 @@ function Row(props) {
                             {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" />Yes</div> : " No"}
 
                         </Button>
-                    </AnimateButton></TableCell>
+                    </AnimateButton> */}
+                </TableCell>
                 <TableCell align="right"><Checkbox /></TableCell>
             </TableRow>
             <TableRow>
