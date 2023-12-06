@@ -50,7 +50,7 @@ const CookingBatch = () => {
                     <Table aria-label="sticky table">
                         <TableHead>
                             <TableRow>
-                                <TableCell style={{ fontWeight: "800" }} align="center" colSpan={2}>
+                                <TableCell style={{ fontWeight: "800" }} align="center" colSpan={1}>
                                     Batch Cooking Ingredients:
                                 </TableCell>
                             </TableRow>

@@ -24,19 +24,22 @@ import { InfinitySpin } from 'react-loader-spinner';
 import LocationModal from 'components/LocationModal';
 import Checkbox from '@mui/material/Checkbox';
 import moment from 'moment';
+import { ADDToBatch } from 'store/batch/batchTypeAction';
 
 
 function Row(props) {
-    const { row } = props;
+    const { row, setId } = props;
     const [open, setOpen] = React.useState(false);
     const [modalOpen, setModalOpen] = React.useState(false);
+
     const Userdata = useSelector((state) => state.AuthReducer.data);
     // const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
     const LocationDataChange = useSelector((state) => state.OrderReducer.LocationDataChange);
+    // moveToBatch(row?._id)
 
 
     const dispatch = useDispatch();
-    const OrderCooked = (id, name,check) => {
+    const OrderCooked = (id, name, check) => {
         if (name === "isCooked") {
             let data = {
                 isCooked: true
@@ -50,6 +53,7 @@ function Row(props) {
             dispatch(ChangeOrder(id, data, Userdata?.clientToken, onSuccess))
         }
     }
+
 
     const onSuccess = () => {
         dispatch(GetAllOrder(Userdata?.clientToken));
@@ -114,24 +118,11 @@ function Row(props) {
                     </AnimateButton> */}
                     {/* </div> */}
                 </TableCell>
-                <TableCell align="center">--</TableCell>
+                <TableCell align="center">{row?.batchNumber}</TableCell>
                 <TableCell align="center">
                     <Switch onChange={() => OrderCooked(row?._id, "isCompleted", row.isCompleted)} checked={row.isCompleted} />
-                    {/* <AnimateButton>
-                        <Button
-                            onClick={() => }
-                            disabled={row.isCompleted}
-                            style={{ margin: '12px' }}
-                            variant="contained"
-                            color="primary"
-                            sx={{ boxShadow: 'none' }}
-                        >
-                            {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" />Yes</div> : " No"}
-
-                        </Button>
-                    </AnimateButton> */}
                 </TableCell>
-                <TableCell align="right"><Checkbox /></TableCell>
+                <TableCell align="right"><Checkbox onChange={() => setId(row?._id)} /></TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
@@ -284,6 +275,8 @@ function Row(props) {
 export default function OrderList() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [OrderIds, setOrderIds] = React.useState([]);
+    const [Id, setId] = React.useState(null);
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -296,9 +289,40 @@ export default function OrderList() {
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const isLoading = useSelector((state) => state.OrderReducer.isLoadingOrder);
     const dataOrders = useSelector((state) => state.OrderReducer.orderData);
+    console.log(dataOrders,"dataOrders")
+
     React.useEffect(() => {
         dispatch(GetAllOrder(Userdata?.clientToken));
     }, []);
+    React.useEffect(() => {
+        if (Id !== null) {
+            let ifMatch = OrderIds.indexOf(Id);
+            if (ifMatch === -1) {
+                if (OrderIds?.length > 0) {
+                    setOrderIds(oldArray => [Id, ...oldArray]);
+                } else {
+                    setOrderIds([Id]);
+                }
+            } else {
+                let newData = [...OrderIds];
+                let index = newData.findIndex(i => i === Id);
+                if (index !== -1) {
+                    newData.splice(index, 1);
+                    setOrderIds(newData);
+                }
+            }
+            setId(null);
+        }
+    }, [Id]);
+
+    const GenerateBatch = () => {
+        let allData = {
+            OrderIds: OrderIds
+        }
+        if (OrderIds?.length > 0) {
+            dispatch(ADDToBatch(allData, Userdata?.clientToken));
+        }
+    };
     return (
         <TableContainer component={Paper}>
             {isLoading ? <Paper sx={{ width: '100%', mb: 2 }}>
@@ -331,6 +355,7 @@ export default function OrderList() {
                         </AnimateButton>
                         <AnimateButton>
                             <Button
+                                onClick={() => GenerateBatch()}
                                 style={{ margin: '12px' }}
                                 variant="contained"
                                 color="primary"
@@ -359,7 +384,7 @@ export default function OrderList() {
                         </TableHead>
                         <TableBody>
                             {dataOrders?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
-                                <Row key={index} row={row} />
+                                <Row key={index} row={row} setId={setId} />
                             ))}
                         </TableBody>
                     </Table>
