@@ -24,10 +24,12 @@ import { InfinitySpin } from 'react-loader-spinner';
 import LocationModal from 'components/LocationModal';
 import Checkbox from '@mui/material/Checkbox';
 import moment from 'moment';
-import { ADDToBatch } from 'store/batch/batchTypeAction';
+import { updateToBatch } from 'store/batch/batchTypeAction';
+import { useLocation, useNavigate } from 'react-router';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 function Row(props) {
-  const { row, setId } = props;
+  const { row, setId, state } = props;
   const [open, setOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
 
@@ -91,30 +93,13 @@ function Row(props) {
             </Button>
           </AnimateButton>
         </TableCell>
-        <TableCell align="center">
-          {row?.isCooked ? 'Yes' : 'No'}
-          {/* <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}> */}
-          {/* <AnimateButton>
-                        <Button
-                            onClick={() => OrderCooked(row?._id, "isCooked")}
-                            disabled={row?.isCooked}
-                            style={{ margin: '12px' }}
-                            variant="contained"
-                            color="primary"
-                            sx={{ boxShadow: 'none' }}
-                        >
-                            {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : !row?.isCooked ? "Order Cooked" : "Order Dispatched"}
-
-                        </Button>
-                    </AnimateButton> */}
-          {/* </div> */}
-        </TableCell>
+        <TableCell align="center">{row?.isCooked ? 'Yes' : 'No'}</TableCell>
         <TableCell align="center">{row?.batchNumber}</TableCell>
         <TableCell align="center">
           <Switch onChange={() => OrderCooked(row?._id, 'isCompleted', row.isCompleted)} checked={row.isCompleted} />
         </TableCell>
         <TableCell align="right">
-          <Checkbox onChange={() => setId(row?._id)} />
+          <Checkbox defaultChecked={state?.batchNumber === row?.batchNumber ? true : false} onChange={() => setId(row?._id)} />
         </TableCell>
       </TableRow>
       <TableRow>
@@ -261,10 +246,15 @@ function Row(props) {
   );
 }
 
-export default function OrderList() {
+export default function EditBatch() {
+  const { state } = useLocation();
+  const navigate = useNavigate();
+  // console.log(state, 'IncomingData');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [OrderIds, setOrderIds] = React.useState([]);
+
+  const [FiltredDAta, setFiltredDAta] = React.useState([]);
   const [Id, setId] = React.useState(null);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -279,7 +269,18 @@ export default function OrderList() {
   const isLoading = useSelector((state) => state.OrderReducer.isLoadingOrder);
   const dataOrders = useSelector((state) => state.OrderReducer.orderData);
   const isLoadingAddBatch = useSelector((state) => state.BatchReducer.isLoadingAddBatch);
-  console.log(isLoadingAddBatch, 'dataOrders');
+
+  React.useEffect(() => {
+    let findData = dataOrders?.filter(
+      (i) => i?.batchNumber === state?.batchNumber || i?.batchNumber === undefined || i?.batchNumber === null || i?.batchNumber === ''
+    );
+    let findingInitalId = dataOrders?.filter((i) => i?.batchNumber === state?.batchNumber);
+    let IdMap = findingInitalId?.map((w) => w?._id);
+    setOrderIds([...IdMap]);
+    setFiltredDAta(findData);
+  }, [dataOrders]);
+
+  // console.log(dataOrders, 'dataOrders');
 
   React.useEffect(() => {
     dispatch(GetAllOrder(Userdata?.clientToken));
@@ -305,12 +306,12 @@ export default function OrderList() {
     }
   }, [Id]);
 
-  const GenerateBatch = () => {
+  const updateBatch = () => {
     let allData = {
-      orderIds: OrderIds
+      add: OrderIds
     };
     if (OrderIds?.length > 0) {
-      dispatch(ADDToBatch(allData, Userdata?.clientToken, onSuccessBatch));
+      dispatch(updateToBatch(state?.batch_id, allData, Userdata?.clientToken, onSuccessBatch));
     }
   };
   const onSuccessBatch = () => {
@@ -326,20 +327,26 @@ export default function OrderList() {
         </Paper>
       ) : (
         <>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%' }}>
-            <AnimateButton>
-              <Button style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
-                Export
-              </Button>
-            </AnimateButton>
-            <AnimateButton>
-              <Button style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
-                Print
-              </Button>
-            </AnimateButton>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            <div
+              style={{
+                border: '1px solid #D78809',
+                width: 30,
+                display: 'flex',
+                justifyContent: 'center',
+                borderRadius: 50,
+                margin: 5,
+                padding: 2
+              }}
+            >
+              <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: '#D78809' }} />
+            </div>
+            <div>
+              <h3>Batch Number : {state?.batchNumber}</h3>
+            </div>
             <AnimateButton>
               <Button
-                onClick={() => GenerateBatch()}
+                onClick={() => updateBatch()}
                 style={{ margin: '12px' }}
                 variant="contained"
                 color="primary"
@@ -360,7 +367,7 @@ export default function OrderList() {
                     <InfinitySpin color="#fff" />
                   </div>
                 ) : (
-                  'Generate Cooking Batch'
+                  'Update Cooking Batch'
                 )}
               </Button>
             </AnimateButton>
@@ -397,8 +404,8 @@ export default function OrderList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {dataOrders?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
-                <Row key={index} row={row} setId={setId} />
+              {FiltredDAta?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
+                <Row key={index} row={row} setId={setId} state={state} />
               ))}
             </TableBody>
           </Table>
@@ -407,7 +414,7 @@ export default function OrderList() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
         component="div"
-        count={dataOrders?.length}
+        count={FiltredDAta?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

@@ -5,8 +5,9 @@ import { Get } from '../../helpers/apicalls/apicalls';
 export const GetAllCookingSheet = (data) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingCookingSheet });
-    Get(`order/cooking-sheet`, data)
+    Get(`order-batch/?page=1&count=100000`, data)
       .then(function (response) {
+        console.log(response,"response");
         if (response?.isSuccess) {
           dispatch({
             type: actionTypes.SuccessCookingSheet,

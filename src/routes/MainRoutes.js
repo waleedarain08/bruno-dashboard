@@ -16,10 +16,11 @@ import PromoLoyality from 'views/promo-codes&loyality-points/promo-loyality';
 import Ingredients from 'views/ingredients/Ingredients';
 import Categories from 'views/categories/Categories';
 import OrderList from 'views/order-list/OrderList';
-import IngredientsQuantitySheet from "views/cooking-sheet/IngredientsQuantitySheet"
-import IngredientsPortioningSheet from "views/cooking-sheet/IngredientsPortioningSheet"
+import IngredientsQuantitySheet from 'views/cooking-sheet/IngredientsQuantitySheet';
+import IngredientsPortioningSheet from 'views/cooking-sheet/IngredientsPortioningSheet';
 import DeliveryReport from 'views/delivery-report/DeliveryReport';
 import CookingBatch from 'views/cooking-sheet/cookingBatch';
+import EditBatch from 'views/cooking-sheet/editBatch';
 
 // dashboard routing
 // const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -109,6 +110,10 @@ const MainRoutes = {
         {
           path: '/cooking-sheet/ingredients-quantity-sheet',
           element: <IngredientsQuantitySheet />
+        },
+        {
+          path: '/cooking-sheet/edit-batch',
+          element: <EditBatch />
         }
       ]
     },
@@ -185,9 +190,6 @@ const MainRoutes = {
         }
       ]
     },
-
-
-    
 
     {
       path: 'utils',
