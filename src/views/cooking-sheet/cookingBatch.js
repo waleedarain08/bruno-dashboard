@@ -12,6 +12,7 @@ import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { Batch_Ingredients, Batch_Order_By_id } from 'store/batch/batchTypeAction';
 
+
 const CookingBatch = () => {
     const { state } = useLocation();
     const dispatch = useDispatch();
@@ -28,7 +29,6 @@ const CookingBatch = () => {
 
     React.useEffect(() => {
         if (BatchIngredientsData?.length > 0 || BatchIngredientsData !== undefined) {
-
             const formattedData = Object.keys(BatchIngredientsData).map(key => {
                 const weight = BatchIngredientsData[key].weight;
                 const contingencyFactor = BatchIngredientsData[key].ContingencyFactor;
@@ -58,6 +58,12 @@ const CookingBatch = () => {
     const givenDate = moment(state?.createdOnDate);
     const futureDate = givenDate.add(30, 'days');
     const formattedFutureDate = futureDate.format('DD MMM YYYY');
+
+    let nameArr = BatchOrderByIdData
+        ?.map((i) => i?.orderItems?.map((u) => u?.recipes?.map((x) => x?.name)))
+        .flat(2)
+        .filter((name) => name !== undefined);
+
     return (
         <>
             <Paper sx={{ width: '40%', marginBottom: 4 }}>
@@ -163,84 +169,90 @@ const CookingBatch = () => {
 
 
             <Paper sx={{ width: '100%', marginTop: 4 }}>
-                <TableContainer >
+                <TableContainer>
                     <Table aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell style={{ fontWeight: "800" }} align="center" colSpan={2}>
-                                    Orders Cooking Ingredients:
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell style={{ fontWeight: "800" }} align="center" colSpan={3}>
-                                </TableCell>
-                                <TableCell style={{ fontWeight: "800" }} align="center" colSpan={4}>
-                                    Order 1
-                                </TableCell>
-                                <TableCell style={{ fontWeight: "800" }} align="center" colSpan={1}>
-                                    Order 2
-                                </TableCell>
-                                <TableCell style={{ fontWeight: "800" }} align="center" colSpan={3}>
-                                    Order 3
-                                </TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Ingredient Ref
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Ingredient Description
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Cooking Volume (grams)
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Chicken
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Chicken
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Beef
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Combo Chicken/ Beef
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Beef
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Beef
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Chicken
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Lamb
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {AllKeys?.map((i, index) => {
-                                return <TableRow key={index}>
-                                    <TableCell align="center">
-                                        {index}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {i?.key}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {i?.weight}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        --
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        --
+                        <>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell style={{ fontWeight: "800" }} align="center" colSpan={2}>
+                                        Orders Cooking Ingredients:
                                     </TableCell>
                                 </TableRow>
-                            })}
-                        </TableBody>
+                                <TableRow>
+                                    <TableCell style={{ fontWeight: "800" }} align="center">
+                                    </TableCell>
+                                    <TableCell style={{ fontWeight: "800" }} align="center">
+                                    </TableCell>
+                                    <TableCell style={{ fontWeight: "800" }} align="center">
+                                    </TableCell>
+                                    {BatchOrderByIdData?.map((i, index) => {
+                                        return <TableCell colSpan={i?.orderItems?.length > 1 ? i?.orderItems?.length : 0} key={index} style={{ fontWeight: "800" }} align="center" >
+                                            Order {index + 1}
+                                        </TableCell>
+                                    })}
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell style={{ backgroundColor: "#D78809" }} align="center">
+                                        Ingredient Ref
+                                    </TableCell>
+                                    <TableCell style={{ backgroundColor: "#D78809" }} align="center">
+                                        Ingredient Description
+                                    </TableCell>
+                                    <TableCell style={{ backgroundColor: "#D78809" }} align="center">
+                                        Cooking Volume (grams)
+                                    </TableCell>
+                                    {nameArr?.map((i, index) =>
+                                        <TableCell key={index} style={{ backgroundColor: "#D78809" }} align="center">
+                                            {i}
+                                        </TableCell>
+                                    )}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {AllKeys?.map((i, index) => {
+                                    return <TableRow key={index}>
+                                        <TableCell align="center">
+                                            {index}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {i?.key}
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {i?.weight}
+                                        </TableCell>
+                                        {BatchOrderByIdData?.map((x, index) => {
+                                            let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
+                                            let anOther = updatedData?.filter((u) => u?.name == i?.key);
+                                            return <TableCell key={index} align="center">
+                                                {anOther?.length > 0 ? anOther?.[0]?.value : "--"}
+                                            </TableCell>
+                                        })}
+                                    </TableRow>
+                                })}
+                                <TableRow >
+                                    <TableCell align="center">
+
+                                    </TableCell>
+                                    <TableCell align="center">
+
+                                    </TableCell>
+                                    <TableCell style={{ fontWeight: "700" }} align="center">
+                                        {sumWithInitial}
+                                    </TableCell>
+                                    {BatchOrderByIdData?.map((x, index) => {
+                                        let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
+                                        const newSum = updatedData?.reduce(
+                                            (accumulator, currentValue) => accumulator + currentValue?.value,
+                                            0,
+                                        );
+                                        return <TableCell style={{ fontWeight: "700" }} key={index} align="center">
+                                            {newSum}
+                                        </TableCell>
+                                    })}
+                                </TableRow>
+                            </TableBody>
+                        </>
+
                     </Table>
                 </TableContainer>
                 <Paper sx={{ width: '100%', marginTop: 10, borderTop: 1 }}>
