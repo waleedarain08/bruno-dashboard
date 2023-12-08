@@ -118,7 +118,9 @@ const CookingSheet = () => {
                   return (
                     <StyledTableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                       <StyledTableCell
-                        onClick={() => navigate('/cooking-sheet-template')}
+                        onClick={() => navigate('/cooking-sheet-template', {
+                          state: row
+                        })}
                         style={{ textDecoration: 'underline', cursor: 'pointer' }}
                         component="th"
                         align="center"

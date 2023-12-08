@@ -7,7 +7,11 @@ export const initialState = {
   isLoadingDeleteBatch: false,
   DeleteBatchData: [],
   isLoadingUpdateBatch: false,
-  UpdateBatchData: []
+  UpdateBatchData: [],
+  isLoadingBatchIngredients: false,
+  BatchIngredientsData: [],
+  isLoadingBatchOrderById: false,
+  BatchOrderByIdData: []
 };
 
 // ==============================|| OrderReducer REDUCER ||============================== //
@@ -64,6 +68,42 @@ const BatchReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoadingUpdateBatch: false
+      };
+    ///////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////
+    case actionTypes.isLoading_Batch_Ingredients:
+      return {
+        ...state,
+        isLoadingBatchIngredients: true
+      };
+    case actionTypes.SuccessAisLoading_Batch_Ingredients:
+      return {
+        ...state,
+        isLoadingBatchIngredients: false,
+        BatchIngredientsData: action.payload
+      };
+    case actionTypes.FailedAisLoading_Batch_Ingredients:
+      return {
+        ...state,
+        isLoadingBatchIngredients: false
+      };
+    ///////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////
+    case actionTypes.isLoading_Batch_Order_By_id:
+      return {
+        ...state,
+        isLoadingBatchOrderById: true
+      };
+    case actionTypes.SuccessAisLoading_Batch_Order_By_id:
+      return {
+        ...state,
+        isLoadingBatchOrderById: false,
+        BatchOrderByIdData: action.payload
+      };
+    case actionTypes.FailedAisLoading_Batch_Order_By_id:
+      return {
+        ...state,
+        isLoadingBatchOrderById: false
       };
     ///////////////////////////////////////////////////////////
     default:

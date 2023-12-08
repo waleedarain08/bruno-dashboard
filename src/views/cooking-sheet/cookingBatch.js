@@ -6,11 +6,58 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { useLocation } from 'react-router';
+import moment from 'moment';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { Batch_Ingredients, Batch_Order_By_id } from 'store/batch/batchTypeAction';
 
 const CookingBatch = () => {
+    const { state } = useLocation();
+    const dispatch = useDispatch();
+    const Userdata = useSelector((state) => state.AuthReducer.data);
+    const [AllKeys, setAllKeys] = React.useState([]);
+    const BatchIngredientsData = useSelector((state) => state.BatchReducer.BatchIngredientsData);
+    const BatchOrderByIdData = useSelector((state) => state.BatchReducer.BatchOrderByIdData);
+    console.log(BatchOrderByIdData, "BatchIngredientsData");
 
+    React.useEffect(() => {
+        dispatch(Batch_Ingredients(state?._id, Userdata?.clientToken));
+        dispatch(Batch_Order_By_id(state?._id, Userdata?.clientToken));
+    }, [state]);
 
+    React.useEffect(() => {
+        if (BatchIngredientsData?.length > 0 || BatchIngredientsData !== undefined) {
+
+            const formattedData = Object.keys(BatchIngredientsData).map(key => {
+                const weight = BatchIngredientsData[key].weight;
+                const contingencyFactor = BatchIngredientsData[key].ContingencyFactor;
+                const percentage = parseFloat(contingencyFactor.replace('%', '')) / 100;
+                const adjustedWeight = weight * (1 + percentage);
+
+                return {
+                    key: key,
+                    weight: weight,
+                    ContingencyFactor: contingencyFactor,
+                    CookingVolume: adjustedWeight
+                };
+            });
+            setAllKeys(formattedData);
+        }
+    }, [BatchIngredientsData]);
+
+    const sumWithInitial = AllKeys?.reduce(
+        (accumulator, currentValue) => accumulator + currentValue?.weight,
+        0,
+    );
+    const sumWithadjustedWeight = AllKeys?.reduce(
+        (accumulator, currentValue) => accumulator + currentValue?.CookingVolume,
+        0,
+    );
+
+    const givenDate = moment(state?.createdOnDate);
+    const futureDate = givenDate.add(30, 'days');
+    const formattedFutureDate = futureDate.format('DD MMM YYYY');
     return (
         <>
             <Paper sx={{ width: '40%', marginBottom: 4 }}>
@@ -21,7 +68,7 @@ const CookingBatch = () => {
                                 Batch Ref.
                             </TableCell>
                             <TableCell align="left">
-                                23/1123
+                                {state?.batchNumber}
                             </TableCell>
                         </TableBody>
                         <TableBody>
@@ -29,7 +76,7 @@ const CookingBatch = () => {
                                 Production Date:
                             </TableCell>
                             <TableCell align="left">
-                                19th Nov, 2023
+                                {moment(state?.createdOnDate).format('DD MMM YYYY')}
                             </TableCell>
                         </TableBody>
                         <TableBody>
@@ -37,7 +84,7 @@ const CookingBatch = () => {
                                 Expiry Date:
                             </TableCell>
                             <TableCell align="left">
-                                18th Dev, 2023
+                                {formattedFutureDate}
                             </TableCell>
                         </TableBody>
                     </Table>
@@ -73,21 +120,39 @@ const CookingBatch = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
+                            {AllKeys?.map((i, index) => {
+                                return <TableRow key={index}>
+                                    <TableCell align="center">
+                                        {index}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {i?.key}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {i?.weight}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {i?.ContingencyFactor}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {i?.CookingVolume}
+                                    </TableCell>
+                                </TableRow>
+                            })}
                             <TableRow >
                                 <TableCell align="center">
-                                    1
                                 </TableCell>
                                 <TableCell align="center">
-                                    Beef
+
+                                </TableCell>
+                                <TableCell style={{ fontWeight: "700" }} align="center">
+                                    {sumWithInitial}
                                 </TableCell>
                                 <TableCell align="center">
-                                    12500
+
                                 </TableCell>
-                                <TableCell align="center">
-                                    25%
-                                </TableCell>
-                                <TableCell align="center">
-                                    15,625
+                                <TableCell style={{ fontWeight: "700" }} align="center">
+                                    {sumWithadjustedWeight}
                                 </TableCell>
                             </TableRow>
                         </TableBody>
@@ -156,41 +221,25 @@ const CookingBatch = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow >
-                                <TableCell align="center">
-                                    1
-                                </TableCell>
-                                <TableCell align="center">
-                                    Beef
-                                </TableCell>
-                                <TableCell align="center">
-                                    12500
-                                </TableCell>
-                                <TableCell align="center">
-                                    -
-                                </TableCell>
-                                <TableCell align="center">
-                                    -
-                                </TableCell>
-                                <TableCell align="center">
-                                    1388
-                                </TableCell>
-                                <TableCell align="center">
-                                    14678
-                                </TableCell>
-                                <TableCell align="center">
-                                    1245
-                                </TableCell>
-                                <TableCell align="center">
-                                    -
-                                </TableCell>
-                                <TableCell align="center">
-                                    48544
-                                </TableCell>
-                                <TableCell align="center">
-                                    -
-                                </TableCell>
-                            </TableRow>
+                            {AllKeys?.map((i, index) => {
+                                return <TableRow key={index}>
+                                    <TableCell align="center">
+                                        {index}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {i?.key}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        {i?.weight}
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        --
+                                    </TableCell>
+                                    <TableCell align="center">
+                                        --
+                                    </TableCell>
+                                </TableRow>
+                            })}
                         </TableBody>
                     </Table>
                 </TableContainer>

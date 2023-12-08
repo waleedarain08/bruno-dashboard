@@ -1,6 +1,6 @@
 // action - state management
 import * as actionTypes from './batchType';
-import { Post, Delete, Patch } from '../../helpers/apicalls/apicalls';
+import { Post, Delete, Patch, Get } from '../../helpers/apicalls/apicalls';
 
 export const ADDToBatch = (data, token, onSuccessBatch) => {
   return (dispatch) => {
@@ -73,3 +73,52 @@ export const DeleteBatch = (data, token, onSuccessBatch) => {
       });
   };
 };
+
+
+export const Batch_Ingredients = (id, token) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.isLoading_Batch_Ingredients });
+    Get(`order-batch/${id}/composition`, token)
+      .then(function (response) {
+        console.log(response, 'response');
+        if (response?.isSuccess) {
+          dispatch({
+            type: actionTypes.SuccessAisLoading_Batch_Ingredients,
+            payload: response?.data
+          });
+
+        } else {
+          dispatch({ type: actionTypes.FailedAisLoading_Batch_Ingredients });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.FailedAisLoading_Batch_Ingredients });
+      });
+  };
+};
+
+export const Batch_Order_By_id = (id, token) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.isLoading_Batch_Order_By_id });
+    Get(`order-batch/${id}/orders`, token)
+      .then(function (response) {
+        console.log(response, 'response');
+        if (response?.isSuccess) {
+          dispatch({
+            type: actionTypes.SuccessAisLoading_Batch_Order_By_id,
+            payload: response?.data
+          });
+        } else {
+          dispatch({ type: actionTypes.FailedAisLoading_Batch_Order_By_id });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.FailedAisLoading_Batch_Order_By_id });
+      });
+  };
+};
+
