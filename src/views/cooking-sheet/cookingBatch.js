@@ -12,634 +12,404 @@ import moment from 'moment';
 import { useSelector, useDispatch } from 'react-redux';
 import { Batch_Ingredients, Batch_Order_By_id } from 'store/batch/batchTypeAction';
 
-
 const CookingBatch = () => {
-    const { state } = useLocation();
-    const dispatch = useDispatch();
-    const Userdata = useSelector((state) => state.AuthReducer.data);
-    const [AllKeys, setAllKeys] = React.useState([]);
-    const BatchIngredientsData = useSelector((state) => state.BatchReducer.BatchIngredientsData);
-    const BatchOrderByIdData = useSelector((state) => state.BatchReducer.BatchOrderByIdData);
-    console.log(BatchOrderByIdData, "BatchIngredientsData");
+  const { state } = useLocation();
+  const dispatch = useDispatch();
+  const Userdata = useSelector((state) => state.AuthReducer.data);
+  const [AllKeys, setAllKeys] = React.useState([]);
+  const [FeedingData, setFeedingData] = React.useState([]);
+  const BatchIngredientsData = useSelector((state) => state.BatchReducer.BatchIngredientsData);
+  const BatchOrderByIdData = useSelector((state) => state.BatchReducer.BatchOrderByIdData);
+  console.log(BatchOrderByIdData, 'BatchIngredientsData');
 
-    React.useEffect(() => {
-        dispatch(Batch_Ingredients(state?._id, Userdata?.clientToken));
-        dispatch(Batch_Order_By_id(state?._id, Userdata?.clientToken));
-    }, [state]);
+  React.useEffect(() => {
+    dispatch(Batch_Ingredients(state?._id, Userdata?.clientToken));
+    dispatch(Batch_Order_By_id(state?._id, Userdata?.clientToken));
+  }, [state]);
 
-    React.useEffect(() => {
-        if (BatchIngredientsData?.length > 0 || BatchIngredientsData !== undefined) {
-            const formattedData = Object.keys(BatchIngredientsData).map(key => {
-                const weight = BatchIngredientsData[key].weight;
-                const contingencyFactor = BatchIngredientsData[key].ContingencyFactor;
-                const percentage = parseFloat(contingencyFactor.replace('%', '')) / 100;
-                const adjustedWeight = weight * (1 + percentage);
+  React.useEffect(() => {
+    if (BatchIngredientsData?.length > 0 || BatchIngredientsData !== undefined) {
+      const formattedData = Object.keys(BatchIngredientsData).map((key) => {
+        const weight = BatchIngredientsData[key].weight;
+        const contingencyFactor = BatchIngredientsData[key].ContingencyFactor;
+        const percentage = parseFloat(contingencyFactor.replace('%', '')) / 100;
+        const adjustedWeight = weight * (1 + percentage);
 
-                return {
-                    key: key,
-                    weight: weight,
-                    ContingencyFactor: contingencyFactor,
-                    CookingVolume: adjustedWeight
-                };
+        return {
+          key: key,
+          weight: weight,
+          ContingencyFactor: contingencyFactor,
+          CookingVolume: adjustedWeight
+        };
+      });
+      setAllKeys(formattedData);
+    }
+  }, [BatchIngredientsData]);
+
+  const sumWithInitial = AllKeys?.reduce((accumulator, currentValue) => accumulator + currentValue?.weight, 0);
+  const sumWithadjustedWeight = AllKeys?.reduce((accumulator, currentValue) => accumulator + currentValue?.CookingVolume, 0);
+
+  const givenDate = moment(state?.createdOnDate);
+  const futureDate = givenDate.add(30, 'days');
+  const formattedFutureDate = futureDate.format('DD MMM YYYY');
+
+  let nameArr = BatchOrderByIdData?.map((i) => i?.orderItems?.map((u) => u?.recipes?.map((x) => x?.name)))
+    .flat(2)
+    .filter((name) => name !== undefined);
+
+  React.useEffect(() => {
+    if (BatchOrderByIdData?.length > 0) {
+      let newarrr = BatchOrderByIdData?.map((w) => {
+        return w?.orderItems
+          ?.map((z) => {
+            let extractString = z?.pouchesDetail[0].split('|');
+            // Initialize an array to store the new data
+            let newData = [];
+            // Processing each segment
+            extractString.forEach((segment) => {
+              // Extracting day and value from the segment
+              let match = segment.match(/(\d+) pouches x (\d+\.\d+) grams/);
+              if (match) {
+                // Creating an object and pushing it to the newData array
+                newData.push({
+                  day: parseInt(match[1]),
+                  value: parseFloat(match[2])
+                });
+              }
             });
-            setAllKeys(formattedData);
-        }
-    }, [BatchIngredientsData]);
+            return newData;
+          })
+          .flat(2);
+      });
+      setFeedingData(newarrr);
+    }
+  }, [BatchOrderByIdData]);
 
-    const sumWithInitial = AllKeys?.reduce(
-        (accumulator, currentValue) => accumulator + currentValue?.weight,
-        0,
-    );
-    const sumWithadjustedWeight = AllKeys?.reduce(
-        (accumulator, currentValue) => accumulator + currentValue?.CookingVolume,
-        0,
-    );
+  return (
+    <>
+      <Paper sx={{ width: '40%', marginBottom: 4 }}>
+        <TableContainer>
+          <Table>
+            <TableBody>
+              <TableCell align="left">Batch Ref.</TableCell>
+              <TableCell align="left">{state?.batchNumber}</TableCell>
+            </TableBody>
+            <TableBody>
+              <TableCell align="left">Production Date:</TableCell>
+              <TableCell align="left">{moment(state?.createdOnDate).format('DD MMM YYYY')}</TableCell>
+            </TableBody>
+            <TableBody>
+              <TableCell align="left">Expiry Date:</TableCell>
+              <TableCell align="left">{formattedFutureDate}</TableCell>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
 
-    const givenDate = moment(state?.createdOnDate);
-    const futureDate = givenDate.add(30, 'days');
-    const formattedFutureDate = futureDate.format('DD MMM YYYY');
+      <Paper sx={{ width: '100%' }}>
+        <TableContainer>
+          <Table aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ fontWeight: '800' }} align="left" colSpan={1}>
+                  Batch Cooking Ingredients:
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell style={{ backgroundColor: '#D78809' }} align="center">
+                  Ingredient Ref
+                </TableCell>
+                <TableCell style={{ backgroundColor: '#D78809' }} align="center">
+                  Ingredient Description
+                </TableCell>
+                <TableCell style={{ backgroundColor: '#D78809' }} align="center">
+                  Total Orders Volume (grams)
+                </TableCell>
+                <TableCell style={{ backgroundColor: '#D78809' }} align="center">
+                  Contingency Factor (%)
+                </TableCell>
+                <TableCell style={{ backgroundColor: '#D78809' }} align="center">
+                  Cooking Volume (grams)
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {AllKeys?.map((i, index) => {
+                return (
+                  <TableRow key={index}>
+                    <TableCell align="center">{index + 1}</TableCell>
+                    <TableCell align="center">{i?.key}</TableCell>
+                    <TableCell align="center">{i?.weight?.toFixed(2)}</TableCell>
+                    <TableCell align="center">{i?.ContingencyFactor}</TableCell>
+                    <TableCell align="center">{i?.CookingVolume?.toFixed(2)}</TableCell>
+                  </TableRow>
+                );
+              })}
+              <TableRow>
+                <TableCell align="center"></TableCell>
+                <TableCell align="center"></TableCell>
+                <TableCell style={{ fontWeight: '700' }} align="center">
+                  {sumWithInitial?.toFixed(2)}
+                </TableCell>
+                <TableCell align="center"></TableCell>
+                <TableCell style={{ fontWeight: '700' }} align="center">
+                  {sumWithadjustedWeight?.toFixed(2)}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
 
-    let nameArr = BatchOrderByIdData
-        ?.map((i) => i?.orderItems?.map((u) => u?.recipes?.map((x) => x?.name)))
-        .flat(2)
-        .filter((name) => name !== undefined);
+      <Paper sx={{ width: '100%', marginTop: 4 }}>
+        <TableContainer>
+          <Table aria-label="sticky table">
+            <>
+              <TableHead>
+                <TableRow>
+                  <TableCell style={{ fontWeight: '800' }} align="left" colSpan={2}>
+                    Orders Cooking Ingredients:
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell style={{ fontWeight: '800' }} align="center"></TableCell>
+                  <TableCell style={{ fontWeight: '800' }} align="center"></TableCell>
+                  <TableCell style={{ fontWeight: '800' }} align="center"></TableCell>
+                  {BatchOrderByIdData?.map((i, index) => {
+                    return (
+                      <TableCell key={index} style={{ fontWeight: '800' }} align="center">
+                        Order {index + 1}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+                <TableRow>
+                  <TableCell style={{ backgroundColor: '#D78809' }} align="center">
+                    Ingredient Ref
+                  </TableCell>
+                  <TableCell style={{ backgroundColor: '#D78809' }} align="center">
+                    Ingredient Description
+                  </TableCell>
+                  <TableCell style={{ backgroundColor: '#D78809' }} align="center">
+                    Cooking Volume (grams)
+                  </TableCell>
+                  {nameArr?.map((i, index) => (
+                    <TableCell key={index} style={{ backgroundColor: '#D78809' }} align="center">
+                      {i}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {AllKeys?.map((i, index) => {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell align="center">{index + 1}</TableCell>
+                      <TableCell align="center">{i?.key}</TableCell>
+                      <TableCell align="center">{i?.weight?.toFixed(2)}</TableCell>
+                      {BatchOrderByIdData?.map((x, index) => {
+                        let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
+                        let anOther = updatedData?.filter((u) => u?.name == i?.key);
+                        return (
+                          <TableCell key={index} align="center">
+                            {anOther?.length > 0 ? anOther?.[0]?.value?.toFixed(2) : '--'}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  );
+                })}
+                <TableRow>
+                  <TableCell align="center"></TableCell>
+                  <TableCell align="center"></TableCell>
+                  <TableCell style={{ fontWeight: '700' }} align="center">
+                    {sumWithInitial?.toFixed(2)}
+                  </TableCell>
+                  {BatchOrderByIdData?.map((x, index) => {
+                    let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
+                    const newSum = updatedData?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
+                    return (
+                      <TableCell style={{ fontWeight: '700' }} key={index} align="center">
+                        {newSum?.toFixed(2)}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              </TableBody>
+            </>
+          </Table>
+        </TableContainer>
+        <Paper sx={{ width: '100%', marginTop: 10, borderTop: 1 }}>
+          <TableContainer>
+            <Table aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  <TableCell style={{ fontWeight: '800' }} align="left" colSpan={2}>
+                    Packaging Instructions:
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell align="left">Daily Feeding Routine:</TableCell>
+                  <TableCell align="left"></TableCell>
+                  <TableCell align="left"></TableCell>
+                  {BatchOrderByIdData?.map((u) => {
+                    return u?.orderItems?.map((y, index) => (
+                      <TableCell key={index} align="center">
+                        {y?.pet?.feedingRoutine}
+                      </TableCell>
+                    ));
+                  })}
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+        <Paper sx={{ width: '100%', marginTop: 10, borderTop: 1 }}>
+          <TableContainer>
+            <Table aria-label="sticky table">
+              {FeedingData?.map((x, firstindex) => {
+                return (
+                  <TableBody key={firstindex}>
+                    <TableRow>
+                      <TableCell align="left">Daily Intake (grams):</TableCell>
+                      <TableCell align="left"></TableCell>
+                      <TableCell align="left" style={{ width: 140 }}></TableCell>
+                      {x?.map((m, index) => (
+                        <TableCell key={index} align="center">
+                          {FeedingData[index][firstindex]?.value}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                    <TableRow>
+                      <TableCell align="left">Days:</TableCell>
+                      <TableCell align="left"></TableCell>
+                      <TableCell align="left"></TableCell>
+                      {x?.map((m, index) => (
+                        <TableCell key={index} align="center">
+                          {FeedingData[index][firstindex]?.day}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableBody>
+                );
+              })}
+            </Table>
+          </TableContainer>
+        </Paper>
+      </Paper>
 
-    return (
-        <>
-            <Paper sx={{ width: '40%', marginBottom: 4 }}>
-                <TableContainer >
-                    <Table >
-                        <TableBody>
-                            <TableCell align="left">
-                                Batch Ref.
-                            </TableCell>
-                            <TableCell align="left">
-                                {state?.batchNumber}
-                            </TableCell>
-                        </TableBody>
-                        <TableBody>
-                            <TableCell align="left">
-                                Production Date:
-                            </TableCell>
-                            <TableCell align="left">
-                                {moment(state?.createdOnDate).format('DD MMM YYYY')}
-                            </TableCell>
-                        </TableBody>
-                        <TableBody>
-                            <TableCell align="left">
-                                Expiry Date:
-                            </TableCell>
-                            <TableCell align="left">
-                                {formattedFutureDate}
-                            </TableCell>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
+      <Paper sx={{ width: '100%', marginTop: 4 }}>
+        <TableContainer>
+          <Table aria-label="sticky table">
+            <TableBody>
+              <TableRow>
+                <TableCell align="left">Portion / Pouch :</TableCell>
+                <TableCell align="center">26</TableCell>
+                <TableCell align="center">279</TableCell>
+                <TableCell align="center">312</TableCell>
+                <TableCell align="center">215</TableCell>
+                <TableCell align="center">83</TableCell>
+                <TableCell align="center">140</TableCell>
+                <TableCell align="center">391</TableCell>
+                <TableCell align="center">337</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">Total Pouches:</TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  9
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  26
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  14
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  20
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  90
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  20
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  16
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  36
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">Portion / Pouch :</TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  49
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell align="left">Total Pouches:</TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  9
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+                <TableCell style={{ width: 97 }} align="center"></TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
 
-
-            <Paper sx={{ width: '100%' }}>
-                <TableContainer >
-                    <Table aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell style={{ fontWeight: "800" }} align="center" colSpan={1}>
-                                    Batch Cooking Ingredients:
-                                </TableCell>
-                            </TableRow>
-                            <TableRow >
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Ingredient Ref
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Ingredient Description
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Total Orders Volume (grams)
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Contingency Factor (%)
-                                </TableCell>
-                                <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                    Cooking Volume (grams)
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {AllKeys?.map((i, index) => {
-                                return <TableRow key={index}>
-                                    <TableCell align="center">
-                                        {index}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {i?.key}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {i?.weight}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {i?.ContingencyFactor}
-                                    </TableCell>
-                                    <TableCell align="center">
-                                        {i?.CookingVolume}
-                                    </TableCell>
-                                </TableRow>
-                            })}
-                            <TableRow >
-                                <TableCell align="center">
-                                </TableCell>
-                                <TableCell align="center">
-
-                                </TableCell>
-                                <TableCell style={{ fontWeight: "700" }} align="center">
-                                    {sumWithInitial}
-                                </TableCell>
-                                <TableCell align="center">
-
-                                </TableCell>
-                                <TableCell style={{ fontWeight: "700" }} align="center">
-                                    {sumWithadjustedWeight}
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
-            </Paper>
-
-
-            <Paper sx={{ width: '100%', marginTop: 4 }}>
-                <TableContainer>
-                    <Table aria-label="sticky table">
-                        <>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell style={{ fontWeight: "800" }} align="center" colSpan={2}>
-                                        Orders Cooking Ingredients:
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{ fontWeight: "800" }} align="center">
-                                    </TableCell>
-                                    <TableCell style={{ fontWeight: "800" }} align="center">
-                                    </TableCell>
-                                    <TableCell style={{ fontWeight: "800" }} align="center">
-                                    </TableCell>
-                                    {BatchOrderByIdData?.map((i, index) => {
-                                        return <TableCell colSpan={i?.orderItems?.length > 1 ? i?.orderItems?.length : 0} key={index} style={{ fontWeight: "800" }} align="center" >
-                                            Order {index + 1}
-                                        </TableCell>
-                                    })}
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                        Ingredient Ref
-                                    </TableCell>
-                                    <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                        Ingredient Description
-                                    </TableCell>
-                                    <TableCell style={{ backgroundColor: "#D78809" }} align="center">
-                                        Cooking Volume (grams)
-                                    </TableCell>
-                                    {nameArr?.map((i, index) =>
-                                        <TableCell key={index} style={{ backgroundColor: "#D78809" }} align="center">
-                                            {i}
-                                        </TableCell>
-                                    )}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {AllKeys?.map((i, index) => {
-                                    return <TableRow key={index}>
-                                        <TableCell align="center">
-                                            {index}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {i?.key}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {i?.weight}
-                                        </TableCell>
-                                        {BatchOrderByIdData?.map((x, index) => {
-                                            let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
-                                            let anOther = updatedData?.filter((u) => u?.name == i?.key);
-                                            return <TableCell key={index} align="center">
-                                                {anOther?.length > 0 ? anOther?.[0]?.value : "--"}
-                                            </TableCell>
-                                        })}
-                                    </TableRow>
-                                })}
-                                <TableRow >
-                                    <TableCell align="center">
-
-                                    </TableCell>
-                                    <TableCell align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ fontWeight: "700" }} align="center">
-                                        {sumWithInitial}
-                                    </TableCell>
-                                    {BatchOrderByIdData?.map((x, index) => {
-                                        let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
-                                        const newSum = updatedData?.reduce(
-                                            (accumulator, currentValue) => accumulator + currentValue?.value,
-                                            0,
-                                        );
-                                        return <TableCell style={{ fontWeight: "700" }} key={index} align="center">
-                                            {newSum}
-                                        </TableCell>
-                                    })}
-                                </TableRow>
-                            </TableBody>
-                        </>
-
-                    </Table>
-                </TableContainer>
-                <Paper sx={{ width: '100%', marginTop: 10, borderTop: 1 }}>
-                    <TableContainer >
-                        <Table aria-label="sticky table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell style={{ fontWeight: "800" }} align="center" colSpan={1}>
-                                        Packaging Instructions:
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell align="left">
-                                        Daily Feeding Routine:
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        3
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        2
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        2
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        2
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        3
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        2
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        2
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        1
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell align="left">
-                                        Daily Intake (grams):
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        230
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        558
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        625
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        431
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        249
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        280
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        782
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        1010
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell align="left">
-                                        Days :
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        4
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        13
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        7
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        10
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        30
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        10
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        8
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        12
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell align="left">
-                                        Daily Intake (grams):
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        440
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell align="left">
-                                        Days :
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        3
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell align="left">
-                                        Daily Intake (grams):
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        440
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell align="left">
-                                        Days :
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-                                        3
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                    <TableCell style={{ width: 97 }} align="center">
-
-                                    </TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Paper>
-            </Paper>
-
-            <Paper sx={{ width: '100%', marginTop: 4 }}>
-                <TableContainer >
-                    <Table aria-label="sticky table">
-                        <TableBody>
-                            <TableRow >
-                                <TableCell align="left">
-                                    Portion / Pouch :
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    26
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    279
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    312
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    215
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    83
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    140
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    391
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    337
-                                </TableCell>
-                            </TableRow>
-                            <TableRow >
-                                <TableCell align="left">
-                                    Total Pouches:
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    9
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    26
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    14
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    20
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    90
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    20
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    16
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    36
-                                </TableCell>
-                            </TableRow>
-                            <TableRow >
-                                <TableCell align="left">
-                                    Portion / Pouch :
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    49
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                            </TableRow>
-                            <TableRow >
-                                <TableCell align="left">
-                                    Total Pouches:
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    9
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
-
-            <Paper sx={{ width: '100%', marginTop: 4 }}>
-                <TableContainer >
-                    <Table aria-label="sticky table">
-                        <TableBody>
-                            <TableRow >
-                                <TableCell align="left">
-                                    No of Pouches per 1 serving:
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    1
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    1
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    1
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    1
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    1
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    1
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    1
-                                </TableCell>
-                                <TableCell style={{ width: 97 }} align="center">
-                                    1
-                                </TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
-        </>
-
-    );
-}
+      <Paper sx={{ width: '100%', marginTop: 4 }}>
+        <TableContainer>
+          <Table aria-label="sticky table">
+            <TableBody>
+              <TableRow>
+                <TableCell align="left">No of Pouches per 1 serving:</TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  1
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  1
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  1
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  1
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  1
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  1
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  1
+                </TableCell>
+                <TableCell style={{ width: 97 }} align="center">
+                  1
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
+    </>
+  );
+};
 
 export default CookingBatch;

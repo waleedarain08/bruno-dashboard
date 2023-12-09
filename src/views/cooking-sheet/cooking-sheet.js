@@ -117,15 +117,7 @@ const CookingSheet = () => {
                   const formattedFutureDate = futureDate.format('DD MMM YYYY');
                   return (
                     <StyledTableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                      <StyledTableCell
-                        onClick={() => navigate('/cooking-sheet-template', {
-                          state: row
-                        })}
-                        style={{ textDecoration: 'underline', cursor: 'pointer' }}
-                        component="th"
-                        align="center"
-                        scope="row"
-                      >
+                      <StyledTableCell component="th" align="center" scope="row">
                         {row?.batchNumber}
                       </StyledTableCell>
                       <StyledTableCell align="center">{moment(row?.createdOnDate).format('DD MMM YYYY')}</StyledTableCell>
@@ -136,7 +128,17 @@ const CookingSheet = () => {
                       <StyledTableCell align="center"></StyledTableCell>
                       <StyledTableCell align="center">
                         <AnimateButton>
-                          <Button style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                          <Button
+                            onClick={() =>
+                              navigate('/cooking-sheet-template', {
+                                state: row
+                              })
+                            }
+                            style={{ margin: '12px' }}
+                            variant="contained"
+                            color="primary"
+                            sx={{ boxShadow: 'none' }}
+                          >
                             Cooking Sheet
                           </Button>
                         </AnimateButton>
