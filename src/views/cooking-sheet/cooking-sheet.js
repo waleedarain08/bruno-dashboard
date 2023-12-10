@@ -11,14 +11,21 @@ import { Box } from '@mui/material';
 import { InfinitySpin } from 'react-loader-spinner';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { GetAllCookingSheet } from 'store/cookingSheet/cookingSheetAction';
 import TablePagination from '@mui/material/TablePagination';
 // import Tooltip from '@mui/material/Tooltip';
 import moment from 'moment';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { DeleteBatch } from 'store/batch/batchTypeAction';
+import { ChangeOrder } from 'store/orders/ordersAction';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -47,7 +54,17 @@ const CookingSheet = () => {
   const allData = useSelector((state) => state.CookingSheetReducer.cookingSheetData);
   const isLoading = useSelector((state) => state.CookingSheetReducer.isLoadingcookingSheet);
   const isLoadingDeleteBatch = useSelector((state) => state.BatchReducer.isLoadingDeleteBatch);
+  const [Cooked, setCooked] = React.useState(null);
+  const [snackOpen, setsnackOpen] = React.useState(false);
   const navigate = useNavigate();
+  const { state } = useLocation();
+  console.log(state, 'state');
+
+  useEffect(() => {
+    if (state?.data) {
+      setsnackOpen(true);
+    }
+  }, [state]);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -70,8 +87,29 @@ const CookingSheet = () => {
   const onSuccessBatch = () => {
     dispatch(GetAllCookingSheet(Userdata?.clientToken));
   };
+
+  const handleChange = (id, event) => {
+    let data = {
+      isCooked: event.target.value
+    };
+    dispatch(ChangeOrder(id, data, Userdata?.clientToken, onSuccessBatch));
+    setCooked(event.target.value);
+  };
+
+  const handleClosee = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setsnackOpen(false);
+  };
+
   return (
     <Box sx={{ width: '100%' }}>
+      <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={snackOpen} autoHideDuration={6000} onClose={handleClosee}>
+        <Alert onClose={handleClosee} severity="success" sx={{ width: '100%' }}>
+          Successfully updated the value.
+        </Alert>
+      </Snackbar>
       {isLoading ? (
         <Paper sx={{ width: '100%', mb: 2 }}>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -81,19 +119,6 @@ const CookingSheet = () => {
       ) : (
         <Paper sx={{ width: '100%', mb: 2 }}>
           <TableContainer component={Paper}>
-            {/* <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
-                            <AnimateButton>
-                                <Button
-                                    onClick={() => navigate('/cooking-sheet/ingredients-quantity-sheet')}
-                                    style={{ margin: '12px' }}
-                                    variant="contained"
-                                    color="primary"
-                                    sx={{ boxShadow: 'none' }}
-                                >
-                                    Ingredients Quantity Sheet
-                                </Button>
-                            </AnimateButton>
-                        </Box> */}
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
@@ -124,7 +149,21 @@ const CookingSheet = () => {
                       <StyledTableCell align="center">{formattedFutureDate}</StyledTableCell>
                       <StyledTableCell align="center">{row?.orderCount}</StyledTableCell>
                       <StyledTableCell align="center">{row?.totalAmountSum}-AED</StyledTableCell>
-                      <StyledTableCell align="center">{row?.isCooked ? 'Yes' : 'No'}</StyledTableCell>
+                      <StyledTableCell align="center">
+                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                          <InputLabel id="demo-select-small-label">Status</InputLabel>
+                          <Select
+                            labelId="demo-select-small-label"
+                            id="demo-select-small"
+                            value={Cooked === null ? row?.isCooked : Cooked}
+                            label="Status"
+                            onChange={(e) => handleChange(row?._id, e)}
+                          >
+                            <MenuItem value={false}>Process</MenuItem>
+                            <MenuItem value={true}>Completed </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </StyledTableCell>
                       <StyledTableCell align="center"></StyledTableCell>
                       <StyledTableCell align="center">
                         <AnimateButton>

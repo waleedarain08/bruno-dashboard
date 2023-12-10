@@ -279,8 +279,6 @@ export default function OrderList() {
   const isLoading = useSelector((state) => state.OrderReducer.isLoadingOrder);
   const dataOrders = useSelector((state) => state.OrderReducer.orderData);
   const isLoadingAddBatch = useSelector((state) => state.BatchReducer.isLoadingAddBatch);
-  console.log(isLoadingAddBatch, 'dataOrders');
-
   React.useEffect(() => {
     dispatch(GetAllOrder(Userdata?.clientToken));
   }, []);

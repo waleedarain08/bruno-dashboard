@@ -28,8 +28,9 @@ import { updateToBatch } from 'store/batch/batchTypeAction';
 import { useLocation, useNavigate } from 'react-router';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
+
 function Row(props) {
-  const { row, setId, state } = props;
+  const { row, changingCheck, state } = props;
   const [open, setOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
 
@@ -37,7 +38,6 @@ function Row(props) {
   // const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
   const LocationDataChange = useSelector((state) => state.OrderReducer.LocationDataChange);
   // moveToBatch(row?._id)
-
   const dispatch = useDispatch();
   const OrderCooked = (id, name, check) => {
     if (name === 'isCooked') {
@@ -99,7 +99,7 @@ function Row(props) {
           <Switch onChange={() => OrderCooked(row?._id, 'isCompleted', row.isCompleted)} checked={row.isCompleted} />
         </TableCell>
         <TableCell align="right">
-          <Checkbox defaultChecked={state?.batchNumber === row?.batchNumber ? true : false} onChange={() => setId(row?._id)} />
+          <Checkbox defaultChecked={state?.batchNumber === row?.batchNumber ? true : false} onChange={(e) => changingCheck(e, row?._id)} />
         </TableCell>
       </TableRow>
       <TableRow>
@@ -253,9 +253,11 @@ export default function EditBatch() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [OrderIds, setOrderIds] = React.useState([]);
+  const [ExistedIds, setExistedIds] = React.useState([]);
+  const [addIds, setAddIds] = React.useState([]);
 
   const [FiltredDAta, setFiltredDAta] = React.useState([]);
-  const [Id, setId] = React.useState(null);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -269,6 +271,7 @@ export default function EditBatch() {
   const isLoading = useSelector((state) => state.OrderReducer.isLoadingOrder);
   const dataOrders = useSelector((state) => state.OrderReducer.orderData);
   const isLoadingAddBatch = useSelector((state) => state.BatchReducer.isLoadingAddBatch);
+  const isLoadingUpdateBatch = useSelector((state) => state.BatchReducer.isLoadingUpdateBatch);
 
   React.useEffect(() => {
     let findData = dataOrders?.filter(
@@ -280,46 +283,50 @@ export default function EditBatch() {
     setFiltredDAta(findData);
   }, [dataOrders]);
 
-  // console.log(dataOrders, 'dataOrders');
-
   React.useEffect(() => {
     dispatch(GetAllOrder(Userdata?.clientToken));
   }, []);
-  React.useEffect(() => {
-    if (Id !== null) {
-      let ifMatch = OrderIds.indexOf(Id);
-      if (ifMatch === -1) {
-        if (OrderIds?.length > 0) {
-          setOrderIds((oldArray) => [Id, ...oldArray]);
-        } else {
-          setOrderIds([Id]);
-        }
-      } else {
-        let newData = [...OrderIds];
-        let index = newData.findIndex((i) => i === Id);
-        if (index !== -1) {
-          newData.splice(index, 1);
-          setOrderIds(newData);
-        }
-      }
-      setId(null);
-    }
-  }, [Id]);
 
   const updateBatch = () => {
     let allData = {
-      add: OrderIds
+      add: addIds,
+      delete: ExistedIds
     };
     if (OrderIds?.length > 0) {
       dispatch(updateToBatch(state?.batch_id, allData, Userdata?.clientToken, onSuccessBatch));
     }
   };
+
   const onSuccessBatch = () => {
     dispatch(GetAllOrder(Userdata?.clientToken));
+    navigate('/cooking-sheet', { state: { data: true } });
   };
+
+  const changingCheck = async (e, Id) => {
+    if (e.target?.checked) {
+      let otherMatch = addIds.indexOf(Id);
+      if (otherMatch === -1) {
+        if (addIds?.length > 0) {
+          setAddIds((oldArray) => [Id, ...oldArray]);
+        } else {
+          setAddIds([Id]);
+        }
+      }
+    } else {
+      let forDeleteIds = ExistedIds.indexOf(Id);
+      if (forDeleteIds === -1) {
+        if (ExistedIds?.length > 0) {
+          setExistedIds((oldArray) => [Id, ...oldArray]);
+        } else {
+          setExistedIds([Id]);
+        }
+      }
+    }
+  };
+
   return (
     <TableContainer component={Paper}>
-      {isLoading ? (
+      {isLoading || isLoadingUpdateBatch ? (
         <Paper sx={{ width: '100%', mb: 2 }}>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
             <InfinitySpin width="200" color="#D78809" />
@@ -405,7 +412,7 @@ export default function EditBatch() {
             </TableHead>
             <TableBody>
               {FiltredDAta?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
-                <Row key={index} row={row} setId={setId} state={state} />
+                <Row key={index} row={row} changingCheck={changingCheck} state={state} />
               ))}
             </TableBody>
           </Table>

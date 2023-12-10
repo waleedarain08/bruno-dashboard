@@ -25,6 +25,7 @@ export const GetAllOrder = (data) => {
 };
 
 export const ChangeOrder = (id, data, token, onSuccess) => {
+  console.log(id,data)
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingOrderChange });
     Put(`order/${id}`, data, token)
