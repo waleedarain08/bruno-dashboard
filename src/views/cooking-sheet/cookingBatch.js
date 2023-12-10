@@ -20,7 +20,6 @@ const CookingBatch = () => {
   const [FeedingData, setFeedingData] = React.useState([]);
   const BatchIngredientsData = useSelector((state) => state.BatchReducer.BatchIngredientsData);
   const BatchOrderByIdData = useSelector((state) => state.BatchReducer.BatchOrderByIdData);
-  console.log(BatchOrderByIdData, 'BatchIngredientsData');
 
   React.useEffect(() => {
     dispatch(Batch_Ingredients(state?._id, Userdata?.clientToken));
@@ -62,28 +61,34 @@ const CookingBatch = () => {
       let newarrr = BatchOrderByIdData?.map((w) => {
         return w?.orderItems
           ?.map((z) => {
-            let extractString = z?.pouchesDetail[0].split('|');
-            // Initialize an array to store the new data
-            let newData = [];
-            // Processing each segment
-            extractString.forEach((segment) => {
-              // Extracting day and value from the segment
-              let match = segment.match(/(\d+) pouches x (\d+\.\d+) grams/);
-              if (match) {
-                // Creating an object and pushing it to the newData array
-                newData.push({
-                  day: parseInt(match[1]),
-                  value: parseFloat(match[2])
-                });
-              }
-            });
-            return newData;
+            if (z?.planType === 'Transitional') {
+              let extractString = z?.pouchesDetail[0].split('|');
+              // Initialize an array to store the new data
+              let newData = [];
+              // Processing each segment
+              extractString.forEach((segment) => {
+                // Extracting day and value from the segment
+                let match = segment.match(/(\d+) pouches x (\d+\.\d+) grams/);
+                if (match) {
+                  // Creating an object and pushing it to the newData array
+                  newData.push({
+                    day: parseInt(match[1]),
+                    value: parseFloat(match[2])
+                  });
+                }
+              });
+              return newData;
+            } else {
+              return z?.totalWeight[0];
+            }
           })
           .flat(2);
       });
       setFeedingData(newarrr);
     }
   }, [BatchOrderByIdData]);
+
+  let PuchesData = BatchOrderByIdData?.map((x) => x?.orderItems).flat(2);
 
   return (
     <>
@@ -244,7 +249,7 @@ const CookingBatch = () => {
             <Table aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  <TableCell style={{ fontWeight: '800' }} align="left" colSpan={2}>
+                  <TableCell style={{ fontWeight: '800' }} align="left">
                     Packaging Instructions:
                   </TableCell>
                 </TableRow>
@@ -256,7 +261,7 @@ const CookingBatch = () => {
                   <TableCell align="left"></TableCell>
                   {BatchOrderByIdData?.map((u) => {
                     return u?.orderItems?.map((y, index) => (
-                      <TableCell key={index} align="center">
+                      <TableCell style={{ width: 208 }} key={index} align="center">
                         {y?.pet?.feedingRoutine}
                       </TableCell>
                     ));
@@ -277,7 +282,7 @@ const CookingBatch = () => {
                       <TableCell align="left"></TableCell>
                       <TableCell align="left" style={{ width: 140 }}></TableCell>
                       {x?.map((m, index) => (
-                        <TableCell key={index} align="center">
+                        <TableCell style={{ width: 208 }} key={index} align="center">
                           {FeedingData[index][firstindex]?.value}
                         </TableCell>
                       ))}
@@ -303,72 +308,28 @@ const CookingBatch = () => {
       <Paper sx={{ width: '100%', marginTop: 4 }}>
         <TableContainer>
           <Table aria-label="sticky table">
-            <TableBody>
-              <TableRow>
-                <TableCell align="left">Portion / Pouch :</TableCell>
-                <TableCell align="center">26</TableCell>
-                <TableCell align="center">279</TableCell>
-                <TableCell align="center">312</TableCell>
-                <TableCell align="center">215</TableCell>
-                <TableCell align="center">83</TableCell>
-                <TableCell align="center">140</TableCell>
-                <TableCell align="center">391</TableCell>
-                <TableCell align="center">337</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="left">Total Pouches:</TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  9
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  26
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  14
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  20
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  90
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  20
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  16
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  36
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="left">Portion / Pouch :</TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  49
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell align="left">Total Pouches:</TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  9
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-                <TableCell style={{ width: 97 }} align="center"></TableCell>
-              </TableRow>
-            </TableBody>
+            {FeedingData?.map((x, firstindex) => {
+              return (
+                <TableBody key={firstindex}>
+                  <TableRow>
+                    <TableCell align="left">Portion / Pouch :</TableCell>
+                    {x?.map((m, index) => (
+                      <TableCell style={{ width: 208 }} key={index} align="center">
+                        {FeedingData[index][firstindex]?.value / PuchesData[index]?.pet?.feedingRoutine}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell align="left">Total Pouches:</TableCell>
+                    {x?.map((m, index) => (
+                      <TableCell style={{ width: 208 }} key={index} align="center">
+                        {FeedingData[index][firstindex]?.day + FeedingData[index][firstindex]?.day}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableBody>
+              );
+            })}
           </Table>
         </TableContainer>
       </Paper>
@@ -379,30 +340,13 @@ const CookingBatch = () => {
             <TableBody>
               <TableRow>
                 <TableCell align="left">No of Pouches per 1 serving:</TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  1
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  1
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  1
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  1
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  1
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  1
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  1
-                </TableCell>
-                <TableCell style={{ width: 97 }} align="center">
-                  1
-                </TableCell>
+                {BatchOrderByIdData?.map((x, firstindex) => {
+                  return (
+                    <TableCell key={firstindex} style={{ width: 208 }} align="center">
+                      1
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             </TableBody>
           </Table>
