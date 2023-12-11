@@ -116,7 +116,7 @@ const CookingBatch = () => {
                         </TableContainer>
                     </Paper>
 
-                    <Paper sx={{ width: '100%' }}>
+                    <Paper>
                         <TableContainer>
                             <Table aria-label="sticky table">
                                 <TableHead>
@@ -170,88 +170,87 @@ const CookingBatch = () => {
                             </Table>
                         </TableContainer>
                     </Paper>
-                    <Paper sx={{ width: '100%', marginTop: 4 }}>
+
+
+                    <Paper sx={{ marginTop: 4 }}>
                         <TableContainer>
-                            <Table aria-label="sticky table">
-                                <>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell style={{ fontWeight: '800' }} align="left" colSpan={2}>
-                                                Orders Cooking Ingredients:
-                                            </TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell style={{ fontWeight: '800' }} align="center"></TableCell>
-                                            <TableCell style={{ fontWeight: '800' }} align="center"></TableCell>
-                                            <TableCell style={{ fontWeight: '800' }} align="center"></TableCell>
-                                            {BatchOrderByIdData?.map((i, index) => {
-                                                return (
-                                                    <TableCell key={index} style={{ fontWeight: '800' }} align="center">
-                                                        Order {index + 1}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell style={{ backgroundColor: '#D78809' }} align="center">
-                                                Ingredient Ref
-                                            </TableCell>
-                                            <TableCell style={{ backgroundColor: '#D78809' }} align="center">
-                                                Ingredient Description
-                                            </TableCell>
-                                            <TableCell style={{ backgroundColor: '#D78809' }} align="center">
-                                                Cooking Volume (grams)
-                                            </TableCell>
-                                            {nameArr?.map((i, index) => (
-                                                <TableCell key={index} style={{ backgroundColor: '#D78809' }} align="center">
-                                                    {i}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {AllKeys?.map((i, index) => {
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell style={{ fontWeight: '800' }} align="left" colSpan={2}>
+                                            Orders Cooking Ingredients:
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
+                                        <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
+                                        <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
+                                        {BatchOrderByIdData?.map((i, index) => {
                                             return (
-                                                <TableRow key={index}>
-                                                    <TableCell align="center">{index + 1}</TableCell>
-                                                    <TableCell align="center">{i?.key}</TableCell>
-                                                    <TableCell align="center">{i?.weight?.toFixed(2)}</TableCell>
-                                                    {BatchOrderByIdData?.map((x, index) => {
-                                                        let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
-                                                        let anOther = updatedData?.filter((u) => u?.name == i?.key);
-                                                        return (
-                                                            <TableCell key={index} align="center">
-                                                                {anOther?.length > 0 ? anOther?.[0]?.value?.toFixed(2) : '--'}
-                                                            </TableCell>
-                                                        );
-                                                    })}
-                                                </TableRow>
+                                                <TableCell key={index} style={{ width: 250, fontWeight: '800' }} align="center">
+                                                    Order {index + 1}
+                                                </TableCell>
                                             );
                                         })}
-                                        <TableRow>
-                                            <TableCell align="center"></TableCell>
-                                            <TableCell align="center"></TableCell>
-                                            <TableCell style={{ fontWeight: '700' }} align="center">
-                                                {sumWithInitial?.toFixed(2)}
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell style={{ width: 250, backgroundColor: '#D78809' }} align="center">
+                                            Ingredient Ref
+                                        </TableCell>
+                                        <TableCell style={{ width: 250, backgroundColor: '#D78809' }} align="center">
+                                            Ingredient Description
+                                        </TableCell>
+                                        <TableCell style={{ width: 250, backgroundColor: '#D78809' }} align="center">
+                                            Cooking Volume (grams)
+                                        </TableCell>
+                                        {nameArr?.map((i, index) => (
+                                            <TableCell key={index} style={{ width: 250, backgroundColor: '#D78809' }} align="center">
+                                                {i}
                                             </TableCell>
-                                            {BatchOrderByIdData?.map((x, index) => {
-                                                let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
-                                                const newSum = updatedData?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
-                                                return (
-                                                    <TableCell style={{ fontWeight: '700' }} key={index} align="center">
-                                                        {newSum?.toFixed(2)}
-                                                    </TableCell>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    </TableBody>
-                                </>
+                                        ))}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {AllKeys?.map((i, index) => {
+                                        return (
+                                            <TableRow key={index}>
+                                                <TableCell style={{ width: 250 }} align="center">{index + 1}</TableCell>
+                                                <TableCell style={{ width: 250 }} align="center">{i?.key}</TableCell>
+                                                <TableCell style={{ width: 250 }} align="center">{i?.weight?.toFixed(2)}</TableCell>
+                                                {BatchOrderByIdData?.map((x, index) => {
+                                                    let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
+                                                    let anOther = updatedData?.filter((u) => u?.name == i?.key);
+                                                    return (
+                                                        <TableCell style={{ width: 250 }} key={index} align="center">
+                                                            {anOther?.length > 0 ? anOther?.[0]?.value?.toFixed(2) : '--'}
+                                                        </TableCell>
+                                                    );
+                                                })}
+                                            </TableRow>
+                                        );
+                                    })}
+                                    <TableRow>
+                                        <TableCell style={{ width: 250 }} align="center"></TableCell>
+                                        <TableCell style={{ width: 250 }} align="center"></TableCell>
+                                        <TableCell style={{ width: 250, fontWeight: '700' }} align="center">
+                                            {sumWithInitial?.toFixed(2)}
+                                        </TableCell>
+                                        {BatchOrderByIdData?.map((x, index) => {
+                                            let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
+                                            const newSum = updatedData?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
+                                            return (
+                                                <TableCell style={{ width: 250, fontWeight: '700' }} key={index} align="center">
+                                                    {newSum?.toFixed(2)}
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                </TableBody>
                             </Table>
                         </TableContainer>
-
                     </Paper>
 
-                    <Paper sx={{ width: '100%', marginTop: 10, borderTop: 1 }}>
+                    <Paper sx={{ width: '100%', marginTop: 5, borderTop: 1 }}>
                         <TableContainer>
                             <Table aria-label="sticky table">
                                 <TableHead>
@@ -263,10 +262,12 @@ const CookingBatch = () => {
                                 </TableHead>
                                 <TableBody>
                                     <TableRow>
-                                        <TableCell align="left">Daily Feeding Routine:</TableCell>
+                                        <TableCell style={{ width: 250 }} align="left">Daily Feeding Routine:</TableCell>
+                                        <TableCell style={{ width: 250 }} align="center"></TableCell>
+                                        <TableCell style={{ width: 250 }} align="center"></TableCell>
                                         {BatchOrderByIdData?.map((u) => {
                                             return u?.orderItems?.map((y, index) => (
-                                                <TableCell key={index} align="center">
+                                                <TableCell style={{ width: 250 }} key={index} align="center">
                                                     {y?.pet?.feedingRoutine}
                                                 </TableCell>
                                             ));
@@ -276,24 +277,28 @@ const CookingBatch = () => {
                             </Table>
                         </TableContainer>
                     </Paper>
-                    <Paper sx={{ width: '100%', marginTop: 10, }}>
+                    <Paper sx={{ width: '100%', marginTop: 5, }}>
                         <TableContainer>
                             <Table>
                                 {FeedingData?.[0]?.map((p, firstindex) => {
                                     return (
                                         <TableBody key={firstindex}>
                                             <TableRow>
-                                                <TableCell align="left">Daily Intake (grams):</TableCell>
+                                                <TableCell style={{ width: 250 }} align="left">Daily Intake (grams):</TableCell>
+                                                <TableCell style={{ width: 250 }} align="center"></TableCell>
+                                                <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 {FeedingData?.map((x, secned) => {
-                                                    return <TableCell key={secned} align="center">
+                                                    return <TableCell style={{ width: 250 }} key={secned} align="center">
                                                         {FeedingData?.[secned]?.[firstindex]?.value}
                                                     </TableCell>
                                                 })}
                                             </TableRow>
                                             <TableRow>
-                                                <TableCell align="left">Days:</TableCell>
+                                                <TableCell style={{ width: 250 }} align="left">Days:</TableCell>
+                                                <TableCell style={{ width: 250 }} align="center"></TableCell>
+                                                <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 {FeedingData?.map((x, secned) => {
-                                                    return <TableCell key={secned} align="center">
+                                                    return <TableCell style={{ width: 250 }} key={secned} align="center">
                                                         {FeedingData?.[secned]?.[firstindex]?.day}
                                                     </TableCell>
                                                 })}
@@ -314,18 +319,22 @@ const CookingBatch = () => {
                                     return (
                                         <TableBody key={firstindex}>
                                             <TableRow>
-                                                <TableCell align="left">Portion / Pouch :</TableCell>
+                                                <TableCell style={{ width: 250 }} align="left">Portion / Pouch :</TableCell>
+                                                <TableCell style={{ width: 250 }} align="center"></TableCell>
+                                                <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 {FeedingData?.map((x, secned) => {
-                                                    return <TableCell key={secned} align="center">
+                                                    return <TableCell style={{ width: 250 }} key={secned} align="center">
                                                         {FeedingData?.[secned]?.[firstindex]?.value / PuchesData?.[secned]?.pet?.feedingRoutine}
                                                     </TableCell>
                                                 })}
                                             </TableRow>
                                             <TableRow>
-                                                <TableCell align="left">Total Pouches:</TableCell>
+                                                <TableCell style={{ width: 250 }} align="left">Total Pouches:</TableCell>
+                                                <TableCell style={{ width: 250 }} align="center"></TableCell>
+                                                <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 {FeedingData?.map((x, secned) => {
-                                                    return <TableCell key={secned} align="center">
-                                                        {FeedingData?.[secned]?.[firstindex]?.day + FeedingData?.[secned]?.[firstindex]?.day}
+                                                    return <TableCell style={{ width: 250 }} key={secned} align="center">
+                                                        {PuchesData?.[secned]?.pet?.feedingRoutine > 1 ? FeedingData?.[secned]?.[firstindex]?.day + FeedingData?.[secned]?.[firstindex]?.day : FeedingData?.[secned]?.[firstindex]?.day}
                                                     </TableCell>
                                                 })}
                                             </TableRow>
@@ -340,10 +349,12 @@ const CookingBatch = () => {
                             <Table aria-label="sticky table">
                                 <TableBody>
                                     <TableRow>
-                                        <TableCell align="left">No of Pouches per 1 serving:</TableCell>
+                                        <TableCell style={{ width: 250 }} align="left">No of Pouches per 1 serving:</TableCell>
+                                        <TableCell style={{ width: 250 }} align="left"></TableCell>
+                                        <TableCell style={{ width: 250 }} align="left"></TableCell>
                                         {BatchOrderByIdData?.map((x, firstindex) => {
                                             return (
-                                                <TableCell key={firstindex}  align="center">
+                                                <TableCell style={{ width: 250 }} key={firstindex} align="center">
                                                     1
                                                 </TableCell>
                                             );
