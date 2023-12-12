@@ -28,8 +28,7 @@ const BatchLable = () => {
     // for (let i = 0; i < maxLength; i++) {
     //     rows.push(i);
     // }
-
-    console.log(FeedingData, "FeedingData")
+    console.log(BatchOrderByIdData, "BatchOrderByIdData")
 
     React.useEffect(() => {
         if (BatchOrderByIdData?.length > 0) {
@@ -79,9 +78,9 @@ const BatchLable = () => {
                 <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: '#D78809' }} />
             </div>
             <TableContainer component={Paper}>
-                {FeedingData?.map((t, firstindex) => {
+                {BatchOrderByIdData?.map((t, firstindex) => {
                     let PuchesData = BatchOrderByIdData?.map((p) => p?.orderItems).flat(2);
-                    return t?.map((i) => {
+                    return FeedingData?.[firstindex]?.map((i) => {
                         let allDay = PuchesData?.[firstindex]?.pet?.feedingRoutine > 1 ? i?.day + i?.day : i?.day;
                         let updatedPouches = i?.value / PuchesData?.[firstindex]?.pet?.feedingRoutine;
                         let newPouches = updatedPouches >= 400 && updatedPouches <= 800 ? updatedPouches / 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? updatedPouches / 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? updatedPouches / 4 : updatedPouches;
@@ -95,8 +94,7 @@ const BatchLable = () => {
                                 <Table key={thiredIndex}>
                                     <TableBody>
                                         <TableRow>
-                                            <TableCell style={{ transform: 'rotate(-90deg)', textAlign: "center", width: 200 }} rowSpan={4}>Order No
-                                                Recipe Ref</TableCell>
+                                            <TableCell style={{ transform: 'rotate(-90deg)', textAlign: "center", width: 200 }} rowSpan={4}>{t?._id.substr(t?._id?.length - 5)}</TableCell>
                                             <TableCell>Batch No. :</TableCell>
                                             <TableCell>{state?.batchNumber}</TableCell>
                                         </TableRow>
