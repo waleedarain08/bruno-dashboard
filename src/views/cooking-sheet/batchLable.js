@@ -94,7 +94,9 @@ const BatchLable = () => {
                                 <Table key={thiredIndex}>
                                     <TableBody>
                                         <TableRow>
-                                            <TableCell style={{ transform: 'rotate(-90deg)', textAlign: "center", width: 200 }} rowSpan={4}>{t?._id.substr(t?._id?.length - 5)}</TableCell>
+                                            <TableCell style={{ transform: 'rotate(-90deg)', textAlign: "center", width: 200 }} rowSpan={4}>Order No : {t?._id.substr(t?._id?.length - 5)}<br></br>
+                                                Recipe Ref :
+                                            </TableCell>
                                             <TableCell>Batch No. :</TableCell>
                                             <TableCell>{state?.batchNumber}</TableCell>
                                         </TableRow>
