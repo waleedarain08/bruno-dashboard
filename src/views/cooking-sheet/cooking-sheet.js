@@ -22,8 +22,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { DeleteBatch } from 'store/batch/batchTypeAction';
-import { ChangeOrder } from 'store/orders/ordersAction';
+import { DeleteBatch, updateToBatch } from 'store/batch/batchTypeAction';
+
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
@@ -58,7 +58,7 @@ const CookingSheet = () => {
   const [snackOpen, setsnackOpen] = React.useState(false);
   const navigate = useNavigate();
   const { state } = useLocation();
-  console.log(state, 'state');
+
 
   useEffect(() => {
     if (state?.data) {
@@ -92,7 +92,7 @@ const CookingSheet = () => {
     let data = {
       isCooked: event.target.value
     };
-    dispatch(ChangeOrder(id, data, Userdata?.clientToken, onSuccessBatch));
+    dispatch(updateToBatch(id, data, Userdata?.clientToken));
     setCooked(event.target.value);
   };
 
@@ -223,7 +223,11 @@ const CookingSheet = () => {
                       </StyledTableCell>
                       <StyledTableCell align="center">
                         <AnimateButton>
-                          <Button style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                          <Button onClick={() =>
+                            navigate("/cooking-sheet/batch-lable", {
+                              state: row
+                            })
+                          } style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
                             Batch Label
                           </Button>
                         </AnimateButton>

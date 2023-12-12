@@ -10,7 +10,7 @@ import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import BallotIcon from '@mui/icons-material/Ballot';
 import PercentIcon from '@mui/icons-material/Percent';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
-import SummarizeIcon from '@mui/icons-material/Summarize';
+// import SummarizeIcon from '@mui/icons-material/Summarize';
 
 // constant
 // const icons = { IconDashboard };
@@ -103,14 +103,14 @@ const dashboard = {
       icon: BallotIcon,
       breadcrumbs: false
     },
-    {
-      id: 'delivery-report',
-      title: 'Delivery-Report',
-      type: 'item',
-      url: '/delivery-report',
-      icon: SummarizeIcon,
-      breadcrumbs: false
-    },
+    // {
+    //   id: 'delivery-report',
+    //   title: 'Delivery-Report',
+    //   type: 'item',
+    //   url: '/delivery-report',
+    //   icon: SummarizeIcon,
+    //   breadcrumbs: false
+    // },
   ]
 };
 

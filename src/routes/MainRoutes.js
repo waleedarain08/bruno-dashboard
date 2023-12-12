@@ -21,6 +21,7 @@ import IngredientsPortioningSheet from 'views/cooking-sheet/IngredientsPortionin
 import DeliveryReport from 'views/delivery-report/DeliveryReport';
 import CookingBatch from 'views/cooking-sheet/cookingBatch';
 import EditBatch from 'views/cooking-sheet/editBatch';
+import BatchLable from 'views/cooking-sheet/batchLable';
 
 // dashboard routing
 // const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -114,7 +115,12 @@ const MainRoutes = {
         {
           path: '/cooking-sheet/edit-batch',
           element: <EditBatch />
-        }
+        },
+        {
+          path: '/cooking-sheet/batch-lable',
+          element: <BatchLable />
+        },
+
       ]
     },
     {

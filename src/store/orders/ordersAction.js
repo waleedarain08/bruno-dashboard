@@ -25,11 +25,12 @@ export const GetAllOrder = (data) => {
 };
 
 export const ChangeOrder = (id, data, token, onSuccess) => {
-  console.log(id,data)
+  console.log(id, data)
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingOrderChange });
     Put(`order/${id}`, data, token)
       .then(function (response) {
+        console.log(response, "response")
         if (response?.isSuccess) {
           onSuccess();
           dispatch({
@@ -42,7 +43,6 @@ export const ChangeOrder = (id, data, token, onSuccess) => {
       })
       .catch(function (error) {
         console.log(error, 'error');
-
         dispatch({ type: actionTypes.FailedOrderChange });
       });
   };

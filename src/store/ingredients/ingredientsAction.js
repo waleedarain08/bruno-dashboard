@@ -74,7 +74,7 @@ export const SaveIngredient = (data, Token, onSuccess) => {
 export const EditIngredient = (id, data, token, onSuccess) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingEditIng });
-    Put(`ingredient/${id}/quantity`, data, token)
+    Put(`ingredient/${id}`, data, token)
       .then(function (response) {
         console.log(response, 'response');
         if (response?.isSuccess) {
@@ -85,7 +85,6 @@ export const EditIngredient = (id, data, token, onSuccess) => {
           });
         } else {
           dispatch({ type: actionTypes.FailediIngredientEditIng });
-
           alert(response.message);
         }
       })

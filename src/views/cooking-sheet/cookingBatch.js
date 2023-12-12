@@ -323,8 +323,9 @@ const CookingBatch = () => {
                                                 <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 {FeedingData?.map((x, secned) => {
+                                                    let updatedPouches = FeedingData?.[secned]?.[firstindex]?.value / PuchesData?.[secned]?.pet?.feedingRoutine;
                                                     return <TableCell style={{ width: 250 }} key={secned} align="center">
-                                                        {FeedingData?.[secned]?.[firstindex]?.value / PuchesData?.[secned]?.pet?.feedingRoutine}
+                                                        {updatedPouches >= 400 && updatedPouches <= 800 ? updatedPouches / 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? updatedPouches / 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? updatedPouches / 4 : updatedPouches}
                                                     </TableCell>
                                                 })}
                                             </TableRow>
@@ -333,8 +334,11 @@ const CookingBatch = () => {
                                                 <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 {FeedingData?.map((x, secned) => {
+                                                    let allDay = PuchesData?.[secned]?.pet?.feedingRoutine > 1 ? FeedingData?.[secned]?.[firstindex]?.day + FeedingData?.[secned]?.[firstindex]?.day : FeedingData?.[secned]?.[firstindex]?.day
+                                                    let updatedPouches = FeedingData?.[secned]?.[firstindex]?.value / PuchesData?.[secned]?.pet?.feedingRoutine;
                                                     return <TableCell style={{ width: 250 }} key={secned} align="center">
-                                                        {PuchesData?.[secned]?.pet?.feedingRoutine > 1 ? FeedingData?.[secned]?.[firstindex]?.day + FeedingData?.[secned]?.[firstindex]?.day : FeedingData?.[secned]?.[firstindex]?.day}
+                                                        {updatedPouches >= 400 && updatedPouches <= 800 ? allDay * 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? allDay * 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? allDay * 4 : allDay}
+
                                                     </TableCell>
                                                 })}
                                             </TableRow>
@@ -344,7 +348,7 @@ const CookingBatch = () => {
                             </Table>
                         </TableContainer>
                     </Paper>
-                    <Paper sx={{ width: '100%', marginTop: 4 }}>
+                    {/* <Paper sx={{ width: '100%', marginTop: 4 }}>
                         <TableContainer>
                             <Table aria-label="sticky table">
                                 <TableBody>
@@ -363,7 +367,7 @@ const CookingBatch = () => {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                    </Paper>
+                    </Paper> */}
                 </>
             )}
         </>
