@@ -84,6 +84,7 @@ const BatchLable = () => {
                     return t?.map((i) => {
                         let allDay = PuchesData?.[firstindex]?.pet?.feedingRoutine > 1 ? i?.day + i?.day : i?.day;
                         let updatedPouches = i?.value / PuchesData?.[firstindex]?.pet?.feedingRoutine;
+                        let newPouches = updatedPouches >= 400 && updatedPouches <= 800 ? updatedPouches / 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? updatedPouches / 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? updatedPouches / 4 : updatedPouches;
                         let numbers = updatedPouches >= 400 && updatedPouches <= 800 ? allDay * 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? allDay * 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? allDay * 4 : allDay;
                         let newArray = [];
                         for (let i = 0; i <= numbers; i++) {
@@ -109,7 +110,7 @@ const BatchLable = () => {
                                         </TableRow>
                                         <TableRow>
                                             <TableCell>Net Weight:</TableCell>
-                                            <TableCell>{updatedPouches} grams</TableCell>
+                                            <TableCell>{newPouches} grams</TableCell>
                                         </TableRow>
                                     </TableBody>
                                     <TableBody>
