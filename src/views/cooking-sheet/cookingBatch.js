@@ -6,15 +6,17 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import moment from 'moment';
 import { InfinitySpin } from 'react-loader-spinner';
 import { useSelector, useDispatch } from 'react-redux';
 import { Batch_Ingredients, Batch_Order_By_id } from 'store/batch/batchTypeAction';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const CookingBatch = () => {
     const { state } = useLocation();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const [AllKeys, setAllKeys] = React.useState([]);
     const [FeedingData, setFeedingData] = React.useState([]);
@@ -85,7 +87,11 @@ const CookingBatch = () => {
         }
     }, [BatchOrderByIdData]);
 
-    //   let PuchesData = BatchOrderByIdData?.map((x) => x?.orderItems).flat(2);
+    let maxLength = Math.max(...FeedingData.map(innerArray => innerArray.length));
+    let rows = [];
+    for (let i = 0; i < maxLength; i++) {
+        rows.push(i);
+    }
 
     return (
         <>
@@ -97,6 +103,19 @@ const CookingBatch = () => {
                 </Paper>
             ) : (
                 <>
+                    <div
+                        style={{
+                            border: '1px solid #D78809',
+                            width: 30,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            borderRadius: 50,
+                            margin: 5,
+                            padding: 2
+                        }}
+                    >
+                        <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: '#D78809' }} />
+                    </div>
                     <Paper sx={{ width: '40%', marginBottom: 4 }}>
                         <TableContainer>
                             <Table>
@@ -280,7 +299,7 @@ const CookingBatch = () => {
                     <Paper sx={{ width: '100%', marginTop: 5, }}>
                         <TableContainer>
                             <Table>
-                                {FeedingData?.[0]?.map((p, firstindex) => {
+                                {rows?.map((p, firstindex) => {
                                     return (
                                         <TableBody key={firstindex}>
                                             <TableRow>
@@ -314,7 +333,7 @@ const CookingBatch = () => {
                     <Paper sx={{ width: '100%', marginTop: 4 }}>
                         <TableContainer>
                             <Table>
-                                {FeedingData?.[0]?.map((x, firstindex) => {
+                                {rows?.map((x, firstindex) => {
                                     let PuchesData = BatchOrderByIdData?.map((p) => p?.orderItems).flat(2);
                                     return (
                                         <TableBody key={firstindex}>
@@ -334,7 +353,7 @@ const CookingBatch = () => {
                                                 <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 {FeedingData?.map((x, secned) => {
-                                                    let allDay = PuchesData?.[secned]?.pet?.feedingRoutine > 1 ? FeedingData?.[secned]?.[firstindex]?.day + FeedingData?.[secned]?.[firstindex]?.day : FeedingData?.[secned]?.[firstindex]?.day
+                                                    let allDay = PuchesData?.[secned]?.pet?.feedingRoutine > 1 ? FeedingData?.[secned]?.[firstindex]?.day + FeedingData?.[secned]?.[firstindex]?.day : FeedingData?.[secned]?.[firstindex]?.day;
                                                     let updatedPouches = FeedingData?.[secned]?.[firstindex]?.value / PuchesData?.[secned]?.pet?.feedingRoutine;
                                                     return <TableCell style={{ width: 250 }} key={secned} align="center">
                                                         {updatedPouches >= 400 && updatedPouches <= 800 ? allDay * 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? allDay * 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? allDay * 4 : allDay}
