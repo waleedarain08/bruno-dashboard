@@ -25,6 +25,8 @@ import LocationModal from 'components/LocationModal';
 import Checkbox from '@mui/material/Checkbox';
 import moment from 'moment';
 import { ADDToBatch } from 'store/batch/batchTypeAction';
+import SearchFeild from 'components/searchFeild';
+// material-ui
 
 function Row(props) {
   const { row, setId } = props;
@@ -262,9 +264,12 @@ function Row(props) {
 }
 
 export default function OrderList() {
+
   const [page, setPage] = React.useState(0);
+  const [value, setValue] = React.useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [OrderIds, setOrderIds] = React.useState([]);
+  const [FiltredData, setFiltredData] = React.useState([]);
   const [Id, setId] = React.useState(null);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -303,6 +308,24 @@ export default function OrderList() {
     }
   }, [Id]);
 
+  React.useEffect(() => {
+    if (value !== "") {
+      const filteredData = dataOrders?.filter(item => {
+        return item?.batchNumber?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          item?._id.substr(item?._id?.length - 5)?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          item?.user?.fullName?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          item?.totalAmount.toString()?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          moment(item?.updatedOnDate).format('DD MMM YYYY, h:mm a')?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          moment(item?.deliveryDate).format('DD MMM YYYY, h:mm a')?.toLowerCase()?.includes(value?.toLowerCase())
+      });
+      setFiltredData(filteredData);
+    }
+    else {
+      setFiltredData(dataOrders);
+    }
+  }, [value]);
+
+
   const GenerateBatch = () => {
     let allData = {
       orderIds: OrderIds
@@ -324,44 +347,48 @@ export default function OrderList() {
         </Paper>
       ) : (
         <>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%' }}>
-            <AnimateButton>
-              <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
-                Export
-              </Button>
-            </AnimateButton>
-            <AnimateButton>
-              <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
-                Print
-              </Button>
-            </AnimateButton>
-            <AnimateButton>
-              <Button
-                onClick={() => GenerateBatch()}
-                style={{ margin: '12px' }}
-                variant="contained"
-                color="primary"
-                sx={{ boxShadow: 'none' }}
-              >
-                {isLoadingAddBatch ? (
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                      width: 120,
-                      height: 25,
-                      marginLeft: 10
-                    }}
-                  >
-                    <InfinitySpin color="#fff" />
-                  </div>
-                ) : (
-                  'Generate Cooking Batch'
-                )}
-              </Button>
-            </AnimateButton>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            <SearchFeild setValue={setValue} value={value} />
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%' }}>
+              <AnimateButton>
+                <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                  Export
+                </Button>
+              </AnimateButton>
+              <AnimateButton>
+                <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                  Print
+                </Button>
+              </AnimateButton>
+              <AnimateButton>
+                <Button
+                  onClick={() => GenerateBatch()}
+                  style={{ margin: '12px' }}
+                  variant="contained"
+                  color="primary"
+                  sx={{ boxShadow: 'none' }}
+                >
+                  {isLoadingAddBatch ? (
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'row',
+                        width: 120,
+                        height: 25,
+                        marginLeft: 10
+                      }}
+                    >
+                      <InfinitySpin color="#fff" />
+                    </div>
+                  ) : (
+                    'Generate Cooking Batch'
+                  )}
+                </Button>
+              </AnimateButton>
+            </div>
+
           </div>
           <Table aria-label="collapsible table">
             <TableHead>
@@ -395,7 +422,7 @@ export default function OrderList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {dataOrders?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
+              {FiltredData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
                 <Row key={index} row={row} setId={setId} />
               ))}
             </TableBody>
@@ -405,7 +432,7 @@ export default function OrderList() {
       <TablePagination
         rowsPerPageOptions={[5, 10, 25, 50, 100]}
         component="div"
-        count={dataOrders?.length}
+        count={FiltredData?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

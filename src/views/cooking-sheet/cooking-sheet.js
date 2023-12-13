@@ -26,6 +26,7 @@ import { DeleteBatch, updateToBatch } from 'store/batch/batchTypeAction';
 
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import SearchFeild from 'components/searchFeild';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -57,7 +58,9 @@ const CookingSheet = () => {
   const [Cooked, setCooked] = React.useState(null);
   const [snackOpen, setsnackOpen] = React.useState(false);
   const navigate = useNavigate();
+  const [FiltredData, setFiltredData] = React.useState([]);
   const { state } = useLocation();
+  const [value, setValue] = React.useState('');
 
 
   useEffect(() => {
@@ -66,6 +69,23 @@ const CookingSheet = () => {
     }
   }, [state]);
 
+  React.useEffect(() => {
+    if (value !== "") {
+      const filteredData = allData?.data?.filter(item => {
+
+        return item?.batchNumber?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          item?.orderCount?.toString()?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          item?.totalAmountSum.toString()?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          moment(item?.createdOnDate).format('DD MMM YYYY, h:mm a')?.toLowerCase()?.includes(value?.toLowerCase())
+      });
+      setFiltredData(filteredData);
+    }
+    else {
+      setFiltredData(allData?.data);
+    }
+  }, [value]);
+
+  console.log(allData?.data, "allData?.data")
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetAllCookingSheet(Userdata?.clientToken));
@@ -119,6 +139,9 @@ const CookingSheet = () => {
       ) : (
         <Paper sx={{ width: '100%', mb: 2 }}>
           <TableContainer component={Paper}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', margin: "5px 0px 5px 0px" }}>
+              <SearchFeild setValue={setValue} value={value} />
+            </div>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
                 <TableRow>
@@ -136,7 +159,7 @@ const CookingSheet = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {allData?.data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => {
+                {FiltredData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => {
                   const givenDate = moment(row?.createdOnDate);
                   const futureDate = givenDate.add(30, 'days');
                   const formattedFutureDate = futureDate.format('DD MMM YYYY');
@@ -240,7 +263,7 @@ const CookingSheet = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25, 50, 100]}
               component="div"
-              count={allData?.data?.length}
+              count={FiltredData?.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

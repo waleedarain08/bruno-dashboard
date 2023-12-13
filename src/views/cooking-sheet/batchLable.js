@@ -89,6 +89,7 @@ const BatchLable = () => {
                         for (let i = 0; i <= numbers; i++) {
                             newArray.push(i);
                         }
+                        console.log(newArray?.length, "newArray")
                         return newArray?.map((x, thiredIndex) => {
                             return <>
                                 <Table key={thiredIndex}>
@@ -112,14 +113,13 @@ const BatchLable = () => {
                                             <TableCell>Net Weight:</TableCell>
                                             <TableCell>{newPouches} grams</TableCell>
                                         </TableRow>
-                                    </TableBody>
-                                    <TableBody>
                                         <TableRow>
                                             <TableCell></TableCell>
                                             <TableCell></TableCell>
                                             <TableCell></TableCell>
                                         </TableRow>
                                     </TableBody>
+
                                 </Table>
                             </>
                         })
@@ -127,7 +127,15 @@ const BatchLable = () => {
                     })
 
                 })}
-
+                {/* <TablePagination
+                    rowsPerPageOptions={[5, 10, 25, 50, 100]}
+                    component="div"
+                    count={FiltredData?.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                /> */}
             </TableContainer>
         </>
 
