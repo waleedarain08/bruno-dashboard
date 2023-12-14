@@ -323,7 +323,7 @@ export default function OrderList() {
     else {
       setFiltredData(dataOrders);
     }
-  }, [value]);
+  }, [dataOrders,value]);
 
 
   const GenerateBatch = () => {

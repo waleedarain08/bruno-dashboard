@@ -89,7 +89,7 @@ const BatchLable = () => {
                         for (let i = 0; i <= numbers; i++) {
                             newArray.push(i);
                         }
-                        console.log(newArray?.length, "newArray")
+
                         return newArray?.map((x, thiredIndex) => {
                             return <>
                                 <Table key={thiredIndex}>

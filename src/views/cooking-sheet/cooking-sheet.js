@@ -61,6 +61,7 @@ const CookingSheet = () => {
   const [FiltredData, setFiltredData] = React.useState([]);
   const { state } = useLocation();
   const [value, setValue] = React.useState('');
+  console.log(FiltredData, "FiltredData")
 
 
   useEffect(() => {
@@ -83,9 +84,9 @@ const CookingSheet = () => {
     else {
       setFiltredData(allData?.data);
     }
-  }, [value]);
+  }, [allData,value]);
 
-  console.log(allData?.data, "allData?.data")
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetAllCookingSheet(Userdata?.clientToken));
