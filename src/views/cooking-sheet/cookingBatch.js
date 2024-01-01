@@ -29,6 +29,7 @@ const CookingBatch = () => {
         dispatch(Batch_Order_By_id(state?._id, Userdata?.clientToken));
     }, [state]);
 
+
     React.useEffect(() => {
         if (BatchIngredientsData?.length > 0 || BatchIngredientsData !== undefined) {
             const formattedData = Object.keys(BatchIngredientsData).map((key) => {
@@ -152,13 +153,13 @@ const CookingBatch = () => {
                                             Ingredient Description
                                         </TableCell>
                                         <TableCell style={{ backgroundColor: '#D78809' }} align="center">
-                                            Total Orders Volume (grams)
+                                            Cooking Volume (grams)
                                         </TableCell>
                                         <TableCell style={{ backgroundColor: '#D78809' }} align="center">
                                             Contingency Factor (%)
                                         </TableCell>
                                         <TableCell style={{ backgroundColor: '#D78809' }} align="center">
-                                            Cooking Volume (grams)
+                                            Total Orders Volume (grams)
                                         </TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -235,7 +236,7 @@ const CookingBatch = () => {
                                             <TableRow key={index}>
                                                 <TableCell style={{ width: 250 }} align="center">{index + 1}</TableCell>
                                                 <TableCell style={{ width: 250 }} align="center">{i?.key}</TableCell>
-                                                <TableCell style={{ width: 250 }} align="center">{i?.weight?.toFixed(2)}</TableCell>
+                                                <TableCell style={{ width: 250 }} align="center">{i?.CookingVolume?.toFixed(2)}</TableCell>
                                                 {BatchOrderByIdData?.map((x, index) => {
                                                     let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
                                                     let anOther = updatedData?.filter((u) => u?.name == i?.key);
@@ -252,7 +253,7 @@ const CookingBatch = () => {
                                         <TableCell style={{ width: 250 }} align="center"></TableCell>
                                         <TableCell style={{ width: 250 }} align="center"></TableCell>
                                         <TableCell style={{ width: 250, fontWeight: '700' }} align="center">
-                                            {sumWithInitial?.toFixed(2)}
+                                            {sumWithadjustedWeight?.toFixed(2)}
                                         </TableCell>
                                         {BatchOrderByIdData?.map((x, index) => {
                                             let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
@@ -296,6 +297,7 @@ const CookingBatch = () => {
                             </Table>
                         </TableContainer>
                     </Paper>
+
                     <Paper sx={{ width: '100%', marginTop: 5, }}>
                         <TableContainer>
                             <Table>
@@ -317,8 +319,10 @@ const CookingBatch = () => {
                                                 <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 {FeedingData?.map((x, secned) => {
+                                                    let plane = BatchOrderByIdData?.[secned]?.orderItems?.[0]?.planType;
+                                                    let daysData = [3, 3, 3, 1];
                                                     return <TableCell style={{ width: 250 }} key={secned} align="center">
-                                                        {FeedingData?.[secned]?.[firstindex]?.day}
+                                                        {plane == "Transitional" ? daysData?.[firstindex] : FeedingData?.[secned]?.[firstindex]?.day}
                                                     </TableCell>
                                                 })}
                                             </TableRow>
@@ -353,7 +357,9 @@ const CookingBatch = () => {
                                                 <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 {FeedingData?.map((x, secned) => {
-                                                    let allDay = PuchesData?.[secned]?.pet?.feedingRoutine > 1 ? FeedingData?.[secned]?.[firstindex]?.day + FeedingData?.[secned]?.[firstindex]?.day : FeedingData?.[secned]?.[firstindex]?.day;
+                                                    let daysData = [3, 3, 3, 1];
+                                                    let plane = BatchOrderByIdData?.[secned]?.orderItems?.[0]?.planType;
+                                                    let allDay = PuchesData?.[secned]?.pet?.feedingRoutine <= 1 ? FeedingData?.[secned]?.[firstindex]?.day : plane == "Transitional" ? daysData?.[firstindex] + daysData?.[firstindex] : FeedingData?.[secned]?.[firstindex]?.day + FeedingData?.[secned]?.[firstindex]?.day;
                                                     let updatedPouches = FeedingData?.[secned]?.[firstindex]?.value / PuchesData?.[secned]?.pet?.feedingRoutine;
                                                     return <TableCell style={{ width: 250 }} key={secned} align="center">
                                                         {updatedPouches >= 400 && updatedPouches <= 800 ? allDay * 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? allDay * 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? allDay * 4 : allDay}

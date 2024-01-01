@@ -392,7 +392,7 @@ const FoodRecipes = () => {
               sx={{ width: '100%' }}
               type={'number'}
               id="outlined-basic"
-              label="Price 1"
+              label="Price 1 (0-200g)"
               variant="outlined"
             />
             <TextField
@@ -402,7 +402,7 @@ const FoodRecipes = () => {
               sx={{ width: '100%' }}
               type={'number'}
               id="outlined-basic"
-              label="Price 2"
+              label="Price 2 (201-400g)"
               variant="outlined"
             />
           </Box>
@@ -414,7 +414,7 @@ const FoodRecipes = () => {
               sx={{ width: '100%' }}
               type={'number'}
               id="outlined-basic"
-              label="Price 3"
+              label="Price 3 (401-600g)"
               variant="outlined"
             />
             <TextField
@@ -424,7 +424,7 @@ const FoodRecipes = () => {
               sx={{ width: '100%' }}
               type={'number'}
               id="outlined-basic"
-              label="Price 4"
+              label="Price 4 (600-800g)"
               variant="outlined"
             />
           </Box>
@@ -436,7 +436,7 @@ const FoodRecipes = () => {
               sx={{ width: '100%' }}
               type={'number'}
               id="outlined-basic"
-              label="Price 5"
+              label="Price 5 (801-1000g)"
               variant="outlined"
             />
             <TextField
@@ -446,18 +446,10 @@ const FoodRecipes = () => {
               sx={{ width: '100%' }}
               type={'number'}
               id="outlined-basic"
-              label="Price 6"
+              label="Price 6 (1001g onwords)"
               variant="outlined"
             />
           </Box>
-
-
-
-
-
-
-
-
 
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             {/* <TextField
