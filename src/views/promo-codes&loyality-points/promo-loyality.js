@@ -443,6 +443,86 @@ const PromoLoality = ({ ...others }) => {
                 )}
               </Formik>
 
+
+
+              <Formik
+                initialValues={{
+                  pointToAedRatio: parseFloat(pointsToAEDRatio?.[0]?.aggregate),
+                  submit: null
+                }}
+                validationSchema={Yup.object().shape({
+                  pointToAedRatio: Yup.string().required('Points To AED is required')
+                })}
+                onSubmit={async (values, { setStatus, setSubmitting }) => {
+                  try {
+                    if (scriptedRef.current) {
+                      let data = {
+                        name: pointsToAEDRatio?.[0]?.name,
+                        aggregate: parseFloat(values?.pointToAedRatio),
+
+                      };
+                      dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    if (scriptedRef.current) {
+                      setStatus({ success: false });
+                      // setErrors({ submit: err.message });
+                      setSubmitting(false);
+                    }
+                  }
+                }}
+              >
+                {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
+                  <form noValidate onSubmit={handleSubmit} {...others}>
+                    <FormControl
+                      fullWidth
+                      error={Boolean(touched.pointToAedRatio && errors.pointToAedRatio)}
+                      sx={{ ...theme.typography.customInput, mt: 2 }}
+                    >
+                      <InputLabel htmlFor="outlined-adornment-email-login">Limit of Percentage can use</InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-email-login"
+                        type="text"
+                        value={values.pointToAedRatio}
+                        name="pointToAedRatioset"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        label="1 Loyality Point To AED"
+                        inputProps={{}}
+                      />
+                      {touched.pointToAedRatio && errors.pointToAedRatio && (
+                        <FormHelperText error id="standard-weight-helper-text-email-login">
+                          {errors.pointToAedRatio}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+
+                    {errors.submit && (
+                      <Box sx={{ mt: 3 }}>
+                        <FormHelperText error>{errors.submit}</FormHelperText>
+                      </Box>
+                    )}
+
+                    <Box sx={{ mt: 2 }}>
+                      <AnimateButton>
+                        <Button
+                          disableElevation
+                          disabled={updateDiscountLoading}
+                          fullWidth
+                          size="large"
+                          type="submit"
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Box>
+                  </form>
+                )}
+              </Formik>
+
             </CardContent>}
 
           </Card>

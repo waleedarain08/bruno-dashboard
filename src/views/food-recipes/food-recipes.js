@@ -31,7 +31,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  maxHeight: '100vh', // Set the maximum height with a viewport-relative unit (vh)
+  maxHeight: '90vh', // Set the maximum height with a viewport-relative unit (vh)
   overflowY: 'auto', // Enable vertical scrolling if content overflows
   overflowX: 'hidden',
   bgcolor: 'background.paper',
@@ -78,6 +78,12 @@ const FoodRecipes = () => {
   const [LifeStage, setLifeStage] = React.useState('Adult');
   const [KG, setKG] = React.useState('');
   const [ContentNo, setContentNo] = React.useState(0);
+  const [PriceOne, setPriceOne] = React.useState(0);
+  const [PriceTwo, setPriceTwo] = React.useState(0);
+  const [PriceThree, setPriceThree] = React.useState(0);
+  const [PriceFour, setPriceFour] = React.useState(0);
+  const [PriceFive, setPriceFive] = React.useState(0);
+  const [PriceSix, setPriceSix] = React.useState(0);
   const [Instructions, setInstructions] = React.useState('');
   const [Details, setDetails] = React.useState('');
   const [Description, setDescription] = React.useState('');
@@ -101,6 +107,12 @@ const FoodRecipes = () => {
   const InitialState = () => {
     setNameRecipe('');
     setRecipeNo(0);
+    setPriceOne(0);
+    setPriceTwo(0);
+    setPriceThree(0);
+    setPriceFour(0);
+    setPriceFive(0);
+    setPriceSix(0);
     setNnutrition('');
     setLifeStage('');
     setKG('');
@@ -204,7 +216,13 @@ const FoodRecipes = () => {
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
-            caloriesContentNo: parseInt(ContentNo)
+            caloriesContentNo: parseInt(ContentNo),
+            price1: PriceOne,
+            price2: PriceTwo,
+            price3: PriceThree,
+            price4: PriceFour,
+            price5: PriceFive,
+            price6: PriceSix,
           };
           dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
           // Now you can use newdata with the updated media property.
@@ -234,7 +252,13 @@ const FoodRecipes = () => {
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
-            caloriesContentNo: parseInt(ContentNo)
+            caloriesContentNo: parseInt(ContentNo),
+            price1: PriceOne,
+            price2: PriceTwo,
+            price3: PriceThree,
+            price4: PriceFour,
+            price5: PriceFive,
+            price6: PriceSix,
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         } else {
@@ -258,7 +282,13 @@ const FoodRecipes = () => {
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
-            caloriesContentNo: parseInt(ContentNo)
+            caloriesContentNo: parseInt(ContentNo),
+            price1: PriceOne,
+            price2: PriceTwo,
+            price3: PriceThree,
+            price4: PriceFour,
+            price5: PriceFive,
+            price6: PriceSix,
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         }
@@ -294,6 +324,12 @@ const FoodRecipes = () => {
     setPreviewEdit(data?.media);
     setFields(data?.ingredient);
     setIngredientsComposition(data?.ingredientsComposition);
+    setPriceOne(data?.price1);
+    setPriceTwo(data?.price2);
+    setPriceThree(data?.price3);
+    setPriceFour(data?.price4);
+    setPriceFive(data?.price5);
+    setPriceSix(data?.price6);
   };
   return (
     <Box sx={{ width: '100%' }}>
@@ -345,6 +381,84 @@ const FoodRecipes = () => {
               variant="outlined"
             />
           </Box>
+
+
+
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <TextField
+              value={PriceOne}
+              onChange={(e) => setPriceOne(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              type={'number'}
+              id="outlined-basic"
+              label="Price 1"
+              variant="outlined"
+            />
+            <TextField
+              value={PriceTwo}
+              onChange={(e) => setPriceTwo(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              type={'number'}
+              id="outlined-basic"
+              label="Price 2"
+              variant="outlined"
+            />
+          </Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <TextField
+              value={PriceThree}
+              onChange={(e) => setPriceThree(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              type={'number'}
+              id="outlined-basic"
+              label="Price 3"
+              variant="outlined"
+            />
+            <TextField
+              value={PriceFour}
+              onChange={(e) => setPriceFour(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              type={'number'}
+              id="outlined-basic"
+              label="Price 4"
+              variant="outlined"
+            />
+          </Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <TextField
+              value={PriceFive}
+              onChange={(e) => setPriceFive(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              type={'number'}
+              id="outlined-basic"
+              label="Price 5"
+              variant="outlined"
+            />
+            <TextField
+              value={PriceSix}
+              onChange={(e) => setPriceSix(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              type={'number'}
+              id="outlined-basic"
+              label="Price 6"
+              variant="outlined"
+            />
+          </Box>
+
+
+
+
+
+
+
+
+
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             {/* <TextField
               value={LifeStage}
