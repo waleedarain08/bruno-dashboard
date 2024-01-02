@@ -24,6 +24,8 @@ const CookingBatch = () => {
     const BatchOrderByIdData = useSelector((state) => state.BatchReducer.BatchOrderByIdData);
     const isLoadingBatchOrderById = useSelector((state) => state.BatchReducer.isLoadingBatchOrderById);
 
+    console.log(BatchOrderByIdData,"BatchOrderByIdData")
+
     React.useEffect(() => {
         dispatch(Batch_Ingredients(state?._id, Userdata?.clientToken));
         dispatch(Batch_Order_By_id(state?._id, Userdata?.clientToken));
@@ -242,7 +244,7 @@ const CookingBatch = () => {
                                                     let anOther = updatedData?.filter((u) => u?.name == i?.key);
                                                     return (
                                                         <TableCell style={{ width: 250 }} key={index} align="center">
-                                                            {anOther?.length > 0 ? i?.CookingVolume?.toFixed(2) : '--'}
+                                                            {anOther?.length > 0 ? anOther?.[0]?.value?.toFixed(2) : '--'}
                                                         </TableCell>
                                                     );
                                                 })}
@@ -257,8 +259,9 @@ const CookingBatch = () => {
                                         </TableCell>
                                         {BatchOrderByIdData?.map((x, index) => {
                                             let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
-                                            let findALL = AllKeys?.filter((u) => updatedData.find((t) => t?.name === u?.key));
-                                            const newSum = findALL?.reduce((accumulator, currentValue) => accumulator + currentValue?.weight, 0);
+                                            console.log(updatedData,"updatedData")
+                                            // let findALL = AllKeys?.filter((u) => updatedData.find((t) => t?.name === u?.key));
+                                            const newSum = updatedData?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
                                             return (
                                                 <TableCell style={{ width: 250, fontWeight: '700' }} key={index} align="center">
                                                     {newSum?.toFixed(2)}
