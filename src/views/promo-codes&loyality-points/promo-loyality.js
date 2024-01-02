@@ -481,7 +481,7 @@ const PromoLoality = ({ ...others }) => {
                       error={Boolean(touched.pointsLimit && errors.pointsLimit)}
                       sx={{ ...theme.typography.customInput, mt: 2 }}
                     >
-                      <InputLabel htmlFor="outlined-adornment-email-login">Limit of Percentage can use</InputLabel>
+                      <InputLabel htmlFor="outlined-adornment-email-login">Points Limit Percentage Per Order </InputLabel>
                       <OutlinedInput
                         id="outlined-adornment-email-login"
                         type="text"

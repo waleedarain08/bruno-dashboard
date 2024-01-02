@@ -110,8 +110,8 @@ const BatchLable = () => {
                                         <CardContent style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                                             <Typography style={{ marginTop: 30, textAlign: "center", height: 100, transform: 'rotate(-90deg)' }} variant="h5" component="div">
                                                 Order No : {t?._id.substr(t?._id?.length - 5)}
-                                                <br></br>
-                                                Recipe Ref :
+                                                {/* <br></br>
+                                                Recipe Ref : */}
                                             </Typography>
                                             <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between",width:"70%" }}>
                                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", borderBottom: "1px solid", height: 30, width: "100%", paddingBottom: 40 }} >
