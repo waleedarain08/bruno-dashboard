@@ -235,7 +235,6 @@ const CookingBatch = () => {
                                 </TableHead>
                                 <TableBody>
                                     {AllKeys?.map((i, index) => {
-                                        console.log(i, "s")
                                         return (
                                             <TableRow key={index}>
                                                 <TableCell style={{ width: 250 }} align="center">{index + 1}</TableCell>
@@ -246,7 +245,7 @@ const CookingBatch = () => {
                                                     let anOther = updatedData?.filter((u) => u?.name == i?.key);
                                                     const percentage = parseFloat(i?.ContingencyFactor?.replace('%', '')) / 100;
                                                     const adjustedWeight = anOther?.[0]?.value * (1 + percentage);
-                                                  
+
 
                                                     return (
                                                         <TableCell style={{ width: 250 }} key={index} align="center">
@@ -263,9 +262,16 @@ const CookingBatch = () => {
                                         <TableCell style={{ width: 250, fontWeight: '700' }} align="center">
                                             {sumWithadjustedWeight?.toFixed(2)}
                                         </TableCell>
+
                                         {BatchOrderByIdData?.map((x, index) => {
                                             let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
-                                            const newSum = updatedData?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
+                                            let newS = updatedData?.map((u) => {
+                                                const matchingItem = AllKeys.find((a) => u?.name === a.key);
+                                                let matched = matchingItem !== undefined && matchingItem !== null && u?.value * (1 + parseFloat(matchingItem?.ContingencyFactor?.replace('%', '')) / 100);
+                                                return { value: matched };
+                                            })
+                                            console.log({ newS }, "AllKeys")
+                                            const newSum = newS?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
                                             return (
                                                 <TableCell style={{ width: 250, fontWeight: '700' }} key={index} align="center">
                                                     {newSum?.toFixed(2)}
