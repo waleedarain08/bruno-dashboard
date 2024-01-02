@@ -107,13 +107,14 @@ const PromoLoality = ({ ...others }) => {
   let discountPercentageOn = dicountdata?.filter((i) => i?.name === "discountPercentageOnMonthlyPlan");
   let discountOnPointsRedeem = dicountdata?.filter((i) => i?.name === "discountOnPointsRedeem");
   let pointsToAEDRatio = dicountdata?.filter((i) => i?.name === "pointsToAEDRatio");
+  let pointsLimit = dicountdata?.filter((i) => i?.name === "pointsLimit");
 
 
   return (
     <>
       <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={snackOpen} autoHideDuration={6000} onClose={handleClosee}>
         <Alert onClose={handleClosee} severity="success" sx={{ width: '100%' }}>
-        Successfully updated the value.
+          Successfully updated the value.
         </Alert>
       </Snackbar>
       <Grid container spacing={2}>
@@ -447,18 +448,18 @@ const PromoLoality = ({ ...others }) => {
 
               <Formik
                 initialValues={{
-                  pointToAedRatio: parseFloat(pointsToAEDRatio?.[0]?.aggregate),
+                  pointsLimit: parseFloat(pointsLimit?.[0]?.aggregate),
                   submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                  pointToAedRatio: Yup.string().required('Points To AED is required')
+                  pointsLimit: Yup.string().required('Points To AED is required')
                 })}
                 onSubmit={async (values, { setStatus, setSubmitting }) => {
                   try {
                     if (scriptedRef.current) {
                       let data = {
-                        name: pointsToAEDRatio?.[0]?.name,
-                        aggregate: parseFloat(values?.pointToAedRatio),
+                        name: pointsLimit?.[0]?.name,
+                        aggregate: parseFloat(values?.pointsLimit),
 
                       };
                       dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));
@@ -477,23 +478,23 @@ const PromoLoality = ({ ...others }) => {
                   <form noValidate onSubmit={handleSubmit} {...others}>
                     <FormControl
                       fullWidth
-                      error={Boolean(touched.pointToAedRatio && errors.pointToAedRatio)}
+                      error={Boolean(touched.pointsLimit && errors.pointsLimit)}
                       sx={{ ...theme.typography.customInput, mt: 2 }}
                     >
                       <InputLabel htmlFor="outlined-adornment-email-login">Limit of Percentage can use</InputLabel>
                       <OutlinedInput
                         id="outlined-adornment-email-login"
                         type="text"
-                        value={values.pointToAedRatio}
-                        name="pointToAedRatioset"
+                        value={values.pointsLimit}
+                        name="pointsLimit"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         label="1 Loyality Point To AED"
                         inputProps={{}}
                       />
-                      {touched.pointToAedRatio && errors.pointToAedRatio && (
+                      {touched.pointsLimit && errors.pointsLimit && (
                         <FormHelperText error id="standard-weight-helper-text-email-login">
-                          {errors.pointToAedRatio}
+                          {errors.pointsLimit}
                         </FormHelperText>
                       )}
                     </FormControl>

@@ -81,7 +81,10 @@ const BatchLable = () => {
                     justifyContent: 'center',
                     borderRadius: 50,
                     margin: 5,
-                    padding: 2
+                    padding: 2,
+                    marginBottom:15,
+                    cursor:"pointer"
+                
                 }}
             >
                 <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: '#D78809' }} />
@@ -103,16 +106,16 @@ const BatchLable = () => {
 
                             return newArray?.map((x, thiredIndex) => {
                                 return <Grid item xs={2} sm={4} md={4} key={thiredIndex} >
-                                    <Card sx={{ width: 500 }}>
+                                    <Card sx={{ width: 370 }}>
                                         <CardContent style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                            <Typography style={{ marginTop: 30, marginLeft: 30, textAlign: "center", height: 100, transform: 'rotate(-90deg)' }} variant="h5" component="div">
+                                            <Typography style={{ marginTop: 30, textAlign: "center", height: 100, transform: 'rotate(-90deg)' }} variant="h5" component="div">
                                                 Order No : {t?._id.substr(t?._id?.length - 5)}
                                                 <br></br>
                                                 Recipe Ref :
                                             </Typography>
                                             <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between",width:"70%" }}>
                                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", borderBottom: "1px solid", height: 30, width: "100%", paddingBottom: 40 }} >
-                                                    <p style={{ textAlign: "start", marginRight: 100, fontWeight: "700", width: "50%" }} color="text.secondary">
+                                                    <p style={{ textAlign: "start", fontWeight: "700", width: "50%" }} color="text.secondary">
                                                         Batch No. :
                                                     </p>
                                                     <p style={{ textAlign: "end", fontWeight: "500", width: "50%" }} color="text.secondary">
@@ -121,7 +124,7 @@ const BatchLable = () => {
 
                                                 </div>
                                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", borderBottom: "1px solid", height: 30, width: "100%", paddingBottom: 40 }}>
-                                                    <p style={{ textAlign: "start", marginRight: 100, fontWeight: "700", width: "50%" }} color="text.secondary">
+                                                    <p style={{ textAlign: "start", fontWeight: "700", width: "50%" }} color="text.secondary">
                                                         Prod Date:
                                                     </p>
                                                     <p style={{ textAlign: "end", fontWeight: "500", width: "50%" }} color="text.secondary">
@@ -130,7 +133,7 @@ const BatchLable = () => {
 
                                                 </div>
                                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", borderBottom: "1px solid", height: 30, width: "100%", paddingBottom: 40 }} >
-                                                    <p style={{ textAlign: "start", marginRight: 100, fontWeight: "700", width: "50%" }} color="text.secondary">
+                                                    <p style={{ textAlign: "start", fontWeight: "700", width: "50%" }} color="text.secondary">
                                                         Expiry Date:
                                                     </p>
                                                     <p style={{ textAlign: "end", fontWeight: "500", width: "50%" }} color="text.secondary">
@@ -138,7 +141,7 @@ const BatchLable = () => {
                                                     </p>
                                                 </div>
                                                 <div style={{ display: "flex", flexDirection: "row", justifyContent: "center", borderBottom: "1px solid", height: 30, width: "100%", paddingBottom: 40 }} >
-                                                    <p style={{ textAlign: "start", marginRight: 100, fontWeight: "700", width: "50%" }} color="text.secondary">
+                                                    <p style={{ textAlign: "start", fontWeight: "700", width: "50%" }} color="text.secondary">
                                                         Net Weight:
                                                     </p>
                                                     <p style={{ textAlign: "end", fontWeight: "500", width: "50%" }} color="text.secondary">

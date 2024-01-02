@@ -242,7 +242,7 @@ const CookingBatch = () => {
                                                     let anOther = updatedData?.filter((u) => u?.name == i?.key);
                                                     return (
                                                         <TableCell style={{ width: 250 }} key={index} align="center">
-                                                            {anOther?.length > 0 ? anOther?.[0]?.value?.toFixed(2) : '--'}
+                                                            {anOther?.length > 0 ? i?.CookingVolume?.toFixed(2) : '--'}
                                                         </TableCell>
                                                     );
                                                 })}
@@ -257,7 +257,8 @@ const CookingBatch = () => {
                                         </TableCell>
                                         {BatchOrderByIdData?.map((x, index) => {
                                             let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
-                                            const newSum = updatedData?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
+                                            let findALL = AllKeys?.filter((u) => updatedData.find((t) => t?.name === u?.key));
+                                            const newSum = findALL?.reduce((accumulator, currentValue) => accumulator + currentValue?.weight, 0);
                                             return (
                                                 <TableCell style={{ width: 250, fontWeight: '700' }} key={index} align="center">
                                                     {newSum?.toFixed(2)}
