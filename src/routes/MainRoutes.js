@@ -51,10 +51,10 @@ const MainRoutes = {
     {
       path: '/dashboard',
       children: [
-        {
-          path: 'dashboard',
-          element: <DashboardDefault />
-        }
+        // {
+        //   path: 'dashboard',
+        //   element: <DashboardDefault />
+        // }
       ]
     },
     // {
