@@ -12,11 +12,6 @@
     "@mui/material": "^5.8.6",
     "@mui/system": "^5.8.6",
     "@mui/utils": "^5.8.6",
-<<<<<<< HEAD
-    "@mui/x-date-pickers": "^6.11.1",
-    "@reduxjs/toolkit": "^1.9.5",
-=======
->>>>>>> 941ab75 (Revert "chnages")
     "@tabler/icons": "^1.72.0",
     "apexcharts": "^3.35.3",
     "axios": "^1.4.0",
