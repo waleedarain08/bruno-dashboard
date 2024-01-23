@@ -17,7 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import { Button } from '@mui/material';
+import { Button, Checkbox } from '@mui/material';
 import { InfinitySpin } from 'react-loader-spinner';
 import square from '../../assets/images/square.jpeg';
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -216,7 +216,7 @@ const BlogFAQ = () => {
   const handleChangeValue = (value) => {
     setdescription(value);
   };
-
+  console.log(rows, "rows")
   return (
     <Box sx={{ width: '100%' }}>
       {isLoading ? (
@@ -431,9 +431,15 @@ const BlogFAQ = () => {
                 <TableRow>
                   <TableCell align="left">Title</TableCell>
                   <TableCell align="center">Description</TableCell>
+                  {typeforView === "feedback" && <>
+                    <TableCell align="center">User Name</TableCell>
+                    <TableCell align="center">Email</TableCell>
+                  </>}
+
                   {typeforView !== 'FAQ' && <TableCell align="center">Media</TableCell>}
                   <TableCell align="center">Type</TableCell>
                   <TableCell align="center">isFeature</TableCell>
+                  {typeforView === "feedback" && <TableCell align="center">isRelied</TableCell>}
                   <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -452,6 +458,12 @@ const BlogFAQ = () => {
                         <>{row?.description}</>
                       )}
                     </TableCell>
+                    {typeforView === "feedback" && <>
+                      <TableCell align="center">{row?.user?.fullName}</TableCell>
+                    </>}
+                    {typeforView === "feedback" && <>
+                      <TableCell align="center">{row?.user?.email}</TableCell>
+                    </>}
                     {typeforView !== 'FAQ' && (
                       <TableCell align="center">
                         {row?.media?.length > 0 ? (
@@ -470,8 +482,14 @@ const BlogFAQ = () => {
                       </TableCell>
                     )}
 
+
                     <TableCell align="center">{row?.type == 'newsAndBlog' ? 'News' : row?.type == "feedback" ? 'Feedback' : 'FAQs'}</TableCell>
                     <TableCell align="center">{row?.isFeatured === true ? 'true' : 'false'}</TableCell>
+                    {typeforView === "feedback" && <>
+                      <TableCell align="center">
+                        <Checkbox name="isReplied" />
+                      </TableCell>
+                    </>}
                     <TableCell align="right">
                       <BorderColorIcon onClick={() => onEditClick(row)} style={{ marginRight: 2, cursor: 'pointer' }} />
                       <DeleteIcon onClick={() => onDeleteClick(row?._id)} style={{ marginLeft: 2, cursor: 'pointer' }} />

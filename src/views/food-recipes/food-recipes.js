@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { InfinitySpin } from 'react-loader-spinner';
 import Modal from '@mui/material/Modal';
-import { Button } from '@mui/material';
+import { Button, Checkbox } from '@mui/material';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
@@ -358,7 +358,6 @@ const FoodRecipes = () => {
               variant="outlined"
             />
           </Box>
-
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
               value={KG}
@@ -381,9 +380,6 @@ const FoodRecipes = () => {
               variant="outlined"
             />
           </Box>
-
-
-
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
               value={PriceOne}
@@ -450,17 +446,7 @@ const FoodRecipes = () => {
               variant="outlined"
             />
           </Box>
-
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-            {/* <TextField
-              value={LifeStage}
-              onChange={(e) => setLifeStage(e.target.value)}
-              style={{ margin: 5 }}
-              sx={{ width: '100%' }}
-              id="outlined-basic"
-              label="Life Stage"
-              variant="outlined"
-            /> */}
             <FormControl sx={{ width: '100%', marginTop: 0.7 }}>
               <InputLabel>LifeStage</InputLabel>
               <Select value={LifeStage} onChange={(e) => setLifeStage(e.target.value)}>
@@ -554,7 +540,6 @@ const FoodRecipes = () => {
               variant="outlined"
             /> */}
           </Box>
-
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <StyledTextarea
               value={Nnutrition}
@@ -625,6 +610,13 @@ const FoodRecipes = () => {
             control={<Switch checked={isComboRecipe} onChange={() => setisComboRecipe(!isComboRecipe)} />}
             label="Combo Recipe"
           />
+          <FormControlLabel
+            control={
+              <Checkbox name="Standard_Recipe" />
+            }
+            label="Standard Recipe"
+          />
+
           <ImageUploader imageCount={3} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
@@ -653,6 +645,7 @@ const FoodRecipes = () => {
               </Button>
             </AnimateButton>
           </Box>
+
         </Box>
       </Modal>
       {isLoading ? (
