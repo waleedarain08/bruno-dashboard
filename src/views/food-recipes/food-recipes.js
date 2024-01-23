@@ -96,6 +96,7 @@ const FoodRecipes = () => {
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [IngredientsComposition, setIngredientsComposition] = React.useState('');
   const [SelectedId, setSelectedId] = React.useState(null);
+  const [isStandard, setisStandard] = React.useState(false);
   const [fields, setFields] = React.useState([{ name: '', aggregate: 0 }]);
 
   const handleSelectChange = (index, value) => {
@@ -175,6 +176,7 @@ const FoodRecipes = () => {
     dispatch(GetAllRecipes(Userdata?.clientToken));
     InitialState();
     handleClose();
+    setisStandard(false);
   };
 
   const onSave = async () => {
@@ -203,6 +205,7 @@ const FoodRecipes = () => {
         try {
           const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
           let newdata = {
+            category: "",
             name: NameRecipe,
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
@@ -224,7 +227,7 @@ const FoodRecipes = () => {
             price5: PriceFive,
             price6: PriceSix,
           };
-          dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
+          dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess, isStandard, callAgain));
           // Now you can use newdata with the updated media property.
         } catch (error) {
           console.error('Error uploading images:', error);
@@ -239,6 +242,7 @@ const FoodRecipes = () => {
           });
           const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
           let newdata = {
+            category: "",
             name: NameRecipe,
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
@@ -269,6 +273,7 @@ const FoodRecipes = () => {
             };
           });
           let newdata = {
+            category: "",
             name: NameRecipe,
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
@@ -306,6 +311,10 @@ const FoodRecipes = () => {
       return error;
     }
   };
+
+  const callAgain = (newdata) => {
+    dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
+  }
 
   const EditValues = (data) => {
     setCondition('Edit');
@@ -612,7 +621,7 @@ const FoodRecipes = () => {
           />
           <FormControlLabel
             control={
-              <Checkbox name="Standard_Recipe" />
+              <Checkbox checked={isStandard} onChange={() => setisStandard(!isStandard)} name="standard_Recipe" />
             }
             label="Standard Recipe"
           />

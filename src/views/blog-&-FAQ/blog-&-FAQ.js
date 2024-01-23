@@ -99,7 +99,6 @@ const BlogFAQ = () => {
   const [Types, setTypes] = React.useState('');
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const rows = useSelector((state) => state.BlogsfaqsReducer.data);
-  console.log(rows, "rows")
   const isLoading = useSelector((state) => state.BlogsfaqsReducer.isLoading);
   const Loading = useSelector((state) => state.BlogsfaqsReducer.addLoading);
   const delLoading = useSelector((state) => state.BlogsfaqsReducer.deleteLoading);
@@ -159,7 +158,6 @@ const BlogFAQ = () => {
         dispatch({ type: actionTypes.isLoadingadd });
         dispatch(AddBlogsNnews(newdata, Userdata?.clientToken, onSuccess));
       } else {
-        console.log(newdata, 'newdata');
         dispatch(EditBlogsNnews(Delete_Id, newdata, Userdata?.clientToken, onSuccess));
       }
     } else {
@@ -216,6 +214,13 @@ const BlogFAQ = () => {
   const handleChangeValue = (value) => {
     setdescription(value);
   };
+  const isRepliedChange = (value, id) => {
+    let newData = {
+      isreplied: value,
+      type: "feedback",
+    }
+    dispatch(EditBlogsNnews(id, newData, Userdata?.clientToken, onSuccess));
+  }
   console.log(rows, "rows")
   return (
     <Box sx={{ width: '100%' }}>
@@ -487,7 +492,7 @@ const BlogFAQ = () => {
                     <TableCell align="center">{row?.isFeatured === true ? 'true' : 'false'}</TableCell>
                     {typeforView === "feedback" && <>
                       <TableCell align="center">
-                        <Checkbox name="isReplied" />
+                        <Checkbox onChange={() => isRepliedChange(true, row?._id)} checked={false} on name="isReplied" />
                       </TableCell>
                     </>}
                     <TableCell align="right">
