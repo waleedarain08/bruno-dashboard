@@ -155,7 +155,7 @@ const FoodRecipes = () => {
   const allData = useSelector((state) => state.IngredientsReducer.data);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
   const rows = filterProdcuts?.recipe?.filter((i) => i?.category === '');
-  console.log(rows, "rows")
+
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
 
   const dispatch = useDispatch();
@@ -313,8 +313,9 @@ const FoodRecipes = () => {
   };
 
   const callAgain = (newdata) => {
-    dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
-  }
+    dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess, false, emptyCheck));
+  };
+  let emptyCheck = () => { }
 
   const EditValues = (data) => {
     setCondition('Edit');
