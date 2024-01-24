@@ -216,12 +216,12 @@ const BlogFAQ = () => {
   };
   const isRepliedChange = (value, id) => {
     let newData = {
-      isreplied: value,
-      type: "feedback",
+      isReplied: value,
+
     }
     dispatch(EditBlogsNnews(id, newData, Userdata?.clientToken, onSuccess));
   }
-  console.log(rows, "rows")
+
   return (
     <Box sx={{ width: '100%' }}>
       {isLoading ? (
@@ -492,7 +492,7 @@ const BlogFAQ = () => {
                     <TableCell align="center">{row?.isFeatured === true ? 'true' : 'false'}</TableCell>
                     {typeforView === "feedback" && <>
                       <TableCell align="center">
-                        <Checkbox onChange={() => isRepliedChange(true, row?._id)} checked={false} on name="isReplied" />
+                        <Checkbox onChange={() => isRepliedChange(true, row?._id)} checked={row?.isReplied} on name="isReplied" />
                       </TableCell>
                     </>}
                     <TableCell align="right">
