@@ -17,7 +17,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import AvatarGroup from '@mui/material/AvatarGroup';
-import { Button } from '@mui/material';
+import { Button, Checkbox } from '@mui/material';
 import { InfinitySpin } from 'react-loader-spinner';
 import square from '../../assets/images/square.jpeg';
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -99,7 +99,6 @@ const BlogFAQ = () => {
   const [Types, setTypes] = React.useState('');
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const rows = useSelector((state) => state.BlogsfaqsReducer.data);
-  console.log(rows, "rows")
   const isLoading = useSelector((state) => state.BlogsfaqsReducer.isLoading);
   const Loading = useSelector((state) => state.BlogsfaqsReducer.addLoading);
   const delLoading = useSelector((state) => state.BlogsfaqsReducer.deleteLoading);
@@ -159,7 +158,6 @@ const BlogFAQ = () => {
         dispatch({ type: actionTypes.isLoadingadd });
         dispatch(AddBlogsNnews(newdata, Userdata?.clientToken, onSuccess));
       } else {
-        console.log(newdata, 'newdata');
         dispatch(EditBlogsNnews(Delete_Id, newdata, Userdata?.clientToken, onSuccess));
       }
     } else {
@@ -216,6 +214,13 @@ const BlogFAQ = () => {
   const handleChangeValue = (value) => {
     setdescription(value);
   };
+  const isRepliedChange = (value, id) => {
+    let newData = {
+      isReplied: value,
+
+    }
+    dispatch(EditBlogsNnews(id, newData, Userdata?.clientToken, onSuccess));
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -431,9 +436,15 @@ const BlogFAQ = () => {
                 <TableRow>
                   <TableCell align="left">Title</TableCell>
                   <TableCell align="center">Description</TableCell>
+                  {typeforView === "feedback" && <>
+                    <TableCell align="center">User Name</TableCell>
+                    <TableCell align="center">Email</TableCell>
+                  </>}
+
                   {typeforView !== 'FAQ' && <TableCell align="center">Media</TableCell>}
                   <TableCell align="center">Type</TableCell>
                   <TableCell align="center">isFeature</TableCell>
+                  {typeforView === "feedback" && <TableCell align="center">isRelied</TableCell>}
                   <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -452,6 +463,12 @@ const BlogFAQ = () => {
                         <>{row?.description}</>
                       )}
                     </TableCell>
+                    {typeforView === "feedback" && <>
+                      <TableCell align="center">{row?.user?.fullName}</TableCell>
+                    </>}
+                    {typeforView === "feedback" && <>
+                      <TableCell align="center">{row?.user?.email}</TableCell>
+                    </>}
                     {typeforView !== 'FAQ' && (
                       <TableCell align="center">
                         {row?.media?.length > 0 ? (
@@ -470,8 +487,14 @@ const BlogFAQ = () => {
                       </TableCell>
                     )}
 
+
                     <TableCell align="center">{row?.type == 'newsAndBlog' ? 'News' : row?.type == "feedback" ? 'Feedback' : 'FAQs'}</TableCell>
                     <TableCell align="center">{row?.isFeatured === true ? 'true' : 'false'}</TableCell>
+                    {typeforView === "feedback" && <>
+                      <TableCell align="center">
+                        <Checkbox onChange={() => isRepliedChange(true, row?._id)} checked={row?.isReplied} on name="isReplied" />
+                      </TableCell>
+                    </>}
                     <TableCell align="right">
                       <BorderColorIcon onClick={() => onEditClick(row)} style={{ marginRight: 2, cursor: 'pointer' }} />
                       <DeleteIcon onClick={() => onDeleteClick(row?._id)} style={{ marginLeft: 2, cursor: 'pointer' }} />

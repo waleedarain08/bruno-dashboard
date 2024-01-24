@@ -12,6 +12,8 @@ import { InfinitySpin } from 'react-loader-spinner';
 import { useSelector, useDispatch } from 'react-redux';
 import { Batch_Ingredients, Batch_Order_By_id } from 'store/batch/batchTypeAction';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import AnimateButton from 'ui-component/extended/AnimateButton';
+import { Button } from '@mui/material';
 
 const CookingBatch = () => {
     const { state } = useLocation();
@@ -107,19 +109,27 @@ const CookingBatch = () => {
                 </Paper>
             ) : (
                 <>
-                    <div
-                        style={{
-                            border: '1px solid #D78809',
-                            width: 30,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            borderRadius: 50,
-                            margin: 5,
-                            padding: 2
-                        }}
-                    >
-                        <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: '#D78809' }} />
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <div
+                            style={{
+                                border: '1px solid #D78809',
+                                width: 30,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                borderRadius: 50,
+                                margin: 5,
+                                padding: 2
+                            }}
+                        >
+                            <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: '#D78809' }} />
+                        </div>
+                        <AnimateButton>
+                            <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                                Print
+                            </Button>
+                        </AnimateButton>
                     </div>
+
                     <Paper sx={{ width: '40%', marginBottom: 4 }}>
                         <TableContainer>
                             <Table>

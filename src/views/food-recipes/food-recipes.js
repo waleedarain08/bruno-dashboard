@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { InfinitySpin } from 'react-loader-spinner';
 import Modal from '@mui/material/Modal';
-import { Button } from '@mui/material';
+import { Button, Checkbox } from '@mui/material';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
@@ -96,6 +96,7 @@ const FoodRecipes = () => {
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [IngredientsComposition, setIngredientsComposition] = React.useState('');
   const [SelectedId, setSelectedId] = React.useState(null);
+  const [isStandard, setisStandard] = React.useState(false);
   const [fields, setFields] = React.useState([{ name: '', aggregate: 0 }]);
 
   const handleSelectChange = (index, value) => {
@@ -154,7 +155,7 @@ const FoodRecipes = () => {
   const allData = useSelector((state) => state.IngredientsReducer.data);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
   const rows = filterProdcuts?.recipe?.filter((i) => i?.category === '');
-  console.log(rows, "rows")
+
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
 
   const dispatch = useDispatch();
@@ -175,6 +176,7 @@ const FoodRecipes = () => {
     dispatch(GetAllRecipes(Userdata?.clientToken));
     InitialState();
     handleClose();
+    setisStandard(false);
   };
 
   const onSave = async () => {
@@ -203,6 +205,7 @@ const FoodRecipes = () => {
         try {
           const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
           let newdata = {
+            category: "",
             name: NameRecipe,
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
@@ -224,7 +227,7 @@ const FoodRecipes = () => {
             price5: PriceFive,
             price6: PriceSix,
           };
-          dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
+          dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess, isStandard, callAgain));
           // Now you can use newdata with the updated media property.
         } catch (error) {
           console.error('Error uploading images:', error);
@@ -239,6 +242,7 @@ const FoodRecipes = () => {
           });
           const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
           let newdata = {
+            category: "",
             name: NameRecipe,
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
@@ -269,6 +273,7 @@ const FoodRecipes = () => {
             };
           });
           let newdata = {
+            category: "",
             name: NameRecipe,
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
@@ -306,6 +311,11 @@ const FoodRecipes = () => {
       return error;
     }
   };
+
+  const callAgain = (newdata) => {
+    dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess, false, emptyCheck));
+  };
+  let emptyCheck = () => { }
 
   const EditValues = (data) => {
     setCondition('Edit');
@@ -358,7 +368,6 @@ const FoodRecipes = () => {
               variant="outlined"
             />
           </Box>
-
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
               value={KG}
@@ -381,9 +390,6 @@ const FoodRecipes = () => {
               variant="outlined"
             />
           </Box>
-
-
-
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
               value={PriceOne}
@@ -450,17 +456,7 @@ const FoodRecipes = () => {
               variant="outlined"
             />
           </Box>
-
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-            {/* <TextField
-              value={LifeStage}
-              onChange={(e) => setLifeStage(e.target.value)}
-              style={{ margin: 5 }}
-              sx={{ width: '100%' }}
-              id="outlined-basic"
-              label="Life Stage"
-              variant="outlined"
-            /> */}
             <FormControl sx={{ width: '100%', marginTop: 0.7 }}>
               <InputLabel>LifeStage</InputLabel>
               <Select value={LifeStage} onChange={(e) => setLifeStage(e.target.value)}>
@@ -554,7 +550,6 @@ const FoodRecipes = () => {
               variant="outlined"
             /> */}
           </Box>
-
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <StyledTextarea
               value={Nnutrition}
@@ -625,6 +620,13 @@ const FoodRecipes = () => {
             control={<Switch checked={isComboRecipe} onChange={() => setisComboRecipe(!isComboRecipe)} />}
             label="Combo Recipe"
           />
+          <FormControlLabel
+            control={
+              <Checkbox checked={isStandard} onChange={() => setisStandard(!isStandard)} name="standard_Recipe" />
+            }
+            label="Standard Recipe"
+          />
+
           <ImageUploader imageCount={3} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
@@ -653,6 +655,7 @@ const FoodRecipes = () => {
               </Button>
             </AnimateButton>
           </Box>
+
         </Box>
       </Modal>
       {isLoading ? (
