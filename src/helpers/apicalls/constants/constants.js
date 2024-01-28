@@ -1,1 +1,1 @@
-export const BASE_URL = 'http://api.brunos.kitchen/bruno/api/v1/';
+export const BASE_URL = 'https`://api.brunos.kitchen/bruno/api/v1/';

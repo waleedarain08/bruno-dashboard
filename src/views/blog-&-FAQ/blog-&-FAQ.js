@@ -444,7 +444,7 @@ const BlogFAQ = () => {
                   {typeforView !== 'FAQ' && <TableCell align="center">Media</TableCell>}
                   <TableCell align="center">Type</TableCell>
                   <TableCell align="center">isFeature</TableCell>
-                  {typeforView === "feedback" && <TableCell align="center">isRelied</TableCell>}
+                  {typeforView === "feedback" && <TableCell align="center">Replied</TableCell>}
                   <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
