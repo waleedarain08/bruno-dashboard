@@ -76,7 +76,7 @@ const UserAccounts = () => {
                     </TableCell>
                     <TableCell align="left">{row?.email}</TableCell>
                     <TableCell align="left">{row?.phoneNumber} </TableCell>
-                    <TableCell align="left">{row?.role}</TableCell>
+                    <TableCell align="left">{row?.email==="chef@brunokitchen.com" || row?.email==="admin@brunokitchen.com" ? "Admin" : "User"}</TableCell>
                     <TableCell align="left">
                       <Button onClick={(e) => moveToPets(e, row)} size="small" variant="contained" color="secondary">
                         View Pets
