@@ -26,6 +26,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { GetAllCategories } from 'store/categories/categoriesAction';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchFeild from 'components/searchFeild';
 
 const style = {
   position: 'absolute',
@@ -44,6 +45,7 @@ const style = {
 const ProductCategories = () => {
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState('');
   const [NameRecipe, setNameRecipe] = React.useState('');
   const [KG, setKG] = React.useState('');
   const [Categoryes, setCategoryes] = React.useState("");
@@ -96,16 +98,29 @@ const ProductCategories = () => {
   };
 
   const handleClose = () => setOpen(false);
+  const [rows, setrows] = React.useState([])
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const allData = useSelector((state) => state.CategoryReducer.data);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
-  const rows = filterProdcuts?.recipe?.filter((i) => i?.category !== "");
+  const newRows = filterProdcuts?.recipe?.filter((i) => i?.category !== "");
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading)
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetAllRecipes(Userdata?.clientToken));
     dispatch(GetAllCategories(Userdata?.clientToken));
   }, []);
+
+  React.useEffect(() => {
+    if (value !== "") {
+      const filteredData = newRows?.filter(item => {
+        return item?.name?.toLowerCase()?.includes(value?.toLowerCase());
+      });
+      setrows(filteredData);
+    }
+    else {
+      setrows(newRows);
+    }
+  }, [filterProdcuts, value]);
 
   const allcategories = allData?.map((i) => {
     return {
@@ -397,29 +412,33 @@ const ProductCategories = () => {
       ) : (
         <Paper style={{ paddingBottom: 4 }} sx={{ width: '100%', mb: 2 }}>
           <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
-            <AnimateButton>
-              <Button
+            <SearchFeild setValue={setValue} value={value} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <AnimateButton>
+                <Button
 
-                onClick={() => onAddRecipeBtn()}
-                style={{ margin: '12px' }}
-                variant="contained"
-                color="primary"
-                sx={{ boxShadow: 'none' }}
-              >
-                Add Product
-              </Button>
-            </AnimateButton>
-            <AnimateButton>
-              <Button
-                onClick={() => navigate('/categories')}
-                style={{ margin: '12px' }}
-                variant="contained"
-                color="primary"
-                sx={{ boxShadow: 'none' }}
-              >
-                View & Add Category
-              </Button>
-            </AnimateButton>
+                  onClick={() => onAddRecipeBtn()}
+                  style={{ margin: '12px' }}
+                  variant="contained"
+                  color="primary"
+                  sx={{ boxShadow: 'none' }}
+                >
+                  Add Product
+                </Button>
+              </AnimateButton>
+              <AnimateButton>
+                <Button
+                  onClick={() => navigate('/categories')}
+                  style={{ margin: '12px' }}
+                  variant="contained"
+                  color="primary"
+                  sx={{ boxShadow: 'none' }}
+                >
+                  View & Add Category
+                </Button>
+              </AnimateButton>
+            </div>
+
           </Box>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>

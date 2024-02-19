@@ -98,7 +98,6 @@ const CookingBatch = () => {
     for (let i = 0; i < maxLength; i++) {
         rows.push(i);
     }
-
     return (
         <>
             {isLoadingBatchOrderById ? (

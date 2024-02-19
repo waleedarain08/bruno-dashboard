@@ -56,7 +56,7 @@ const dashboard = {
     },
     {
       id: 'product-categories',
-      title: 'Product-Categories',
+      title: 'Categories',
       type: 'item',
       url: '/product-categories',
       icon: InventoryIcon,
@@ -81,7 +81,7 @@ const dashboard = {
     // },
     {
       id: 'blog-&-FAQ',
-      title: 'News,FAQs & Feedbacks',
+      title: 'News,FAQs, Blogs & Feedbacks',
       type: 'item',
       url: '/blog-&-FAQ',
       icon: NoteAltIcon,

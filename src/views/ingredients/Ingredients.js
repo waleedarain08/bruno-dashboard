@@ -196,7 +196,7 @@ const Ingredients = () => {
               <TextField value={IngredientReference} onChange={(e) => setIngredientReference(e.target.value)} id="outlined-basic" label="Ingredient Reference" variant="outlined" />
             </Box>
             <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
-              <TextField value={Fector} onChange={(e) => setFector(e.target.value)} id="outlined-basic" label="Cooking Contingency Fector" variant="outlined" />
+              <TextField value={Fector} onChange={(e) => setFector(e.target.value)} id="outlined-basic" label="Cooking Contingency Factor" variant="outlined" />
               {/* <TextField type={"number"} value={Quantity} onChange={(e) => setQuantity(e.target.value)} id="outlined-basic" label="Last Added Quantity" variant="outlined" /> */}
             </Box>
             <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
@@ -306,6 +306,11 @@ const Ingredients = () => {
               <AnimateButton>
                 <Button onClick={() => handleOpen("Add")} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
                   Add Ingredients
+                </Button>
+              </AnimateButton>
+              <AnimateButton>
+                <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                  Print
                 </Button>
               </AnimateButton>
             </Box>

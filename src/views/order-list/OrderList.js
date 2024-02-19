@@ -270,6 +270,7 @@ export default function OrderList() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [OrderIds, setOrderIds] = React.useState([]);
   const [FiltredData, setFiltredData] = React.useState([]);
+  const [IsDelevred, setIsDelevred] = React.useState(false);
   const [Id, setId] = React.useState(null);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -323,7 +324,19 @@ export default function OrderList() {
     else {
       setFiltredData(dataOrders);
     }
-  }, [dataOrders,value]);
+  }, [dataOrders, value]);
+
+  React.useEffect(() => {
+    if (IsDelevred) {
+      let findData = dataOrders?.filter((item) => item?.isCompleted === true);
+      setFiltredData(findData);
+    }
+    else {
+      setFiltredData(dataOrders);
+    }
+
+  }, [IsDelevred])
+
 
 
   const GenerateBatch = () => {
@@ -414,7 +427,7 @@ export default function OrderList() {
                   Batch No.
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="center">
-                  Delivered
+                  Delivered  <Checkbox style={{ backgroundColor: "#fff" }} checked={IsDelevred} onChange={() => setIsDelevred(!IsDelevred)} />
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="right">
                   Add to Cooking Batch
