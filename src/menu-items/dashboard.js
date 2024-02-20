@@ -55,10 +55,10 @@ const dashboard = {
       breadcrumbs: false
     },
     {
-      id: 'product-categories',
+      id: 'categories',
       title: 'Categories',
       type: 'item',
-      url: '/product-categories',
+      url: '/categories',
       icon: InventoryIcon,
       breadcrumbs: false
     },

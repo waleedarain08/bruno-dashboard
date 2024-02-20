@@ -24,6 +24,7 @@ import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
+import { SET_MENU } from 'store/actions';
 
 // const grey = {
 //   50: '#f6f8fa',
@@ -178,6 +179,12 @@ const Ingredients = () => {
     handleOpen("Edit");
   }
 
+  const onPrint = () => {
+    dispatch({ type: SET_MENU, opened: false });
+    setTimeout(() => {
+      window.print();
+    }, 200);
+  }
   return (
     <>
       <Box sx={{ width: '100%' }}>
@@ -309,7 +316,7 @@ const Ingredients = () => {
                 </Button>
               </AnimateButton>
               <AnimateButton>
-                <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                <Button onClick={() => onPrint()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
                   Print
                 </Button>
               </AnimateButton>

@@ -36,7 +36,7 @@ const UserAccounts = () => {
     dispatch(GetUsers(Userdata?.clientToken));
   }, []);
 
-  console.log(rows,"rows,rows")
+  console.log(rows, "rows,rows")
   React.useEffect(() => {
     if (value !== "") {
       const filteredData = newRows?.filter(item => {
@@ -106,6 +106,7 @@ const UserAccounts = () => {
                   <TableCell align="left">Phone Number</TableCell>
                   <TableCell align="left">Role</TableCell>
                   <TableCell align="left">Pets</TableCell>
+                  <TableCell align="center">Last Order</TableCell>
                   <TableCell align="center">Loyalty Points</TableCell>
                   <TableCell align="right">Block</TableCell>
                 </TableRow>
@@ -124,6 +125,7 @@ const UserAccounts = () => {
                         View Pets
                       </Button>
                     </TableCell>
+                    <TableCell align="center">{row?.lastOrderDate ? row?.lastOrderDate : "N/A"}</TableCell>
                     <TableCell align="center">{row?.availablePoints}</TableCell>
                     <TableCell align="right">
                       <Switch value={row?.isBlock} color="warning" />

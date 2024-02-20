@@ -4,8 +4,9 @@ import Paper from '@mui/material/Paper';
 import { InfinitySpin } from 'react-loader-spinner';
 import Modal from '@mui/material/Modal';
 import { Button } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AnimateButton from 'ui-component/extended/AnimateButton';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { useSelector, useDispatch } from 'react-redux';
@@ -44,6 +45,7 @@ const style = {
 
 const ProductCategories = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
   const [NameRecipe, setNameRecipe] = React.useState('');
@@ -102,7 +104,7 @@ const ProductCategories = () => {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const allData = useSelector((state) => state.CategoryReducer.data);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
-  const newRows = filterProdcuts?.recipe?.filter((i) => i?.category !== "");
+  const newRows = filterProdcuts?.recipe?.filter((i) => i?.category !== "" && i?.category === location?.state);
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading)
   const dispatch = useDispatch();
   useEffect(() => {
@@ -113,7 +115,7 @@ const ProductCategories = () => {
   React.useEffect(() => {
     if (value !== "") {
       const filteredData = newRows?.filter(item => {
-        return item?.name?.toLowerCase()?.includes(value?.toLowerCase());
+        return item?.name?.toLowerCase()?.includes(value?.toLowerCase()) || item?._id?.toLowerCase()?.includes(value?.toLowerCase());
       });
       setrows(filteredData);
     }
@@ -411,8 +413,15 @@ const ProductCategories = () => {
         </Paper>
       ) : (
         <Paper style={{ paddingBottom: 4 }} sx={{ width: '100%', mb: 2 }}>
+
           <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
-            <SearchFeild setValue={setValue} value={value} />
+            <div style={{ marginLeft: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ border: "1px solid #D78809", width: 30, display: "flex", justifyContent: "center", borderRadius: 50, margin: 5, padding: 2 }}>
+                <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: "#D78809" }} />
+              </div>
+              <SearchFeild setValue={setValue} value={value} />
+            </div>
+
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <AnimateButton>
                 <Button

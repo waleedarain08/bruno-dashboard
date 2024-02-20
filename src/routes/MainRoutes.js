@@ -52,15 +52,7 @@ const MainRoutes = {
       path: '*',
       element: <UserAccounts />
     },
-    // {
-    //   path: '/dashboard',
-    //   children: [
-    //     {
-    //       path: 'dashboard',
-    //       element: <DashboardDefault />
-    //     }
-    //   ]
-    // },
+
     {
       path: '/user-auccounts',
       children: [
@@ -152,20 +144,20 @@ const MainRoutes = {
     },
 
     {
-      path: '/product-categories',
-      children: [
-        {
-          path: '/product-categories',
-          element: <ProductCategories />
-        }
-      ]
-    },
-    {
       path: '/categories',
       children: [
         {
           path: '/categories',
           element: <Categories />
+        }
+      ]
+    },
+    {
+      path: '/product-categories',
+      children: [
+        {
+          path: '/product-categories',
+          element: <ProductCategories />
         }
       ]
     },

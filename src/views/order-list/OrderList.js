@@ -26,6 +26,7 @@ import Checkbox from '@mui/material/Checkbox';
 import moment from 'moment';
 import { ADDToBatch } from 'store/batch/batchTypeAction';
 import SearchFeild from 'components/searchFeild';
+import { SET_MENU } from 'store/actions';
 // material-ui
 
 function Row(props) {
@@ -309,6 +310,12 @@ export default function OrderList() {
     }
   }, [Id]);
 
+  const onPrint = () => {
+    dispatch({ type: SET_MENU, opened: false });
+    setTimeout(() => {
+      window.print();
+    }, 200);
+  }
   React.useEffect(() => {
     if (value !== "") {
       const filteredData = dataOrders?.filter(item => {
@@ -369,7 +376,7 @@ export default function OrderList() {
                 </Button>
               </AnimateButton>
               <AnimateButton>
-                <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                <Button onClick={() => onPrint()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
                   Print
                 </Button>
               </AnimateButton>
