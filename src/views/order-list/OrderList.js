@@ -139,6 +139,7 @@ function Row(props) {
                       <TableHead>
                         <TableRow>
                           <TableCell>Type</TableCell>
+                          <TableCell>Special Instructions(If Any)</TableCell>
                           <TableCell align="right">Total price (AED)</TableCell>
                         </TableRow>
                       </TableHead>
@@ -146,6 +147,9 @@ function Row(props) {
                         <TableRow key={index}>
                           <TableCell component="th" scope="row">
                             {historyRow?.planType}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {row?.specialInstructions}
                           </TableCell>
                           <TableCell align="right">{historyRow?.planTotal}-AED</TableCell>
                         </TableRow>
