@@ -24,7 +24,7 @@ import EditBatch from 'views/cooking-sheet/editBatch';
 import BatchLable from 'views/cooking-sheet/batchLable';
 
 // dashboard routing
-// const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
+const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
 // utilities routing
 const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
@@ -46,11 +46,11 @@ const MainRoutes = {
   children: [
     {
       path: '/',
-      element: <UserAccounts />
+      element: <DashboardDefault />
     },
     {
       path: '*',
-      element: <UserAccounts />
+      element: <DashboardDefault />
     },
 
     {
