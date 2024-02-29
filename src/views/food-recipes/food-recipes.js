@@ -26,6 +26,7 @@ import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchFeild from 'components/searchFeild';
 const style = {
   position: 'absolute',
   top: '50%',
@@ -71,6 +72,7 @@ const StyledTextarea = styled(TextareaAutosize)(
 
 const FoodRecipes = () => {
   const navigate = useNavigate();
+  const [value, setValue] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [NameRecipe, setNameRecipe] = React.useState('');
   const [RecipeNo, setRecipeNo] = React.useState(0);
@@ -95,9 +97,11 @@ const FoodRecipes = () => {
   const [PreviewEdit, setPreviewEdit] = React.useState(null);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [IngredientsComposition, setIngredientsComposition] = React.useState('');
+  const [standaloneSize, setstandaloneSize] = React.useState('');
   const [SelectedId, setSelectedId] = React.useState(null);
   const [isStandard, setisStandard] = React.useState(false);
   const [fields, setFields] = React.useState([{ name: '', aggregate: 0 }]);
+  const [rows, setrows] = React.useState([]);
 
   const handleSelectChange = (index, value) => {
     const updatedFields = [...fields];
@@ -126,6 +130,7 @@ const FoodRecipes = () => {
     setSelectedFiles([]);
     setPreviewEdit([]);
     setSelectedId(null);
+    setstandaloneSize("")
     setFields([{ name: '', aggregate: 0 }]);
   };
 
@@ -154,7 +159,19 @@ const FoodRecipes = () => {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const allData = useSelector((state) => state.IngredientsReducer.data);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
-  const rows = filterProdcuts?.recipe?.filter((i) => i?.category === '');
+  const Newrows = filterProdcuts?.recipe?.filter((i) => i?.category === '');
+
+  React.useEffect(() => {
+    if (value !== "") {
+      const filteredData = Newrows?.filter(item => {
+        return item?.name?.toLowerCase()?.includes(value?.toLowerCase());
+      });
+      setrows(filteredData);
+    }
+    else {
+      setrows(Newrows);
+    }
+  }, [filterProdcuts, value]);
 
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
 
@@ -191,7 +208,8 @@ const FoodRecipes = () => {
       Nnutrition != '' &&
       Instructions != '' &&
       IngredientsComposition != "" &&
-      LifeStage != ''
+      LifeStage != '' &&
+      standaloneSize != ""
     ) {
       setError('');
       setLoading(true);
@@ -226,6 +244,7 @@ const FoodRecipes = () => {
             price4: PriceFour,
             price5: PriceFive,
             price6: PriceSix,
+            standaloneSize: standaloneSize
           };
           dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess, isStandard, callAgain));
           // Now you can use newdata with the updated media property.
@@ -263,6 +282,7 @@ const FoodRecipes = () => {
             price4: PriceFour,
             price5: PriceFive,
             price6: PriceSix,
+            standaloneSize: standaloneSize
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         } else {
@@ -340,7 +360,11 @@ const FoodRecipes = () => {
     setPriceFour(data?.price4);
     setPriceFive(data?.price5);
     setPriceSix(data?.price6);
+    setstandaloneSize(data?.standaloneSize)
+
   };
+
+
   return (
     <Box sx={{ width: '100%' }}>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
@@ -376,7 +400,7 @@ const FoodRecipes = () => {
               sx={{ width: '100%' }}
               type={'number'}
               id="outlined-basic"
-              label="Price Per KG"
+              label="Standalone Price"
               variant="outlined"
             />
             <TextField
@@ -456,6 +480,21 @@ const FoodRecipes = () => {
               variant="outlined"
             />
           </Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <TextField
+              value={standaloneSize}
+              onChange={(e) => setstandaloneSize(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              id="outlined-basic"
+              placeholder="Standalone Size(e.g. 400 grams / 1 Liter/ 1 Can / etc...)"
+              variant="outlined"
+            />
+
+          </Box>
+
+
+
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <FormControl sx={{ width: '100%', marginTop: 0.7 }}>
               <InputLabel>LifeStage</InputLabel>
@@ -574,7 +613,7 @@ const FoodRecipes = () => {
               style={{ width: '105%', height: 50, marginTop: 7 }}
               maxRows={5}
               aria-label="maximum height"
-              placeholder="Instructions"
+              placeholder="Feeding Directions"
               defaultValue=""
             />
             {/* <TextField
@@ -594,7 +633,7 @@ const FoodRecipes = () => {
               style={{ width: '105%', height: 50, marginTop: 7 }}
               maxRows={5}
               aria-label="maximum height"
-              placeholder="Description"
+              placeholder="Nutritional Adequacy"
               defaultValue=""
             />
             {/* <TextField
@@ -624,10 +663,10 @@ const FoodRecipes = () => {
             control={
               <Checkbox checked={isStandard} onChange={() => setisStandard(!isStandard)} name="standard_Recipe" />
             }
-            label="Standard Recipe"
+            label="Standalone Recipe"
           />
 
-          <ImageUploader imageCount={3} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
+          <ImageUploader imageCount={4} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
               {Error}
@@ -667,28 +706,31 @@ const FoodRecipes = () => {
       ) : (
         <Paper style={{ paddingBottom: 4 }} sx={{ width: '100%', mb: 2 }}>
           <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
-            <AnimateButton>
-              <Button
-                onClick={() => onAddRecipeBtn()}
-                style={{ margin: '12px' }}
-                variant="contained"
-                color="primary"
-                sx={{ boxShadow: 'none' }}
-              >
-                Add Recipe
-              </Button>
-            </AnimateButton>
-            <AnimateButton>
-              <Button
-                onClick={() => navigate('/ingredients')}
-                style={{ margin: '12px' }}
-                variant="contained"
-                color="primary"
-                sx={{ boxShadow: 'none' }}
-              >
-                View & Add Ingredients
-              </Button>
-            </AnimateButton>
+            <SearchFeild setValue={setValue} value={value} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <AnimateButton>
+                <Button
+                  onClick={() => onAddRecipeBtn()}
+                  style={{ margin: '12px' }}
+                  variant="contained"
+                  color="primary"
+                  sx={{ boxShadow: 'none' }}
+                >
+                  Add Recipe
+                </Button>
+              </AnimateButton>
+              <AnimateButton>
+                <Button
+                  onClick={() => navigate('/ingredients')}
+                  style={{ margin: '12px' }}
+                  variant="contained"
+                  color="primary"
+                  sx={{ boxShadow: 'none' }}
+                >
+                  View & Add Ingredients
+                </Button>
+              </AnimateButton>
+            </div>
           </Box>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>

@@ -26,6 +26,7 @@ import Checkbox from '@mui/material/Checkbox';
 import moment from 'moment';
 import { ADDToBatch } from 'store/batch/batchTypeAction';
 import SearchFeild from 'components/searchFeild';
+import { SET_MENU } from 'store/actions';
 // material-ui
 
 function Row(props) {
@@ -138,6 +139,7 @@ function Row(props) {
                       <TableHead>
                         <TableRow>
                           <TableCell>Type</TableCell>
+                          <TableCell>Special Instructions(If Any)</TableCell>
                           <TableCell align="right">Total price (AED)</TableCell>
                         </TableRow>
                       </TableHead>
@@ -145,6 +147,9 @@ function Row(props) {
                         <TableRow key={index}>
                           <TableCell component="th" scope="row">
                             {historyRow?.planType}
+                          </TableCell>
+                          <TableCell component="th" scope="row">
+                            {row?.specialInstructions}
                           </TableCell>
                           <TableCell align="right">{historyRow?.planTotal}-AED</TableCell>
                         </TableRow>
@@ -270,6 +275,7 @@ export default function OrderList() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [OrderIds, setOrderIds] = React.useState([]);
   const [FiltredData, setFiltredData] = React.useState([]);
+  const [IsDelevred, setIsDelevred] = React.useState(false);
   const [Id, setId] = React.useState(null);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -308,6 +314,12 @@ export default function OrderList() {
     }
   }, [Id]);
 
+  const onPrint = () => {
+    dispatch({ type: SET_MENU, opened: false });
+    setTimeout(() => {
+      window.print();
+    }, 200);
+  }
   React.useEffect(() => {
     if (value !== "") {
       const filteredData = dataOrders?.filter(item => {
@@ -323,7 +335,19 @@ export default function OrderList() {
     else {
       setFiltredData(dataOrders);
     }
-  }, [dataOrders,value]);
+  }, [dataOrders, value]);
+
+  React.useEffect(() => {
+    if (IsDelevred) {
+      let findData = dataOrders?.filter((item) => item?.isCompleted === true);
+      setFiltredData(findData);
+    }
+    else {
+      setFiltredData(dataOrders);
+    }
+
+  }, [IsDelevred])
+
 
 
   const GenerateBatch = () => {
@@ -356,7 +380,7 @@ export default function OrderList() {
                 </Button>
               </AnimateButton>
               <AnimateButton>
-                <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                <Button onClick={() => onPrint()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
                   Print
                 </Button>
               </AnimateButton>
@@ -414,7 +438,7 @@ export default function OrderList() {
                   Batch No.
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="center">
-                  Delivered
+                  Delivered  <Checkbox style={{ backgroundColor: "#fff" }} checked={IsDelevred} onChange={() => setIsDelevred(!IsDelevred)} />
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="right">
                   Add to Cooking Batch

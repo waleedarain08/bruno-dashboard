@@ -235,7 +235,7 @@ const BlogFAQ = () => {
           <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
             <Box sx={style}>
               <Typography style={{ textAlign: 'center', paddingBottom: 20 }} variant="h4" component="h2">
-                {Process} News & FAQs
+                {Process} News,FAQs,Blogs,Greetings,Banners
               </Typography>
               <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
                 <TextField
@@ -259,6 +259,11 @@ const BlogFAQ = () => {
                   >
                     <MenuItem value={'FAQ'}>FAQs</MenuItem>
                     <MenuItem value={'newsAndBlog'}>News</MenuItem>
+                    <MenuItem value={'blogs'}>Blogs</MenuItem>
+                    <MenuItem value={'greetings'}>Greetings</MenuItem>
+                    <MenuItem value={'banners'}>Banners</MenuItem>
+
+
                   </Select>
                 </FormControl>
               </Box>
@@ -303,6 +308,9 @@ const BlogFAQ = () => {
               )}
               <Typography style={{ textAlign: 'left', color: 'orange' }} variant="h6" component="h6">
                 * Featured will show at home screen of mobile app.
+              </Typography>
+              <Typography style={{ textAlign: 'left', color: 'orange' }} variant="h6" component="h6">
+                * Banners should be of 1005 * 488 , and upload 1 banner at a time only.
               </Typography>
               <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
                 <AnimateButton>
@@ -412,7 +420,7 @@ const BlogFAQ = () => {
                 color="primary"
                 sx={{ boxShadow: 'none' }}
               >
-                Add News & FAQs
+                Add News,FAQs,Blogs,Greetings,Banners
               </Button>
             </AnimateButton>
             <FormControl style={{ marginTop: 5, width: 150, marginRight: 10 }}>
@@ -427,6 +435,11 @@ const BlogFAQ = () => {
                 <MenuItem value={'FAQ'}>FAQs</MenuItem>
                 <MenuItem value={'newsAndBlog'}>News</MenuItem>
                 <MenuItem value={'feedback'}>Feedback</MenuItem>
+                <MenuItem value={'greetings'}>Greetings</MenuItem>
+                <MenuItem value={'blogs'}>Blogs</MenuItem>
+                <MenuItem value={'banners'}>Banners</MenuItem>
+
+
               </Select>
             </FormControl>
           </Box>
@@ -444,7 +457,7 @@ const BlogFAQ = () => {
                   {typeforView !== 'FAQ' && <TableCell align="center">Media</TableCell>}
                   <TableCell align="center">Type</TableCell>
                   <TableCell align="center">isFeature</TableCell>
-                  {typeforView === "feedback" && <TableCell align="center">isRelied</TableCell>}
+                  {typeforView === "feedback" && <TableCell align="center">Replied</TableCell>}
                   <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -488,7 +501,7 @@ const BlogFAQ = () => {
                     )}
 
 
-                    <TableCell align="center">{row?.type == 'newsAndBlog' ? 'News' : row?.type == "feedback" ? 'Feedback' : 'FAQs'}</TableCell>
+                    <TableCell align="center">{row?.type}</TableCell>
                     <TableCell align="center">{row?.isFeatured === true ? 'true' : 'false'}</TableCell>
                     {typeforView === "feedback" && <>
                       <TableCell align="center">

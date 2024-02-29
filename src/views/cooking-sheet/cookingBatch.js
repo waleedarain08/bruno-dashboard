@@ -14,6 +14,7 @@ import { Batch_Ingredients, Batch_Order_By_id } from 'store/batch/batchTypeActio
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { Button } from '@mui/material';
+import { SET_MENU } from 'store/actions';
 
 const CookingBatch = () => {
     const { state } = useLocation();
@@ -27,6 +28,13 @@ const CookingBatch = () => {
     const isLoadingBatchOrderById = useSelector((state) => state.BatchReducer.isLoadingBatchOrderById);
 
     // console.log(AllKeys, "AllKeys")
+
+    const onPrint = () => {
+        dispatch({ type: SET_MENU, opened: false });
+        setTimeout(() => {
+            window.print();
+        }, 200);
+    }
 
     React.useEffect(() => {
         dispatch(Batch_Ingredients(state?._id, Userdata?.clientToken));
@@ -98,7 +106,6 @@ const CookingBatch = () => {
     for (let i = 0; i < maxLength; i++) {
         rows.push(i);
     }
-
     return (
         <>
             {isLoadingBatchOrderById ? (
@@ -124,7 +131,7 @@ const CookingBatch = () => {
                             <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: '#D78809' }} />
                         </div>
                         <AnimateButton>
-                            <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                            <Button onClick={() => onPrint()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
                                 Print
                             </Button>
                         </AnimateButton>

@@ -2,7 +2,7 @@
 // import { IconDashboard } from '@tabler/icons';
 import GroupIcon from '@mui/icons-material/Group';
 // import PetsIcon from '@mui/icons-material/Pets';
-// import GridViewIcon from '@mui/icons-material/GridView';
+import GridViewIcon from '@mui/icons-material/GridView';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import InventoryIcon from '@mui/icons-material/Inventory';
 //import FeedbackIcon from '@mui/icons-material/Feedback';
@@ -22,14 +22,14 @@ const dashboard = {
   title: 'Dashboard',
   type: 'group',
   children: [
-    // {
-    //   id: 'default',
-    //   title: 'Dashboard',
-    //   type: 'item',
-    //   url: '/',
-    //   icon: GridViewIcon,
-    //   breadcrumbs: false
-    // },
+    {
+      id: 'default',
+      title: 'Dashboard',
+      type: 'item',
+      url: '/',
+      icon: GridViewIcon,
+      breadcrumbs: false
+    },
     {
       id: 'userAccounts',
       title: 'User-Accounts',
@@ -55,10 +55,10 @@ const dashboard = {
       breadcrumbs: false
     },
     {
-      id: 'product-categories',
-      title: 'Product-Categories',
+      id: 'categories',
+      title: 'Categories',
       type: 'item',
-      url: '/product-categories',
+      url: '/categories',
       icon: InventoryIcon,
       breadcrumbs: false
     },
@@ -81,7 +81,7 @@ const dashboard = {
     // },
     {
       id: 'blog-&-FAQ',
-      title: 'News,FAQs & Feedbacks',
+      title: 'News,FAQ,Blog, Banner, Greeting & Feedback',
       type: 'item',
       url: '/blog-&-FAQ',
       icon: NoteAltIcon,
