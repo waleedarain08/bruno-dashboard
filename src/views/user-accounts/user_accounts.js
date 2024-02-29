@@ -18,7 +18,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { GetUsers } from 'store/users/usersAction';
 import SearchFeild from 'components/searchFeild';
-import { SET_MENU } from 'store/actions';
+import ExportUsers from './exportUsers';
+// import { SET_MENU } from 'store/actions';
+
 
 const UserAccounts = () => {
   const navigate = useNavigate();
@@ -63,13 +65,12 @@ const UserAccounts = () => {
     navigate('/user-auccounts/pet-profile', { state: row });
   };
 
-  const onExport = () => {
-    dispatch({ type: SET_MENU, opened: false });
-    setTimeout(() => {
-      window.print();
-    }, 200);
-  }
-  console.log(value, "value")
+  // const onExport = () => {
+  //   dispatch({ type: SET_MENU, opened: false });
+  //   setTimeout(() => {
+  //     window.print();
+  //   }, 200);
+  // }
   return (
     <Box sx={{ width: '100%' }}>
       {isLoading ? (
@@ -84,9 +85,10 @@ const UserAccounts = () => {
             <SearchFeild setValue={setValue} value={value} />
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%' }}>
               <AnimateButton>
-                <Button onClick={() => onExport()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                <ExportUsers data={rows} filename={"UserList"} />
+                {/* <Button onClick={() => onExport()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
                   Export
-                </Button>
+                </Button> */}
               </AnimateButton>
               <AnimateButton>
                 <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>

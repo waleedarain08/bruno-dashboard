@@ -13,6 +13,7 @@ import BlogsfaqsReducer from './blogs&faqs/blogs&faqsReducer';
 import OrderReducer from './orders/ordersReducer';
 import CookingSheetReducer from './cookingSheet/cookingSheetReducer';
 import BatchReducer from './batch/batchTypeReducer';
+import ChartsReducer from './charts/chartsReducer';
 
 // ==============================|| COMBINE REDUCER ||============================== //
 
@@ -28,7 +29,8 @@ const reducer = combineReducers({
   BlogsfaqsReducer: BlogsfaqsReducer,
   OrderReducer: OrderReducer,
   CookingSheetReducer: CookingSheetReducer,
-  BatchReducer: BatchReducer
+  BatchReducer: BatchReducer,
+  ChartsReducer: ChartsReducer
 });
 
 export default reducer;

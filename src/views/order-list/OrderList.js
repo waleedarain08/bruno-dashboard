@@ -27,6 +27,7 @@ import moment from 'moment';
 import { ADDToBatch } from 'store/batch/batchTypeAction';
 import SearchFeild from 'components/searchFeild';
 import { SET_MENU } from 'store/actions';
+import ExportUsers from 'views/user-accounts/exportUsers';
 // material-ui
 
 function Row(props) {
@@ -375,9 +376,10 @@ export default function OrderList() {
             <SearchFeild setValue={setValue} value={value} />
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%' }}>
               <AnimateButton>
-                <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                <ExportUsers data={FiltredData} filename={"OrderList"} />
+                {/* <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
                   Export
-                </Button>
+                </Button> */}
               </AnimateButton>
               <AnimateButton>
                 <Button onClick={() => onPrint()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
