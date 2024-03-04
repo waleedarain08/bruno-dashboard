@@ -42,9 +42,8 @@ const ImageUploader = ({ PreviewEdit, setSelectedFiles, selectedFiles, imageCoun
 
   return (
     <Box>
-      <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
+      <Grid >
         <Grid item xs={2} sm={4} md={4}>
-
           <Paper elevation={3} style={{ padding: '20px', margin: 5, width: '100%', textAlign: 'center' }}>
             <input
               accept="image/*"

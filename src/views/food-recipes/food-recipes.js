@@ -96,6 +96,8 @@ const FoodRecipes = () => {
   const [Condition, setCondition] = React.useState(null);
   const [PreviewEdit, setPreviewEdit] = React.useState(null);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
+  const [PreviewTableEdit, setPreviewTableEdit] = React.useState(null);
+  const [selectedTableFiles, setSelectedTableFiles] = React.useState([]);
   const [IngredientsComposition, setIngredientsComposition] = React.useState('');
   const [standaloneSize, setstandaloneSize] = React.useState('');
   const [SelectedId, setSelectedId] = React.useState(null);
@@ -128,7 +130,9 @@ const FoodRecipes = () => {
     setDescription('');
     setFeatured(false);
     setSelectedFiles([]);
+    setSelectedTableFiles([]);
     setPreviewEdit([]);
+    setPreviewTableEdit([]);
     setSelectedId(null);
     setstandaloneSize("")
     setFields([{ name: '', aggregate: 0 }]);
@@ -222,6 +226,7 @@ const FoodRecipes = () => {
         });
         try {
           const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
+          const table_Images = await Promise.all(selectedTableFiles?.map(async (i) => await ImageUpload(i)));
           let newdata = {
             category: "",
             name: NameRecipe,
@@ -234,6 +239,7 @@ const FoodRecipes = () => {
             nutrition: Nnutrition,
             pricePerKG: parseInt(KG),
             media: newPath,
+            tableImage: table_Images,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
@@ -252,7 +258,7 @@ const FoodRecipes = () => {
           console.error('Error uploading images:', error);
         }
       } else {
-        if (selectedFiles?.length > 0) {
+        if (selectedFiles?.length > 0 || selectedTableFiles?.length > 0) {
           let NewValues = fields?.map((i) => {
             return {
               name: i?.name,
@@ -260,6 +266,7 @@ const FoodRecipes = () => {
             };
           });
           const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
+          const table_Images = await Promise.all(selectedTableFiles?.map(async (i) => await ImageUpload(i)));
           let newdata = {
             category: "",
             name: NameRecipe,
@@ -272,6 +279,7 @@ const FoodRecipes = () => {
             nutrition: Nnutrition,
             pricePerKG: parseInt(KG),
             media: newPath,
+            tableImage: table_Images,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
@@ -304,6 +312,7 @@ const FoodRecipes = () => {
             nutrition: Nnutrition,
             pricePerKG: parseInt(KG),
             media: PreviewEdit,
+            tableImage: PreviewTableEdit,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
@@ -352,6 +361,7 @@ const FoodRecipes = () => {
     setFeatured(data?.isFeatured);
     setisComboRecipe(data?.isComboRecipe)
     setPreviewEdit(data?.media);
+    setPreviewTableEdit(data?.tableImage);
     setFields(data?.ingredient);
     setIngredientsComposition(data?.ingredientsComposition);
     setPriceOne(data?.price1);
@@ -665,8 +675,16 @@ const FoodRecipes = () => {
             }
             label="Standalone Recipe"
           />
-
-          <ImageUploader imageCount={4} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
+          <Box style={{ display: 'flex', justifyContent: 'space-between', }} sx={{ width: '100%' }}>
+            <div>
+              <p>Recipe Images : </p>
+              <ImageUploader imageCount={5} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
+            </div>
+            <div>
+              <p>Table Images : </p>
+              <ImageUploader imageCount={1} PreviewEdit={PreviewTableEdit} setPreviewEdit={setPreviewTableEdit} selectedFiles={selectedTableFiles} setSelectedFiles={setSelectedTableFiles} />
+            </div>
+          </Box>
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
               {Error}

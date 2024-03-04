@@ -17,6 +17,7 @@
     "@tabler/icons": "^1.72.0",
     "apexcharts": "^3.35.3",
     "axios": "^1.4.0",
+    "file-saver": "^2.0.5",
     "firebase": "^10.3.1",
     "formik": "^2.2.9",
     "framer-motion": "^6.3.16",
@@ -27,6 +28,7 @@
     "react-apexcharts": "^1.4.0",
     "react-device-detect": "^2.2.2",
     "react-dom": "^18.2.0",
+    "react-json-to-excel": "^1.0.7",
     "react-loader-spinner": "^5.3.4",
     "react-perfect-scrollbar": "^1.5.8",
     "react-quill": "^2.0.0",
@@ -37,6 +39,7 @@
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
+    "xlsx": "^0.18.5",
     "yup": "^0.32.11"
   },
   "scripts": {

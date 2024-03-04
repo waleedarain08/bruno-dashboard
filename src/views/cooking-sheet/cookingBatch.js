@@ -226,9 +226,10 @@ const CookingBatch = () => {
                                         <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
                                         <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
                                         {BatchOrderByIdData?.map((i, index) => {
+                                            console.log(i, "i")
                                             return (
                                                 <TableCell key={index} style={{ width: 250, fontWeight: '800' }} align="center">
-                                                    Order {index + 1}
+                                                    Order: {i?._id?.substring(i?._id?.length - 5)}
                                                 </TableCell>
                                             );
                                         })}

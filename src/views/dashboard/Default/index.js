@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-
 // material-ui
 import { Grid } from '@mui/material';
 
@@ -12,26 +10,33 @@ import TotalOrderLineChartCard from './TotalOrderLineChartCard';
 //import TotalIncomeLightCard from './TotalIncomeLightCard';
 import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
+import { useSelector, useDispatch } from 'react-redux';
+import { chatsApi } from 'store/charts/chartsAction';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
-  const data = useSelector((state) => state.AuthReducer.data);
-  console.log(data, 'data');
+  const dispatch = useDispatch();
+  const chartsData = useSelector((state) => state.ChartsReducer.chartsData);
+  const isLoadingCharts = useSelector((state) => state.ChartsReducer.isLoadingCharts);
+  const Userdata = useSelector((state) => state.AuthReducer.data);
+
   const [isLoading, setLoading] = useState(true);
   useEffect(() => {
+    dispatch(chatsApi(Userdata?.clientToken))
     setLoading(false);
   }, []);
+  console.log(chartsData,isLoading, "chartsData")
 
   return (
     <Grid container spacing={gridSpacing}>
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item lg={6} md={6} sm={6} xs={12}>
-            <EarningCard isLoading={isLoading} />
+            <EarningCard isLoading={isLoadingCharts} />
           </Grid>
           <Grid item lg={6} md={6} sm={6} xs={12}>
-            <TotalOrderLineChartCard isLoading={isLoading} />
+            <TotalOrderLineChartCard isLoading={isLoadingCharts} />
           </Grid>
           {/* <Grid item lg={4} md={12} sm={12} xs={12}>
             <Grid container spacing={gridSpacing}>
@@ -48,10 +53,10 @@ const Dashboard = () => {
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item xs={12} md={8}>
-            <TotalGrowthBarChart isLoading={isLoading} />
+            <TotalGrowthBarChart isLoading={isLoadingCharts} />
           </Grid>
           <Grid item xs={12} md={4}>
-            <PopularCard isLoading={isLoading} />
+            <PopularCard isLoading={isLoadingCharts} />
           </Grid>
         </Grid>
       </Grid>
