@@ -681,7 +681,7 @@ const FoodRecipes = () => {
               <ImageUploader imageCount={5} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
             </div>
             <div>
-              <p>Table Images : </p>
+              <p>Table Image </p>
               <ImageUploader imageCount={1} PreviewEdit={PreviewTableEdit} setPreviewEdit={setPreviewTableEdit} selectedFiles={selectedTableFiles} setSelectedFiles={setSelectedTableFiles} />
             </div>
           </Box>
