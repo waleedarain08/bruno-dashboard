@@ -78,7 +78,7 @@ function Row(props) {
         <TableCell component="th" scope="row">
           {row?._id.substr(row?._id?.length - 5)}
         </TableCell>
-        <TableCell align="center">{moment(row?.updatedOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
+        {/* <TableCell align="center">{moment(row?.updatedOnDate).format('DD MMM YYYY, h:mm a')}</TableCell> */}
         <TableCell align="center">{row?.user?.fullName}</TableCell>
         <TableCell align="center">{row?.totalAmount}-AED</TableCell>
         <TableCell align="center">{row?.deliveryDate}</TableCell>
@@ -421,7 +421,7 @@ export default function OrderList() {
               <TableRow style={{ backgroundColor: '#D78809' }}>
                 <TableCell />
                 <TableCell style={{ color: '#fff' }}>Order No.</TableCell>
-                <TableCell style={{ color: '#fff' }}>Order Date / Time</TableCell>
+                {/* <TableCell style={{ color: '#fff' }}>Order Date / Time</TableCell> */}
                 <TableCell style={{ color: '#fff' }}>User Name</TableCell>
                 <TableCell style={{ color: '#fff' }} align="right">
                   Order Total (AED)

@@ -107,7 +107,7 @@ const TotalGrowthBarChart = ({ isLoading }) => {
                       <Typography variant="subtitle2">Total Growth</Typography>
                     </Grid>
                     <Grid item>
-                      <Typography variant="h3">AED 887</Typography>
+                      <Typography variant="h3">AED 1139</Typography>
                     </Grid>
                   </Grid>
                 </Grid>
