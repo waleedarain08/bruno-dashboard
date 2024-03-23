@@ -65,7 +65,7 @@ const dashboard = {
 
     {
       id: 'promo-code&loyality-points',
-      title: 'Promo Codes & Loyalty Points',
+      title: 'Promo Codes,Loyalty Points & Delivery Charges',
       type: 'item',
       url: '/promo-code&loyality-points',
       icon: PercentIcon,

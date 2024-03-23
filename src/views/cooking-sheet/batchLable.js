@@ -6,7 +6,7 @@ import * as React from 'react';
 // import TableHead from '@mui/material/TableHead';
 // import TableRow from '@mui/material/TableRow';
 // import Paper from '@mui/material/Paper';
-import { useLocation ,useNavigate} from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Batch_Order_By_id } from 'store/batch/batchTypeAction';
 import moment from 'moment';
@@ -21,6 +21,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { SET_MENU } from 'store/actions';
+import ExportBatchLable from './exportBatchLable';
 // import { borderBottom } from '@mui/system';
 
 const BatchLable = () => {
@@ -91,11 +92,19 @@ const BatchLable = () => {
                     >
                         <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: '#D78809' }} />
                     </div>
-                    <AnimateButton>
-                        <Button onClick={() => onExport()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
-                            Print
-                        </Button>
-                    </AnimateButton>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <AnimateButton >
+                            <ExportBatchLable FeedingData={FeedingData} filename={"BatchLable"} data={BatchOrderByIdData} state={state} />
+                        </AnimateButton>
+                        <AnimateButton >
+
+                            <Button onClick={() => onExport()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                                Print
+                            </Button>
+                        </AnimateButton>
+                    </div>
+
+
                 </div>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                     {BatchOrderByIdData?.map((t, firstindex) => {

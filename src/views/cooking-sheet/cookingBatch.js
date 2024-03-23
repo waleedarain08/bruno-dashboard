@@ -27,8 +27,6 @@ const CookingBatch = () => {
     const BatchOrderByIdData = useSelector((state) => state.BatchReducer.BatchOrderByIdData);
     const isLoadingBatchOrderById = useSelector((state) => state.BatchReducer.isLoadingBatchOrderById);
 
-    // console.log(AllKeys, "AllKeys")
-
     const onPrint = () => {
         dispatch({ type: SET_MENU, opened: false });
         setTimeout(() => {
@@ -226,7 +224,7 @@ const CookingBatch = () => {
                                         <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
                                         <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
                                         {BatchOrderByIdData?.map((i, index) => {
-                                            console.log(i, "i")
+                                          
                                             return (
                                                 <TableCell key={index} style={{ width: 250, fontWeight: '800' }} align="center">
                                                     Order: {i?._id?.substring(i?._id?.length - 5)}
@@ -288,7 +286,7 @@ const CookingBatch = () => {
                                                 let matched = matchingItem !== undefined && matchingItem !== null && u?.value * (1 + parseFloat(matchingItem?.ContingencyFactor?.replace('%', '')) / 100);
                                                 return { value: matched };
                                             })
-                                            console.log({ newS }, "AllKeys")
+                                           
                                             const newSum = newS?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
                                             return (
                                                 <TableCell style={{ width: 250, fontWeight: '700' }} key={index} align="center">

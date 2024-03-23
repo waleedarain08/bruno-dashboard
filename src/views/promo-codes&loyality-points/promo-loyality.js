@@ -114,6 +114,10 @@ const PromoLoality = ({ ...others }) => {
   let discountOnPointsRedeem = dicountdata?.filter((i) => i?.name === "discountOnPointsRedeem");
   let pointsToAEDRatio = dicountdata?.filter((i) => i?.name === "pointsToAEDRatio");
   let pointsLimit = dicountdata?.filter((i) => i?.name === "pointsLimit");
+  let deliveryFeesInCity = dicountdata?.filter((i) => i?.name === "deliveryFeesInCity");
+  let deliveryFeesOutside = dicountdata?.filter((i) => i?.name === "deliveryFeesOutside");
+
+
 
 
   return (
@@ -211,7 +215,175 @@ const PromoLoality = ({ ...others }) => {
             </CardContent>
           </Card>
         </Grid> */}
-        <Grid item xs={2}></Grid>
+        <Grid item xs={4}>
+        <Card>
+        {!isDiscountLoading && <CardContent>
+              <Grid container direction="column" justifyContent="center" spacing={2}>
+                <Grid item xs={12} container alignItems="center" justifyContent="center">
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle1">Delivery Charges</Typography>
+                  </Box>
+                </Grid>
+                <Formik
+                initialValues={{
+                  DeliveryFeesInCity: parseFloat(deliveryFeesInCity?.[0]?.aggregate),
+                  submit: null
+                }}
+
+                onSubmit={async (values, { setStatus, setSubmitting }) => {
+                  try {
+                    if (scriptedRef.current) {
+                      let data = {
+                        name: deliveryFeesInCity?.[0]?.name,
+                        aggregate: parseFloat(values?.DeliveryFeesInCity),
+
+                      };
+                      dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    if (scriptedRef.current) {
+                      setStatus({ success: false });
+                      // setErrors({ submit: err.message });
+                      setSubmitting(false);
+                    }
+                  }
+                }}
+              >
+                {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
+                  <form noValidate onSubmit={handleSubmit} {...others}>
+                    <FormControl
+                      fullWidth
+                      error={Boolean(touched.DeliveryFeesInCity && errors.DeliveryFeesInCity)}
+                      sx={{ ...theme.typography.customInput }}
+                    >
+                      <InputLabel htmlFor="outlined-adornment-email-login">Delivery Fees Inside Abu Dhabi</InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-email-login"
+                        type="text"
+                        value={values.DeliveryFeesInCity}
+                        name="DeliveryFeesInCity"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        label="Delivery Fees Inside Abu Dhabi"
+                        inputProps={{}}
+                      />
+                      {touched.DeliveryFeesInCity && errors.DeliveryFeesInCity && (
+                        <FormHelperText error id="standard-weight-helper-text-email-login">
+                          {errors.DeliveryFeesInCity}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                    {errors.submit && (
+                      <Box sx={{ mt: 3 }}>
+                        <FormHelperText error>{errors.submit}</FormHelperText>
+                      </Box>
+                    )}
+                    <Box sx={{ mt: 2 }}>
+                      <AnimateButton>
+                        <Button
+                          disableElevation
+                          disabled={updateDiscountLoading}
+                          fullWidth
+                          size="large"
+                          type="submit"
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Box>
+                  </form>
+                )}
+              </Formik>
+              </Grid>
+        </CardContent>}
+
+        {!isDiscountLoading && <CardContent>
+              <Grid container direction="column" justifyContent="center" spacing={2}>
+                {/* <Grid item xs={12} container alignItems="center" justifyContent="center">
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle1">Delivery Charges</Typography>
+                  </Box>
+                </Grid> */}
+                <Formik
+                initialValues={{
+                  DeliveryFeesOutside: parseFloat(deliveryFeesOutside?.[0]?.aggregate),
+                  submit: null
+                }}
+
+                onSubmit={async (values, { setStatus, setSubmitting }) => {
+                  try {
+                    if (scriptedRef.current) {
+                      let data = {
+                        name: deliveryFeesOutside?.[0]?.name,
+                        aggregate: parseFloat(values?.DeliveryFeesOutside),
+
+                      };
+                      dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    if (scriptedRef.current) {
+                      setStatus({ success: false });
+                      // setErrors({ submit: err.message });
+                      setSubmitting(false);
+                    }
+                  }
+                }}
+              >
+                {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
+                  <form noValidate onSubmit={handleSubmit} {...others}>
+                    <FormControl
+                      fullWidth
+                      error={Boolean(touched.DeliveryFeesOutside && errors.DeliveryFeesOutside)}
+                      sx={{ ...theme.typography.customInput }}
+                    >
+                      <InputLabel htmlFor="outlined-adornment-email-login">Delivery Fees Outside Abu Dhabi</InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-email-login"
+                        type="text"
+                        value={values.DeliveryFeesOutside}
+                        name="DeliveryFeesOutside"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        label="Delivery Fees Outside Abu Dhabi"
+                        inputProps={{}}
+                      />
+                      {touched.DeliveryFeesOutside && errors.DeliveryFeesOutside && (
+                        <FormHelperText error id="standard-weight-helper-text-email-login">
+                          {errors.DeliveryFeesOutside}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                    {errors.submit && (
+                      <Box sx={{ mt: 3 }}>
+                        <FormHelperText error>{errors.submit}</FormHelperText>
+                      </Box>
+                    )}
+                    <Box sx={{ mt: 2 }}>
+                      <AnimateButton>
+                        <Button
+                          disableElevation
+                          disabled={updateDiscountLoading}
+                          fullWidth
+                          size="large"
+                          type="submit"
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Box>
+                  </form>
+                )}
+              </Formik>
+              </Grid>
+        </CardContent>}
+        </Card>
+        </Grid>
         <Grid item xs={4}>
           <Card>
             {!isDiscountLoading && <CardContent>
