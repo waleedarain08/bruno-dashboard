@@ -244,12 +244,12 @@ const FoodRecipes = () => {
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
             caloriesContentNo: parseInt(ContentNo),
-            price1: PriceOne,
-            price2: PriceTwo,
-            price3: PriceThree,
-            price4: PriceFour,
-            price5: PriceFive,
-            price6: PriceSix,
+            price1: parseInt(PriceOne),
+            price2: parseInt(PriceTwo),
+            price3: parseInt(PriceThree),
+            price4: parseInt(PriceFour),
+            price5: parseInt(PriceFive),
+            price6: parseInt(PriceSix),
             standaloneSize: standaloneSize
           };
           dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess, isStandard, callAgain));
@@ -284,12 +284,12 @@ const FoodRecipes = () => {
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
             caloriesContentNo: parseInt(ContentNo),
-            price1: PriceOne,
-            price2: PriceTwo,
-            price3: PriceThree,
-            price4: PriceFour,
-            price5: PriceFive,
-            price6: PriceSix,
+            price1: parseInt(PriceOne),
+            price2: parseInt(PriceTwo),
+            price3: parseInt(PriceThree),
+            price4: parseInt(PriceFour),
+            price5: parseInt(PriceFive),
+            price6: parseInt(PriceSix),
             standaloneSize: standaloneSize
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
@@ -317,12 +317,12 @@ const FoodRecipes = () => {
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
             caloriesContentNo: parseInt(ContentNo),
-            price1: PriceOne,
-            price2: PriceTwo,
-            price3: PriceThree,
-            price4: PriceFour,
-            price5: PriceFive,
-            price6: PriceSix,
+            price1: parseInt(PriceOne),
+            price2: parseInt(PriceTwo),
+            price3: parseInt(PriceThree),
+            price4: parseInt(PriceFour),
+            price5: parseInt(PriceFive),
+            price6: parseInt(PriceSix),
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         }
@@ -514,7 +514,7 @@ const FoodRecipes = () => {
                   Adult
                 </MenuItem>
                 <MenuItem key={2} value="Pet">
-                  Pet{' '}
+                  Puppy{' '}
                 </MenuItem>
                 <MenuItem key={3} value="Senior">
                   {' '}
