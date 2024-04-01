@@ -99,6 +99,8 @@ const ProductCategories = () => {
     setFields([...fields, { name: '', price: null }]);
   };
 
+  console.log(location?.state, "location?.state")
+
   const handleClose = () => setOpen(false);
   const [rows, setrows] = React.useState([])
   const Userdata = useSelector((state) => state.AuthReducer.data);
@@ -137,7 +139,6 @@ const ProductCategories = () => {
     handleClose();
   };
 
-  console.log(fields, "fields")
 
   const onSave = async () => {
     if (
@@ -449,6 +450,7 @@ const ProductCategories = () => {
             </div>
 
           </Box>
+          <h2 style={{ textAlign: "center" }}>{location?.state}</h2>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
               {rows?.map((i, index) => {

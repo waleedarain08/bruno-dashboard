@@ -149,7 +149,7 @@ const BlogFAQ = () => {
           Types === 'FAQ'
             ? []
             : selectedFiles?.length > 0
-              ? newPath
+              ? [...PreviewEdit, ...newPath]
               : PreviewEdit?.length > 0
                 ? PreviewEdit
                 : setError('Please Select Image')
@@ -447,6 +447,7 @@ const BlogFAQ = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
+                  <TableCell align="left">Id</TableCell>
                   <TableCell align="left">Title</TableCell>
                   <TableCell align="center">Description</TableCell>
                   {typeforView === "feedback" && <>
@@ -464,6 +465,9 @@ const BlogFAQ = () => {
               <TableBody>
                 {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
                   <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">
+                      {row?._id.substr(row?._id.length - 5)}
+                    </TableCell>
                     <TableCell component="th" scope="row">
                       {row?.title.length > 30 ? <>{row?.title.substring(0, 30)}...</> : <>{row?.title}</>}
                     </TableCell>

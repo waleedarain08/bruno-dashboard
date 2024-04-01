@@ -267,6 +267,8 @@ const FoodRecipes = () => {
           });
           const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
           const table_Images = await Promise.all(selectedTableFiles?.map(async (i) => await ImageUpload(i)));
+          let allmedia = PreviewEdit;
+          let alltableImage = PreviewTableEdit;
           let newdata = {
             category: "",
             name: NameRecipe,
@@ -278,8 +280,8 @@ const FoodRecipes = () => {
             instructions: Instructions,
             nutrition: Nnutrition,
             pricePerKG: parseInt(KG),
-            media: newPath,
-            tableImage: table_Images,
+            media: [...allmedia, ...newPath],
+            tableImage: [...alltableImage, ...table_Images],
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
@@ -347,6 +349,7 @@ const FoodRecipes = () => {
   let emptyCheck = () => { }
 
   const EditValues = (data) => {
+    console.log(data,"data")
     setCondition('Edit');
     setSelectedId(data?._id);
     setNameRecipe(data?.name);
