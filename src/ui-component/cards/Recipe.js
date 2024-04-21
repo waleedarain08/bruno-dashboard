@@ -26,7 +26,7 @@ import { DeleteRecipe, GetAllRecipes } from 'store/recipe/recipeAction';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
-  console.log(expand, "RecipeReviewCard");
+  console.log(expand, 'RecipeReviewCard');
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
@@ -44,7 +44,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const isLoadingDelete = useSelector((state) => state.RecipeReducer.isLoadingDelete);
 
-  // console.log(data, "data")
+  console.log(data, 'data');
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,7 +56,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
   };
 
   const handleEdit = () => {
-    EditValues(data)
+    EditValues(data);
     setOpen(true);
     handleClose();
   };
@@ -73,9 +73,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
     dispatch(DeleteRecipe(data?._id, Userdata?.clientToken, onSuccess));
   };
 
-  let truncatedDescription = data?.description.length > 60
-    ? `${data?.description.slice(0, 50)}...`
-    : data?.description;
+  let truncatedDescription = data?.description.length > 60 ? `${data?.description.slice(0, 50)}...` : data?.description;
 
   const onSuccess = () => {
     dispatch(GetAllRecipes(Userdata?.clientToken));
@@ -159,7 +157,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
           </IconButton>
         }
         title={data?.name}
-        subheader={`${data?.category !== "" ? `BRN-${lastThreeCharacters}` : `#${data?.recipeNo}`}`}
+        subheader={`${data?.category !== '' ? `BRN-${lastThreeCharacters}` : `#${data?.recipeNo}`}`}
       />
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem onClick={handleEdit}>Edit</MenuItem>
@@ -167,12 +165,14 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
       </Menu>
       <CardMedia component="img" height="194" image={data?.media} alt="image" />
       <CardContent>
-        {data?.category !== "" && <Typography variant="body2" color="text.secondary">
-          Category : {data?.category}
-        </Typography>}
+        {data?.category !== '' && (
+          <Typography variant="body2" color="text.secondary">
+            Category : {data?.category}
+          </Typography>
+        )}
 
         <Typography variant="body2" color="text.secondary">
-          {data?.category !== "" ? "Price" : "PricePerKG"} : {data?.pricePerKG}
+          {data?.category !== '' ? 'Price' : 'PricePerKG'} : {data?.price1}
         </Typography>
         <Tooltip title={data?.description}>
           <Typography variant="body2" color="text.secondary">
@@ -180,44 +180,52 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
           </Typography>
         </Tooltip>
       </CardContent>
-      {data?.category === "" && <>
-        <CardActions disableSpacing>
-          <Typography color="text.secondary">Details</Typography>
-          <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
-            <ExpandMoreIcon />
-          </ExpandMore>
-        </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
-            <Typography style={{ fontWeight: 'bold' }} paragraph>
-              LifeStage : {data?.lifeStage}
-            </Typography>
-            <Typography style={{ fontWeight: 'bold', marginTop: 16 }}>Ingredients:</Typography>
-            {data?.ingredient?.map((i, index) => {
-              return (
-                <>
-                  <Typography style={{ marginTop: 10 }} key={index}>
-                    {i?.name} - {i?.aggregate}% - {i?.aggregate * 10} grams
-                  </Typography>
-                </>
-              );
-            })}
+      {data?.category === '' && (
+        <>
+          <CardActions disableSpacing>
+            <Typography color="text.secondary">Details</Typography>
+            <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </CardActions>
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <CardContent>
+              <Typography style={{ fontWeight: 'bold' }} paragraph>
+                LifeStage : {data?.lifeStage}
+              </Typography>
+              <Typography style={{ fontWeight: 'bold' }} paragraph>
+                Standalone Price : {data?.pricePerKG}
+              </Typography>
+              <Typography style={{ fontWeight: 'bold' }} paragraph>
+                Expiry Period : {data?.expiryPeriod}
+              </Typography>
+              <Typography style={{ fontWeight: 'bold', marginTop: 16 }}>Ingredients:</Typography>
+              {data?.ingredient?.map((i, index) => {
+                return (
+                  <>
+                    <Typography style={{ marginTop: 10 }} key={index}>
+                      {i?.name} - {i?.aggregate}% - {i?.aggregate * 10} grams
+                    </Typography>
+                  </>
+                );
+              })}
 
-            <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
-              Guaranteed Analysis:
-            </Typography>
-            {data?.nutrition}
-            <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
-              Instructions :
-            </Typography>
-            {data?.instructions}
-            <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
-              Ingredients Composition :
-            </Typography>
-            {data?.ingredientsComposition}
-          </CardContent>
-        </Collapse></>}
-
+              <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
+                Guaranteed Analysis:
+              </Typography>
+              {data?.nutrition}
+              <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
+                Instructions :
+              </Typography>
+              {data?.instructions}
+              <Typography style={{ fontWeight: 'bold', marginTop: 16 }} paragraph>
+                Ingredients Composition :
+              </Typography>
+              {data?.ingredientsComposition}
+            </CardContent>
+          </Collapse>
+        </>
+      )}
     </Card>
   );
 }
