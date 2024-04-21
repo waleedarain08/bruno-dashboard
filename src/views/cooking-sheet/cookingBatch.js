@@ -187,9 +187,9 @@ const CookingBatch = () => {
                                             <TableRow key={index}>
                                                 <TableCell align="center">{index + 1}</TableCell>
                                                 <TableCell align="center">{i?.key}</TableCell>
-                                                <TableCell align="center">{i?.weight?.toFixed(2)}</TableCell>
+                                                <TableCell align="center">{Math.trunc(i?.weight)}</TableCell>
                                                 <TableCell align="center">{i?.ContingencyFactor}</TableCell>
-                                                <TableCell align="center">{i?.CookingVolume?.toFixed(2)}</TableCell>
+                                                <TableCell align="center">{Math.trunc(i?.CookingVolume)}</TableCell>
                                             </TableRow>
                                         );
                                     })}
@@ -197,11 +197,11 @@ const CookingBatch = () => {
                                         <TableCell align="center"></TableCell>
                                         <TableCell align="center"></TableCell>
                                         <TableCell style={{ fontWeight: '700' }} align="center">
-                                            {sumWithInitial?.toFixed(2)}
+                                            {Math.trunc(sumWithInitial)}
                                         </TableCell>
                                         <TableCell align="center"></TableCell>
                                         <TableCell style={{ fontWeight: '700' }} align="center">
-                                            {sumWithadjustedWeight?.toFixed(2)}
+                                            {Math.trunc(sumWithInitial)}
                                         </TableCell>
                                     </TableRow>
                                 </TableBody>
@@ -224,7 +224,7 @@ const CookingBatch = () => {
                                         <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
                                         <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
                                         {BatchOrderByIdData?.map((i, index) => {
-                                          
+
                                             return (
                                                 <TableCell key={index} style={{ width: 250, fontWeight: '800' }} align="center">
                                                     Order: {i?._id?.substring(i?._id?.length - 5)}
@@ -255,7 +255,7 @@ const CookingBatch = () => {
                                             <TableRow key={index}>
                                                 <TableCell style={{ width: 250 }} align="center">{index + 1}</TableCell>
                                                 <TableCell style={{ width: 250 }} align="center">{i?.key}</TableCell>
-                                                <TableCell style={{ width: 250 }} align="center">{i?.CookingVolume?.toFixed(2)}</TableCell>
+                                                <TableCell style={{ width: 250 }} align="center">{Math.trunc(i?.CookingVolume)}</TableCell>
                                                 {BatchOrderByIdData?.map((x, index) => {
                                                     let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
                                                     let anOther = updatedData?.filter((u) => u?.name == i?.key);
@@ -265,7 +265,7 @@ const CookingBatch = () => {
 
                                                     return (
                                                         <TableCell style={{ width: 250 }} key={index} align="center">
-                                                            {anOther?.length > 0 ? adjustedWeight?.toFixed(2) : '--'}
+                                                            {anOther?.length > 0 ? Math.trunc(adjustedWeight) : '--'}
                                                         </TableCell>
                                                     );
                                                 })}
@@ -276,7 +276,7 @@ const CookingBatch = () => {
                                         <TableCell style={{ width: 250 }} align="center"></TableCell>
                                         <TableCell style={{ width: 250 }} align="center"></TableCell>
                                         <TableCell style={{ width: 250, fontWeight: '700' }} align="center">
-                                            {sumWithadjustedWeight?.toFixed(2)}
+                                            {Math.trunc(sumWithadjustedWeight)}
                                         </TableCell>
 
                                         {BatchOrderByIdData?.map((x, index) => {
@@ -286,11 +286,11 @@ const CookingBatch = () => {
                                                 let matched = matchingItem !== undefined && matchingItem !== null && u?.value * (1 + parseFloat(matchingItem?.ContingencyFactor?.replace('%', '')) / 100);
                                                 return { value: matched };
                                             })
-                                           
+
                                             const newSum = newS?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
                                             return (
                                                 <TableCell style={{ width: 250, fontWeight: '700' }} key={index} align="center">
-                                                    {newSum?.toFixed(2)}
+                                                    {Math.trunc(newSum)}
                                                 </TableCell>
                                             );
                                         })}
@@ -340,7 +340,7 @@ const CookingBatch = () => {
                                                 <TableCell style={{ width: 250 }} align="center"></TableCell>
                                                 {FeedingData?.map((x, secned) => {
                                                     return <TableCell style={{ width: 250 }} key={secned} align="center">
-                                                        {FeedingData?.[secned]?.[firstindex]?.value}
+                                                        {Math.trunc(FeedingData?.[secned]?.[firstindex]?.value)}
                                                     </TableCell>
                                                 })}
                                             </TableRow>
@@ -378,7 +378,7 @@ const CookingBatch = () => {
                                                 {FeedingData?.map((x, secned) => {
                                                     let updatedPouches = FeedingData?.[secned]?.[firstindex]?.value / PuchesData?.[secned]?.pet?.feedingRoutine;
                                                     return <TableCell style={{ width: 250 }} key={secned} align="center">
-                                                        {updatedPouches >= 400 && updatedPouches <= 800 ? updatedPouches / 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? updatedPouches / 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? updatedPouches / 4 : updatedPouches}
+                                                        {updatedPouches >= 400 && updatedPouches <= 800 ? Math.trunc(updatedPouches / 2) : updatedPouches >= 800 && updatedPouches <= 1200 ? Math.trunc(updatedPouches / 3) : updatedPouches >= 1200 && updatedPouches <= 1600 ? Math.trunc(updatedPouches / 4) : Math.trunc(updatedPouches)}
                                                     </TableCell>
                                                 })}
                                             </TableRow>

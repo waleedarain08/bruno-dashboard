@@ -42,6 +42,7 @@ import ImageUploader from 'ui-component/ImageUploader';
 import { handleUpload } from 'utils/helperFunction';
 import RichTextEditor from 'components/RichTextEditor';
 import HtmlViwser from 'components/htmlViwser';
+import moment from 'moment/moment';
 
 const style = {
   position: 'absolute',
@@ -96,6 +97,7 @@ const BlogFAQ = () => {
   const [PreviewEdit, setPreviewEdit] = React.useState([]);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [Featured, setFeatured] = React.useState(false);
+  const [order, setorder] = React.useState(0);
   const [Types, setTypes] = React.useState('');
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const rows = useSelector((state) => state.BlogsfaqsReducer.data);
@@ -108,6 +110,7 @@ const BlogFAQ = () => {
   const [Delete_Id, setDelete_Id] = React.useState(null);
   const [Process, setProcess] = React.useState('Add');
   const [Error, setError] = React.useState('');
+  console.log(rows, 'rows');
   const handleOpen = () => {
     setOpen(true);
     setProcess('Add');
@@ -145,14 +148,15 @@ const BlogFAQ = () => {
         isFeatured: Featured,
         description: description,
         type: Types,
+        order: order,
         media:
           Types === 'FAQ'
             ? []
             : selectedFiles?.length > 0
-              ? newPath
-              : PreviewEdit?.length > 0
-                ? PreviewEdit
-                : setError('Please Select Image')
+            ? [...PreviewEdit, ...newPath]
+            : PreviewEdit?.length > 0
+            ? PreviewEdit
+            : setError('Please Select Image')
       };
       if (Process === 'Add') {
         dispatch({ type: actionTypes.isLoadingadd });
@@ -187,6 +191,7 @@ const BlogFAQ = () => {
     setdescription(data?.description);
     setFeatured(data?.isFeatured);
     setTypes(data?.type);
+    setorder(data?.order);
     setOpen(true);
     setError('');
   };
@@ -197,6 +202,7 @@ const BlogFAQ = () => {
 
   const InitialState = () => {
     settitle('');
+    setorder(0);
     setdescription('');
     setFeatured(false);
     setSelectedFiles([]);
@@ -216,11 +222,10 @@ const BlogFAQ = () => {
   };
   const isRepliedChange = (value, id) => {
     let newData = {
-      isReplied: value,
-
-    }
+      isReplied: value
+    };
     dispatch(EditBlogsNnews(id, newData, Userdata?.clientToken, onSuccess));
-  }
+  };
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -262,23 +267,35 @@ const BlogFAQ = () => {
                     <MenuItem value={'blogs'}>Blogs</MenuItem>
                     <MenuItem value={'greetings'}>Greetings</MenuItem>
                     <MenuItem value={'banners'}>Banners</MenuItem>
-
-
                   </Select>
                 </FormControl>
               </Box>
               {Types === 'FAQ' ? (
-                <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
-                  <StyledTextarea
-                    value={description}
-                    onChange={(e) => setdescription(e.target.value)}
-                    style={{ width: '100%', height: 50, marginTop: 7 }}
-                    maxRows={5}
-                    aria-label="maximum height"
-                    placeholder="Description"
-                    defaultValue=""
-                  />
-                </Box>
+                <>
+                  <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
+                    <TextField
+                      value={order}
+                      onChange={(e) => setorder(e.target.value)}
+                      style={{ margin: 5 }}
+                      type={'number'}
+                      sx={{ width: '100%' }}
+                      id="outlined-basic"
+                      placeholder="Order"
+                      variant="outlined"
+                    />
+                  </Box>
+                  <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
+                    <StyledTextarea
+                      value={description}
+                      onChange={(e) => setdescription(e.target.value)}
+                      style={{ width: '100%', height: 50, marginTop: 7 }}
+                      maxRows={5}
+                      aria-label="maximum height"
+                      placeholder="Description"
+                      defaultValue=""
+                    />
+                  </Box>
+                </>
               ) : (
                 <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
                   <div style={{ marginLeft: 10, maxHeight: 300, overflowY: 'scroll', width: '100%' }}>
@@ -438,8 +455,6 @@ const BlogFAQ = () => {
                 <MenuItem value={'greetings'}>Greetings</MenuItem>
                 <MenuItem value={'blogs'}>Blogs</MenuItem>
                 <MenuItem value={'banners'}>Banners</MenuItem>
-
-
               </Select>
             </FormControl>
           </Box>
@@ -447,23 +462,32 @@ const BlogFAQ = () => {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
+                {typeforView === 'FAQ' ? (
+                  <TableCell align="left">Order</TableCell>
+                ):(<TableCell align="left">ID</TableCell>)}
                   <TableCell align="left">Title</TableCell>
                   <TableCell align="center">Description</TableCell>
-                  {typeforView === "feedback" && <>
-                    <TableCell align="center">User Name</TableCell>
-                    <TableCell align="center">Email</TableCell>
-                  </>}
+                  {typeforView === 'feedback' && (
+                    <>
+                      <TableCell align="center">User Name</TableCell>
+                      <TableCell align="center">Email</TableCell>
+                    </>
+                  )}
 
                   {typeforView !== 'FAQ' && <TableCell align="center">Media</TableCell>}
                   <TableCell align="center">Type</TableCell>
+                  <TableCell align="center">Published Date</TableCell>
                   <TableCell align="center">isFeature</TableCell>
-                  {typeforView === "feedback" && <TableCell align="center">Replied</TableCell>}
+                  {typeforView === 'feedback' && <TableCell align="center">Replied</TableCell>}
                   <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
                   <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell component="th" scope="row">
+                      {typeforView !== 'FAQ'? row?._id.substr(row?._id.length - 4): row?.order}
+                    </TableCell>
                     <TableCell component="th" scope="row">
                       {row?.title.length > 30 ? <>{row?.title.substring(0, 30)}...</> : <>{row?.title}</>}
                     </TableCell>
@@ -476,12 +500,16 @@ const BlogFAQ = () => {
                         <>{row?.description}</>
                       )}
                     </TableCell>
-                    {typeforView === "feedback" && <>
-                      <TableCell align="center">{row?.user?.fullName}</TableCell>
-                    </>}
-                    {typeforView === "feedback" && <>
-                      <TableCell align="center">{row?.user?.email}</TableCell>
-                    </>}
+                    {typeforView === 'feedback' && (
+                      <>
+                        <TableCell align="center">{row?.user?.fullName}</TableCell>
+                      </>
+                    )}
+                    {typeforView === 'feedback' && (
+                      <>
+                        <TableCell align="center">{row?.user?.email}</TableCell>
+                      </>
+                    )}
                     {typeforView !== 'FAQ' && (
                       <TableCell align="center">
                         {row?.media?.length > 0 ? (
@@ -500,14 +528,16 @@ const BlogFAQ = () => {
                       </TableCell>
                     )}
 
-
                     <TableCell align="center">{row?.type}</TableCell>
+                    <TableCell align="center">{moment(row?.createdOnDate).format('DD/MM/YYYY')}</TableCell>
                     <TableCell align="center">{row?.isFeatured === true ? 'true' : 'false'}</TableCell>
-                    {typeforView === "feedback" && <>
-                      <TableCell align="center">
-                        <Checkbox onChange={() => isRepliedChange(true, row?._id)} checked={row?.isReplied} on name="isReplied" />
-                      </TableCell>
-                    </>}
+                    {typeforView === 'feedback' && (
+                      <>
+                        <TableCell align="center">
+                          <Checkbox onChange={() => isRepliedChange(true, row?._id)} checked={row?.isReplied} on name="isReplied" />
+                        </TableCell>
+                      </>
+                    )}
                     <TableCell align="right">
                       <BorderColorIcon onClick={() => onEditClick(row)} style={{ marginRight: 2, cursor: 'pointer' }} />
                       <DeleteIcon onClick={() => onDeleteClick(row?._id)} style={{ marginLeft: 2, cursor: 'pointer' }} />

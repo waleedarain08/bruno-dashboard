@@ -50,7 +50,8 @@ const ProductCategories = () => {
   const [value, setValue] = React.useState('');
   const [NameRecipe, setNameRecipe] = React.useState('');
   const [KG, setKG] = React.useState('');
-  const [Categoryes, setCategoryes] = React.useState("");
+  const [Categoryes, setCategoryes] = React.useState('');
+  const [Weight, setWeight] = React.useState('');
   const [Details, setDetails] = React.useState('');
   const [Description, setDescription] = React.useState('');
   const [Featured, setFeatured] = React.useState(false);
@@ -62,20 +63,19 @@ const ProductCategories = () => {
   const [SelectedId, setSelectedId] = React.useState(null);
   const [fields, setFields] = React.useState([{ name: '', price: null }]);
 
-
   const InitialState = () => {
-    setNameRecipe("");
-    setKG("");
-    setDetails("");
-    setDescription("");
-    setFeatured("");
+    setNameRecipe('');
+    setKG('');
+    setDetails('');
+    setDescription('');
+    setFeatured('');
     setSelectedFiles([]);
     setPreviewEdit([]);
-    setSelectedId(null)
-  }
+    setSelectedId(null);
+  };
 
   const onAddRecipeBtn = () => {
-    setCondition("Add");
+    setCondition('Add');
     InitialState();
     setOpen(true);
   };
@@ -99,13 +99,15 @@ const ProductCategories = () => {
     setFields([...fields, { name: '', price: null }]);
   };
 
+  console.log(location?.state, 'location?.state');
+
   const handleClose = () => setOpen(false);
-  const [rows, setrows] = React.useState([])
+  const [rows, setrows] = React.useState([]);
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const allData = useSelector((state) => state.CategoryReducer.data);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
-  const newRows = filterProdcuts?.recipe?.filter((i) => i?.category !== "" && i?.category === location?.state);
-  const isLoading = useSelector((state) => state.RecipeReducer.isLoading)
+  const newRows = filterProdcuts?.recipe?.filter((i) => i?.category !== '' && i?.category === location?.state);
+  const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetAllRecipes(Userdata?.clientToken));
@@ -113,13 +115,12 @@ const ProductCategories = () => {
   }, []);
 
   React.useEffect(() => {
-    if (value !== "") {
-      const filteredData = newRows?.filter(item => {
+    if (value !== '') {
+      const filteredData = newRows?.filter((item) => {
         return item?.name?.toLowerCase()?.includes(value?.toLowerCase()) || item?._id?.toLowerCase()?.includes(value?.toLowerCase());
       });
       setrows(filteredData);
-    }
-    else {
+    } else {
       setrows(newRows);
     }
   }, [filterProdcuts, value]);
@@ -127,7 +128,7 @@ const ProductCategories = () => {
   const allcategories = allData?.map((i) => {
     return {
       _id: i?._id,
-      name: i?.name,
+      name: i?.name
     };
   });
 
@@ -137,19 +138,17 @@ const ProductCategories = () => {
     handleClose();
   };
 
-  console.log(fields, "fields")
-
   const onSave = async () => {
     if (
       NameRecipe !== '' &&
       Description !== '' &&
       KG != 0 &&
       Details != '' &&
-      (fields.length === 0 || fields.some(field => field.name !== '' && field.price > 0))
+      (fields.length === 0 || fields.some((field) => field.name !== '' && field.price > 0))
     ) {
       setError('');
       setLoading(true);
-      if (Condition === "Add") {
+      if (Condition === 'Add') {
         const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
         let newdata = {
           name: NameRecipe,
@@ -159,20 +158,20 @@ const ProductCategories = () => {
           pricePerKG: parseInt(KG),
           media: newPath,
           category: Categoryes,
-          recipeNo: "",
-          ingredientsComposition: "",
+          weight: Weight,
+          recipeNo: '',
+          ingredientsComposition: '',
           sizes: fields,
           price1: 0,
           price2: 0,
           price3: 0,
           price4: 0,
           price5: 0,
-          price6: 0,
+          price6: 0
         };
-        console.log(newdata, "newdata")
+        console.log(newdata, 'newdata');
         dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
-      }
-      else {
+      } else {
         if (selectedFiles?.length > 0) {
           const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
           let newdata = {
@@ -182,20 +181,20 @@ const ProductCategories = () => {
             details: Details,
             pricePerKG: parseInt(KG),
             media: newPath,
+            weight: Weight,
             category: Categoryes,
-            recipeNo: "",
-            ingredientsComposition: "",
+            recipeNo: '',
+            ingredientsComposition: '',
             sizes: fields,
             price1: 0,
             price2: 0,
             price3: 0,
             price4: 0,
             price5: 0,
-            price6: 0,
+            price6: 0
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
-        }
-        else {
+        } else {
           let newdata = {
             name: NameRecipe,
             isFeatured: Featured,
@@ -203,16 +202,17 @@ const ProductCategories = () => {
             details: Details,
             pricePerKG: parseInt(KG),
             media: PreviewEdit,
+            weight: Weight,
             category: Categoryes,
-            recipeNo: "",
-            ingredientsComposition: "",
+            recipeNo: '',
+            ingredientsComposition: '',
             sizes: fields,
             price1: 0,
             price2: 0,
             price3: 0,
             price4: 0,
             price5: 0,
-            price6: 0,
+            price6: 0
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         }
@@ -232,26 +232,28 @@ const ProductCategories = () => {
     }
   };
 
-  let SizesData = [{
-    name: "Small"
-  },
-  {
-    name: "Medium"
-  },
-  {
-    name: "Large"
-  },
-  {
-    name: "Extra Large"
-  }]
-
+  let SizesData = [
+    {
+      name: 'Small'
+    },
+    {
+      name: 'Medium'
+    },
+    {
+      name: 'Large'
+    },
+    {
+      name: 'Extra Large'
+    }
+  ];
 
   const EditValues = (data) => {
-    console.log(data, "data")
-    setCondition("Edit");
-    setSelectedId(data?._id)
-    setNameRecipe(data?.name)
-    setKG(data?.pricePerKG)
+    console.log(data, 'data');
+    setCondition('Edit');
+    setWeight(data?.weight);
+    setSelectedId(data?._id);
+    setNameRecipe(data?.name);
+    setKG(data?.pricePerKG);
     setDetails(data?.details);
     setDescription(data?.description);
     setFeatured(data?.isFeatured);
@@ -259,7 +261,7 @@ const ProductCategories = () => {
     setCategoryes(data?.category);
     setFields(data?.sizes);
     // console.log(data, "data")
-  }
+  };
   return (
     <Box sx={{ width: '100%' }}>
       <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
@@ -299,9 +301,11 @@ const ProductCategories = () => {
                   <InputLabel>Size</InputLabel>
                   <Select value={field?.name} onChange={(e) => handleSelectChange(index, e.target.value)}>
                     {SizesData?.map((i, index) => {
-                      return <MenuItem key={index} value={i?.name}>
-                        {i?.name}
-                      </MenuItem>
+                      return (
+                        <MenuItem key={index} value={i?.name}>
+                          {i?.name}
+                        </MenuItem>
+                      );
                     })}
                   </Select>
                 </FormControl>
@@ -332,6 +336,19 @@ const ProductCategories = () => {
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
+              value={Weight}
+              onChange={(e) => setWeight(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              type={'number'}
+              id="outlined-basic"
+              label="Weight (non-mandatory)"
+              variant="outlined"
+            />
+          </Box>
+
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <TextField
               value={KG}
               onChange={(e) => setKG(e.target.value)}
               style={{ margin: 5 }}
@@ -355,7 +372,6 @@ const ProductCategories = () => {
                 })}
               </Select>
             </FormControl>
-
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
@@ -375,7 +391,13 @@ const ProductCategories = () => {
             control={<Switch checked={Featured} onChange={() => setFeatured(!Featured)} />}
             label="Featured"
           />
-          <ImageUploader imageCount={5} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} setSelectedFiles={setSelectedFiles} selectedFiles={selectedFiles} />
+          <ImageUploader
+            imageCount={5}
+            PreviewEdit={PreviewEdit}
+            setPreviewEdit={setPreviewEdit}
+            setSelectedFiles={setSelectedFiles}
+            selectedFiles={selectedFiles}
+          />
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
               {Error}
@@ -413,11 +435,20 @@ const ProductCategories = () => {
         </Paper>
       ) : (
         <Paper style={{ paddingBottom: 4 }} sx={{ width: '100%', mb: 2 }}>
-
           <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} sx={{ width: '100%' }}>
             <div style={{ marginLeft: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ border: "1px solid #D78809", width: 30, display: "flex", justifyContent: "center", borderRadius: 50, margin: 5, padding: 2 }}>
-                <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: "#D78809" }} />
+              <div
+                style={{
+                  border: '1px solid #D78809',
+                  width: 30,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  borderRadius: 50,
+                  margin: 5,
+                  padding: 2
+                }}
+              >
+                <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: '#D78809' }} />
               </div>
               <SearchFeild setValue={setValue} value={value} />
             </div>
@@ -425,7 +456,6 @@ const ProductCategories = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <AnimateButton>
                 <Button
-
                   onClick={() => onAddRecipeBtn()}
                   style={{ margin: '12px' }}
                   variant="contained"
@@ -447,8 +477,8 @@ const ProductCategories = () => {
                 </Button>
               </AnimateButton>
             </div>
-
           </Box>
+          <h2 style={{ textAlign: 'center' }}>{location?.state}</h2>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
               {rows?.map((i, index) => {

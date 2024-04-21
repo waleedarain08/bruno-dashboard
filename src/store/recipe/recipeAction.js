@@ -30,7 +30,6 @@ export const AddRecipe = (data, token, setLoading, onSuccess, isStandard, callAg
     Post(`recipe/`, data, token)
       .then(function (response) {
         if (response?.isSuccess) {
-          console.log(isStandard,"isStandard")
           if (isStandard) {
             let newData = data;
             newData.category = "standard recipe";

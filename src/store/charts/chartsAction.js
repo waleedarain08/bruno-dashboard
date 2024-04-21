@@ -23,3 +23,47 @@ export const chatsApi = (data) => {
       });
   };
 };
+
+export const GrowthApi = (data, token) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.LoadingChartGrowth });
+    Get(`order/growth?year=${data}`, token)
+      .then(function (response) {
+        if (response?.isSuccess) {
+          dispatch({
+            type: actionTypes.SuccessChartGrowth,
+            payload: response?.data
+          });
+        } else {
+          dispatch({ type: actionTypes.FailedChartGrowth });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.FailedChartGrowth });
+      });
+  };
+};
+
+export const TendingApi = (start, end, token) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.LoadingChartStartEnd });
+    Get(`recipe/trending?startingDate=${start}&endingDate=${end}`, token)
+      .then(function (response) {
+        if (response?.isSuccess) {
+          dispatch({
+            type: actionTypes.SuccessChartStartEnd,
+            payload: response?.data
+          });
+        } else {
+          dispatch({ type: actionTypes.FailedChartStartEnd });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.FailedChartStartEnd });
+      });
+  };
+};

@@ -128,7 +128,7 @@ const UserAccounts = () => {
                       </Button>
                     </TableCell>
                     <TableCell align="center">{row?.lastOrderDate ? row?.lastOrderDate : "N/A"}</TableCell>
-                    <TableCell align="center">{row?.availablePoints}</TableCell>
+                    <TableCell align="center">{Math?.trunc(row?.availablePoints)}</TableCell>
                     <TableCell align="right">
                       <Switch value={row?.isBlock} color="warning" />
                     </TableCell>

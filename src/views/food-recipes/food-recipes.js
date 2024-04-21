@@ -79,6 +79,7 @@ const FoodRecipes = () => {
   const [Nnutrition, setNnutrition] = React.useState('');
   const [LifeStage, setLifeStage] = React.useState('Adult');
   const [KG, setKG] = React.useState('');
+  const [expiryPeriod, setexpiryPeriod] = React.useState('');
   const [ContentNo, setContentNo] = React.useState(0);
   const [PriceOne, setPriceOne] = React.useState(0);
   const [PriceTwo, setPriceTwo] = React.useState(0);
@@ -113,6 +114,7 @@ const FoodRecipes = () => {
 
   const InitialState = () => {
     setNameRecipe('');
+    setexpiryPeriod('');
     setRecipeNo(0);
     setPriceOne(0);
     setPriceTwo(0);
@@ -123,7 +125,7 @@ const FoodRecipes = () => {
     setNnutrition('');
     setLifeStage('');
     setKG('');
-    setIngredientsComposition("");
+    setIngredientsComposition('');
     setContentNo(0);
     setInstructions('');
     setDetails('');
@@ -134,7 +136,7 @@ const FoodRecipes = () => {
     setPreviewEdit([]);
     setPreviewTableEdit([]);
     setSelectedId(null);
-    setstandaloneSize("")
+    setstandaloneSize('');
     setFields([{ name: '', aggregate: 0 }]);
   };
 
@@ -166,13 +168,12 @@ const FoodRecipes = () => {
   const Newrows = filterProdcuts?.recipe?.filter((i) => i?.category === '');
 
   React.useEffect(() => {
-    if (value !== "") {
-      const filteredData = Newrows?.filter(item => {
+    if (value !== '') {
+      const filteredData = Newrows?.filter((item) => {
         return item?.name?.toLowerCase()?.includes(value?.toLowerCase());
       });
       setrows(filteredData);
-    }
-    else {
+    } else {
       setrows(Newrows);
     }
   }, [filterProdcuts, value]);
@@ -211,9 +212,10 @@ const FoodRecipes = () => {
       ContentNo != 0 &&
       Nnutrition != '' &&
       Instructions != '' &&
-      IngredientsComposition != "" &&
+      IngredientsComposition != '' &&
       LifeStage != '' &&
-      standaloneSize != ""
+      standaloneSize != '' &&
+      expiryPeriod != ''
     ) {
       setError('');
       setLoading(true);
@@ -228,7 +230,7 @@ const FoodRecipes = () => {
           const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
           const table_Images = await Promise.all(selectedTableFiles?.map(async (i) => await ImageUpload(i)));
           let newdata = {
-            category: "",
+            category: '',
             name: NameRecipe,
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
@@ -238,6 +240,7 @@ const FoodRecipes = () => {
             instructions: Instructions,
             nutrition: Nnutrition,
             pricePerKG: parseInt(KG),
+            expiryPeriod: expiryPeriod,
             media: newPath,
             tableImage: table_Images,
             recipeNo: RecipeNo,
@@ -267,19 +270,22 @@ const FoodRecipes = () => {
           });
           const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
           const table_Images = await Promise.all(selectedTableFiles?.map(async (i) => await ImageUpload(i)));
+          let allmedia = PreviewEdit;
+          let alltableImage = PreviewTableEdit;
           let newdata = {
-            category: "",
+            category: '',
             name: NameRecipe,
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
             ingredient: NewValues,
             description: Description,
+            expiryPeriod: expiryPeriod,
             details: Details,
             instructions: Instructions,
             nutrition: Nnutrition,
             pricePerKG: parseInt(KG),
-            media: newPath,
-            tableImage: table_Images,
+            media: [...allmedia, ...newPath],
+            tableImage: [...alltableImage, ...table_Images],
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
             ingredientsComposition: IngredientsComposition,
@@ -301,7 +307,7 @@ const FoodRecipes = () => {
             };
           });
           let newdata = {
-            category: "",
+            category: '',
             name: NameRecipe,
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
@@ -315,6 +321,7 @@ const FoodRecipes = () => {
             tableImage: PreviewTableEdit,
             recipeNo: RecipeNo,
             lifeStage: LifeStage,
+            expiryPeriod: expiryPeriod,
             ingredientsComposition: IngredientsComposition,
             caloriesContentNo: parseInt(ContentNo),
             price1: parseInt(PriceOne),
@@ -322,7 +329,7 @@ const FoodRecipes = () => {
             price3: parseInt(PriceThree),
             price4: parseInt(PriceFour),
             price5: parseInt(PriceFive),
-            price6: parseInt(PriceSix),
+            price6: parseInt(PriceSix)
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         }
@@ -344,9 +351,10 @@ const FoodRecipes = () => {
   const callAgain = (newdata) => {
     dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess, false, emptyCheck));
   };
-  let emptyCheck = () => { }
+  let emptyCheck = () => {};
 
   const EditValues = (data) => {
+    console.log(data, 'data');
     setCondition('Edit');
     setSelectedId(data?._id);
     setNameRecipe(data?.name);
@@ -359,7 +367,7 @@ const FoodRecipes = () => {
     setDetails(data?.details);
     setDescription(data?.description);
     setFeatured(data?.isFeatured);
-    setisComboRecipe(data?.isComboRecipe)
+    setisComboRecipe(data?.isComboRecipe);
     setPreviewEdit(data?.media);
     setPreviewTableEdit(data?.tableImage);
     setFields(data?.ingredient);
@@ -370,10 +378,9 @@ const FoodRecipes = () => {
     setPriceFour(data?.price4);
     setPriceFive(data?.price5);
     setPriceSix(data?.price6);
-    setstandaloneSize(data?.standaloneSize)
-
+    setstandaloneSize(data?.standaloneSize);
+    setexpiryPeriod(data?.expiryPeriod);
   };
-
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -492,6 +499,17 @@ const FoodRecipes = () => {
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
+              value={expiryPeriod}
+              onChange={(e) => setexpiryPeriod(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              id="outlined-basic"
+              placeholder="Expiry Period"
+              variant="outlined"
+            />
+          </Box>
+          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <TextField
               value={standaloneSize}
               onChange={(e) => setstandaloneSize(e.target.value)}
               style={{ margin: 5 }}
@@ -500,10 +518,7 @@ const FoodRecipes = () => {
               placeholder="Standalone Size(e.g. 400 grams / 1 Liter/ 1 Can / etc...)"
               variant="outlined"
             />
-
           </Box>
-
-
 
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <FormControl sx={{ width: '100%', marginTop: 0.7 }}>
@@ -670,19 +685,29 @@ const FoodRecipes = () => {
             label="Combo Recipe"
           />
           <FormControlLabel
-            control={
-              <Checkbox checked={isStandard} onChange={() => setisStandard(!isStandard)} name="standard_Recipe" />
-            }
+            control={<Checkbox checked={isStandard} onChange={() => setisStandard(!isStandard)} name="standard_Recipe" />}
             label="Standalone Recipe"
           />
-          <Box style={{ display: 'flex', justifyContent: 'space-between', }} sx={{ width: '100%' }}>
+          <Box style={{ display: 'flex', justifyContent: 'space-between' }} sx={{ width: '100%' }}>
             <div>
               <p>Recipe Images : </p>
-              <ImageUploader imageCount={5} PreviewEdit={PreviewEdit} setPreviewEdit={setPreviewEdit} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} />
+              <ImageUploader
+                imageCount={5}
+                PreviewEdit={PreviewEdit}
+                setPreviewEdit={setPreviewEdit}
+                selectedFiles={selectedFiles}
+                setSelectedFiles={setSelectedFiles}
+              />
             </div>
             <div>
-              <p>Table Image </p>
-              <ImageUploader imageCount={1} PreviewEdit={PreviewTableEdit} setPreviewEdit={setPreviewTableEdit} selectedFiles={selectedTableFiles} setSelectedFiles={setSelectedTableFiles} />
+              <p>Table Images : </p>
+              <ImageUploader
+                imageCount={1}
+                PreviewEdit={PreviewTableEdit}
+                setPreviewEdit={setPreviewTableEdit}
+                selectedFiles={selectedTableFiles}
+                setSelectedFiles={setSelectedTableFiles}
+              />
             </div>
           </Box>
           {Error && (
@@ -712,7 +737,6 @@ const FoodRecipes = () => {
               </Button>
             </AnimateButton>
           </Box>
-
         </Box>
       </Modal>
       {isLoading ? (

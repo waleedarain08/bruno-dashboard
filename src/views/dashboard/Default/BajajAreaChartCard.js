@@ -14,11 +14,12 @@ import chartData from './chart-data/bajaj-area-chart';
 
 // ===========================|| DASHBOARD DEFAULT - BAJAJ AREA CHART CARD ||=========================== //
 
-const BajajAreaChartCard = () => {
+const BajajAreaChartCard = ({ firstElement }) => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const { navType } = customization;
 
+  console.log(firstElement, 'firstElement');
   const orangeDark = theme.palette.secondary[800];
 
   useEffect(() => {
@@ -39,12 +40,7 @@ const BajajAreaChartCard = () => {
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item>
               <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.dark }}>
-              Cheerful Chicken
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="h4" sx={{ color: theme.palette.grey[800] }}>
-                AED 693
+                {firstElement?.[0]?.name}
               </Typography>
             </Grid>
           </Grid>

@@ -61,7 +61,6 @@ const CookingSheet = () => {
   const [FiltredData, setFiltredData] = React.useState([]);
   const { state } = useLocation();
   const [value, setValue] = React.useState('');
-  console.log(FiltredData, "FiltredData")
 
 
   useEffect(() => {
