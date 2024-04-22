@@ -66,6 +66,7 @@ const PetsProfile = () => {
                   <TableCell align="left">Owner</TableCell>
                   <TableCell align="left">Current Weight</TableCell>
                   <TableCell align="right">Actual Weight</TableCell>
+                  <TableCell align="right">Activity Level</TableCell>
                 </TableRow>
               </TableHead>
               {rows?.length > 0 ? (
@@ -84,6 +85,7 @@ const PetsProfile = () => {
                       <TableCell align="left">{row?.user?.fullName}</TableCell>
                       <TableCell align="left">{row?.currentWeight} kg</TableCell>
                       <TableCell align="right">{row?.actualWeight} kg</TableCell>
+                      <TableCell align="right">{row?.activityLevel} </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

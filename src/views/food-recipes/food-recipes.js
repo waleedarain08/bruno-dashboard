@@ -504,7 +504,8 @@ const FoodRecipes = () => {
               style={{ margin: 5 }}
               sx={{ width: '100%' }}
               id="outlined-basic"
-              placeholder="Expiry Period"
+              placeholder="Expiry Period In Months"
+              label="Expiry Period In Months"
               variant="outlined"
             />
           </Box>
