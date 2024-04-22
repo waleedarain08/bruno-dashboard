@@ -1,6 +1,6 @@
-import React from 'react';
+//import React from 'react';
 // material-ui
-import { Typography } from '@mui/material';
+//import { Typography } from '@mui/material';
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -17,7 +17,7 @@ import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 // project imports
-import MainCard from 'ui-component/cards/MainCard';
+//import MainCard from 'ui-component/cards/MainCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
 import { useSelector, useDispatch } from 'react-redux';

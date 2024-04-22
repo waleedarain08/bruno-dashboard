@@ -8,19 +8,11 @@ async function Post(path, data, token) {
     url: url,
     headers: token
       ? {
-<<<<<<< HEAD
-        "Content-Type": "application/json",
-        Authorization: `${token}`
-      }
-      : {
-        "Content-Type": "application/json"
-=======
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       }
       : {
         'Content-Type': 'application/json'
->>>>>>> feature/Recipe
       },
     data: data
   };
@@ -37,19 +29,11 @@ async function Get(path, token) {
     url: url,
     headers: token
       ? {
-<<<<<<< HEAD
-        Accept: "multipart/form-data",
-        Authorization: `${token}`
-      }
-      : {
-        Accept: "application/json"
-=======
         Accept: 'application/json',
         Authorization: `Bearer ${token}`
       }
       : {
         Accept: 'application/json'
->>>>>>> feature/Recipe
       }
   };
   let response = await axios(config);
@@ -61,19 +45,11 @@ async function Put(path, data, token) {
   let response = await axios.put(url, data, {
     headers: token
       ? {
-<<<<<<< HEAD
-        Accept: "multipart/form-data",
-        Authorization: `${token}`
-      }
-      : {
-        Accept: "application/json"
-=======
         Accept: 'application/json',
         Authorization: `Bearer ${token}`
       }
       : {
         Accept: 'application/json'
->>>>>>> feature/Recipe
       }
   });
 
@@ -86,19 +62,11 @@ async function Delete(path, token) {
   let response = await axios.delete(url, {
     headers: token
       ? {
-<<<<<<< HEAD
-        Accept: "multipart/form-data",
-        Authorization: `Bearer ${token}`
-      }
-      : {
-        Accept: "application/json"
-=======
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       }
       : {
         Accept: 'application/json'
->>>>>>> feature/Recipe
       }
   });
 
@@ -110,19 +78,11 @@ async function Patch(path, data, token) {
   let response = await axios.patch(url, data, {
     headers: token
       ? {
-<<<<<<< HEAD
-        Accept: "multipart/form-data",
-        Authorization: `${token}`
-      }
-      : {
-        Accept: "application/json"
-=======
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`
       }
       : {
         Accept: 'application/json'
->>>>>>> feature/Recipe
       }
   });
 

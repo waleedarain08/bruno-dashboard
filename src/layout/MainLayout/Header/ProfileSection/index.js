@@ -38,7 +38,7 @@ import User1 from 'assets/images/users/dummy-image.jpeg';
 
 // assets
 import { IconLogout, IconSettings } from '@tabler/icons';
-import { useDispatch } from 'react-redux';
+//import { useDispatch } from 'react-redux';
 
 // ==============================|| PROFILE MENU ||============================== //
 
