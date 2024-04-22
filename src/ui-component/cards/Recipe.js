@@ -197,7 +197,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
                 Standalone Price : {data?.pricePerKG}
               </Typography>
               <Typography style={{ fontWeight: 'bold' }} paragraph>
-                Expiry Period : {data?.expiryPeriod}
+                Expiry Period In Months: {data?.expiryPeriod}
               </Typography>
               <Typography style={{ fontWeight: 'bold', marginTop: 16 }}>Ingredients:</Typography>
               {data?.ingredient?.map((i, index) => {
