@@ -7,7 +7,7 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 
 // dashboard routing
-const Cookingsheet = Loadable(lazy(() => import('views/cooking-sheet/cooking-sheet')));
+const Cookingsheet = Loadable(lazy(() => import('views/oldShookingSheet/cooking-sheet-old')));
 
 
 // ==============================|| MAIN ROUTING ||============================== //

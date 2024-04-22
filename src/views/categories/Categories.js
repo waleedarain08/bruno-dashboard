@@ -21,22 +21,11 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+// import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { GetAllCategories, DeleteCategories, SaveCategories, EditCategories } from 'store/categories/categoriesAction';
 
-// const grey = {
-//   50: '#f6f8fa',
-//   100: '#eaeef2',
-//   200: '#d0d7de',
-//   300: '#afb8c1',
-//   400: '#8c959f',
-//   500: '#6e7781',
-//   600: '#57606a',
-//   700: '#424a53',
-//   800: '#32383f',
-//   900: '#24292f'
-// };
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -48,32 +37,6 @@ const style = {
   boxShadow: 24,
   p: 4
 };
-// const StyledTextarea = styled(TextareaAutosize)(
-//   ({ theme }) => `
-//     width: 320px;
-//     font-family: IBM Plex Sans, sans-serif;
-//     font-size: 0.875rem;
-//     font-weight: 400;
-//     line-height: 1.5;
-//     padding: 12px;
-//     border-radius: 12px 12px 0 12px;
-//     color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
-//     background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-//     border: 2px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-//     box-shadow: 0px 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
-//     &:hover {
-//       border-color: #D78809};
-//     }
-
-//     &:focus {
-//       border-color: #D78809;
-//     }
-//     // firefox
-//     &:focus-visible {
-//       outline: 0;
-//     }
-//   `
-// );
 
 const Categories = () => {
   //   const navigate = useNavigate();
@@ -157,11 +120,7 @@ const Categories = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
-        <div style={{ border: "1px solid #D78809", width: 30, display: "flex", justifyContent: "center", borderRadius: 50, margin: 5, padding: 2 }}>
-          <ArrowBackIcon onClick={() => navigate(-1)} style={{ color: "#D78809" }} />
-        </div>
-      </Box>
+
       <Box sx={{ width: '100%' }}>
         <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
           <Box sx={style}>
@@ -284,7 +243,7 @@ const Categories = () => {
                 <TableBody>
                   {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
                     <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                      <TableCell component="th" scope="row">
+                      <TableCell style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => navigate('/product-categories', { state: row?.name })} component="th" scope="row">
                         {row?.name}
                       </TableCell>
                       <TableCell align="right">

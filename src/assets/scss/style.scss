@@ -126,3 +126,42 @@
     transform: translateX(10px);
   }
 }
+
+.modalContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  .modalContent {
+    background-color: white;
+    padding: 20px;
+    max-width: 500px;
+    width: 100%;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2); /* Optional: Adds a shadow */
+
+    .mapContainer {
+      margin-top: 16px;
+    }
+    .modalInnerView {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modalTitle {
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+    .modalTitlee {
+      font-size: 15px;
+    }
+
+    .modalText {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+  }
+}

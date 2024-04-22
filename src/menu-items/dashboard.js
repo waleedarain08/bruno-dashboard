@@ -5,10 +5,12 @@ import GroupIcon from '@mui/icons-material/Group';
 import GridViewIcon from '@mui/icons-material/GridView';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
 import InventoryIcon from '@mui/icons-material/Inventory';
-import FeedbackIcon from '@mui/icons-material/Feedback';
+//import FeedbackIcon from '@mui/icons-material/Feedback';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import BallotIcon from '@mui/icons-material/Ballot';
 import PercentIcon from '@mui/icons-material/Percent';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+// import SummarizeIcon from '@mui/icons-material/Summarize';
 
 // constant
 // const icons = { IconDashboard };
@@ -53,11 +55,44 @@ const dashboard = {
       breadcrumbs: false
     },
     {
-      id: 'product-categories',
-      title: 'Product-Categories',
+      id: 'categories',
+      title: 'Categories',
       type: 'item',
-      url: '/product-categories',
+      url: '/categories',
       icon: InventoryIcon,
+      breadcrumbs: false
+    },
+
+    {
+      id: 'promo-code&loyality-points',
+      title: 'Promo Codes,Loyalty Points & Delivery Charges',
+      type: 'item',
+      url: '/promo-code&loyality-points',
+      icon: PercentIcon,
+      breadcrumbs: false
+    },
+    // {
+    //   id: 'users-feedback',
+    //   title: 'Users-Feedback',
+    //   type: 'item',
+    //   url: '/users-feedback',
+    //   icon: FeedbackIcon,
+    //   breadcrumbs: false
+    // },
+    {
+      id: 'blog-&-FAQ',
+      title: 'News,FAQ,Blog, Banner, Greeting & Feedback',
+      type: 'item',
+      url: '/blog-&-FAQ',
+      icon: NoteAltIcon,
+      breadcrumbs: false
+    },
+    {
+      id: 'order-list',
+      title: 'Orders',
+      type: 'item',
+      url: '/order-list',
+      icon: FactCheckIcon,
       breadcrumbs: false
     },
     {
@@ -68,31 +103,14 @@ const dashboard = {
       icon: BallotIcon,
       breadcrumbs: false
     },
-
-    {
-      id: 'promo-code&loyality-points',
-      title: 'Promo & Loyality',
-      type: 'item',
-      url: '/promo-code&loyality-points',
-      icon: PercentIcon,
-      breadcrumbs: false
-    },
-    {
-      id: 'users-feedback',
-      title: 'Users-Feedback',
-      type: 'item',
-      url: '/users-feedback',
-      icon: FeedbackIcon,
-      breadcrumbs: false
-    },
-    {
-      id: 'blog-&-FAQ',
-      title: 'Blog & FAQ',
-      type: 'item',
-      url: '/blog-&-FAQ',
-      icon: NoteAltIcon,
-      breadcrumbs: false
-    }
+    // {
+    //   id: 'delivery-report',
+    //   title: 'Delivery-Report',
+    //   type: 'item',
+    //   url: '/delivery-report',
+    //   icon: SummarizeIcon,
+    //   breadcrumbs: false
+    // },
   ]
 };
 

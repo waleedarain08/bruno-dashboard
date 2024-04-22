@@ -24,19 +24,27 @@ export const GetAllRecipes = (data) => {
   };
 };
 
-export const AddRecipe = (data, token, setLoading, onSuccess) => {
+export const AddRecipe = (data, token, setLoading, onSuccess, isStandard, callAgain) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingAdd });
     Post(`recipe/`, data, token)
       .then(function (response) {
-        console.log(response, 'response');
         if (response?.isSuccess) {
-          setLoading(false);
-          onSuccess();
-          dispatch({
-            type: actionTypes.SuccessRecipeAdd,
-            payload: response?.data
-          });
+          if (isStandard) {
+            let newData = data;
+            newData.category = "standard recipe";
+            newData.name = data.name + " "
+            callAgain(data);
+          }
+          else {
+            onSuccess();
+            setLoading(false);
+            dispatch({
+              type: actionTypes.SuccessRecipeAdd,
+              payload: response?.data
+            });
+
+          }
         } else {
           dispatch({ type: actionTypes.FailedRecipeAdd });
           setLoading(false);

@@ -7,7 +7,11 @@ export const initialState = {
   addLoading: false,
   addData: [],
   deleteLoading: false,
-  deleteData: []
+  deleteData: [],
+  discountdata: [],
+  discountLoading: false,
+  updateDiscountData: [],
+  updateDiscountLoading: false,
 };
 
 // ==============================|| UsersReducer REDUCER ||============================== //
@@ -62,6 +66,40 @@ const PromosReducer = (state = initialState, action) => {
       return {
         ...state,
         deleteLoading: false
+      };
+    /////////////////////////////////////////////////////////////
+    case actionTypes.isDiscountLoading:
+      return {
+        ...state,
+        discountLoading: true
+      };
+    case actionTypes.DiscountSuccess:
+      return {
+        ...state,
+        discountLoading: false,
+        discountdata: action.payload
+      };
+    case actionTypes.DiscountFailed:
+      return {
+        ...state,
+        discountLoading: false
+      };
+         /////////////////////////////////////////////////////////////
+    case actionTypes.isUpdateDiscountLoading:
+      return {
+        ...state,
+        updateDiscountLoading: true
+      };
+    case actionTypes.UpdateDiscountSuccess:
+      return {
+        ...state,
+        updateDiscountLoading: false,
+        updateDiscountData: action.payload
+      };
+    case actionTypes.UpdateDiscountFailed:
+      return {
+        ...state,
+        updateDiscountLoading: false
       };
 
     default:

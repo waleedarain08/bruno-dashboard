@@ -13,7 +13,7 @@ import {
   Chip,
   ClickAwayListener,
   // Divider,
-  Grid,
+  //Grid,
   // InputAdornment,
   List,
   ListItemButton,
@@ -34,10 +34,11 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
 // import UpgradePlanCard from './UpgradePlanCard';
-import User1 from 'assets/images/users/user-round.svg';
+import User1 from 'assets/images/users/dummy-image.jpeg';
 
 // assets
-import { IconLogout, IconSettings, IconUser } from '@tabler/icons';
+import { IconLogout, IconSettings } from '@tabler/icons';
+import { useDispatch } from 'react-redux';
 
 // ==============================|| PROFILE MENU ||============================== //
 
@@ -66,7 +67,8 @@ const ProfileSection = () => {
     setOpen(false);
   };
 
-  const handleListItemClick = (event, index, route = '') => {
+  const handleListItemClick = (event, index, route = '') => {  // eslint-disable-line no-unused-vars
+    // do stuff
     setSelectedIndex(index);
     handleClose(event);
 
@@ -157,12 +159,9 @@ const ProfileSection = () => {
                   <Box sx={{ p: 2 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Typography variant="h4">Good Morning,</Typography>
-                        <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          Johne Doe
-                        </Typography>
+                        <Typography variant="h4">Good Morning</Typography>
                       </Stack>
-                      <Typography variant="subtitle2">Project Admin</Typography>
+                      <Typography variant="subtitle2">Product Admin</Typography>
                     </Stack>
                     {/* <OutlinedInput
                       sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}
@@ -244,7 +243,7 @@ const ProfileSection = () => {
                           }
                         }}
                       >
-                        <ListItemButton
+                        {/* <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 0}
                           onClick={(event) => handleListItemClick(event, 0, '#')}
@@ -253,8 +252,8 @@ const ProfileSection = () => {
                             <IconSettings stroke={1.5} size="1.3rem" />
                           </ListItemIcon>
                           <ListItemText primary={<Typography variant="body2">Account Settings</Typography>} />
-                        </ListItemButton>
-                        <ListItemButton
+                        </ListItemButton> */}
+                        {/* <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 1}
                           onClick={(event) => handleListItemClick(event, 1, '#')}
@@ -281,7 +280,7 @@ const ProfileSection = () => {
                               </Grid>
                             }
                           />
-                        </ListItemButton>
+                        </ListItemButton> */}
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
                           selected={selectedIndex === 4}

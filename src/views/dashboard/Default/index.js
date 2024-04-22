@@ -1,5 +1,5 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
-
 // material-ui
 import { Grid } from '@mui/material';
 
@@ -7,30 +7,90 @@ import { Grid } from '@mui/material';
 import EarningCard from './EarningCard';
 import PopularCard from './PopularCard';
 import TotalOrderLineChartCard from './TotalOrderLineChartCard';
-import TotalIncomeDarkCard from './TotalIncomeDarkCard';
-import TotalIncomeLightCard from './TotalIncomeLightCard';
+//import TotalIncomeDarkCard from './TotalIncomeDarkCard';
+//import TotalIncomeLightCard from './TotalIncomeLightCard';
 import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
+import { useSelector, useDispatch } from 'react-redux';
+import { GrowthApi, TendingApi, chatsApi } from 'store/charts/chartsAction';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import moment from 'moment/moment';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  function getCurrentMonth() {
+    const currentDate = new Date();
+    const currentMonth = String(currentDate.getMonth() + 1).padStart(2, '0'); // Add 1 because months are zero-based
+    return currentMonth;
+  }
+  const chartsData = useSelector((state) => state.ChartsReducer.chartsData);
+  const isLoadingCharts = useSelector((state) => state.ChartsReducer.isLoadingCharts);
+  const chartGrowthData = useSelector((state) => state.ChartsReducer.chartGrowthData);
+  const chartstartData = useSelector((state) => state.ChartsReducer.chartstartData);
+  const isLoadingChartGrowth = useSelector((state) => state.ChartsReducer.isLoadingChartGrowth);
+  const Userdata = useSelector((state) => state.AuthReducer.data);
+  const [paidAmount, setpaidAmount] = React.useState(null);
+  const [newDate, setDate] = React.useState(null);
+  const [newDateMonth, setDateMonth] = React.useState(getCurrentMonth());
+
+  function getMonthStartAndEndDate(month) {
+    const year = new Date().getFullYear();
+    const startDate = new Date(year, month - 1, 1).getTime(); // Get timestamp for start of month
+    const endDate = new Date(year, month, 0).getTime(); // Get timestamp for end of month
+
+    return {
+      startDate,
+      endDate
+    };
+  }
+
+  const { startDate, endDate } = getMonthStartAndEndDate(newDateMonth);
+
   const [isLoading, setLoading] = useState(true);
   useEffect(() => {
+    dispatch(chatsApi(Userdata?.clientToken));
     setLoading(false);
   }, []);
+  console.log('chartsData', isLoading);
+
+  useEffect(() => {
+    if (newDate !== null) {
+      dispatch(GrowthApi(newDate, Userdata?.clientToken));
+    } else {
+      dispatch(GrowthApi(new Date().getFullYear(), Userdata?.clientToken));
+    }
+  }, [newDate]);
+
+  useEffect(() => {
+    if (chartsData?.length > 0) {
+      let find = chartsData?.filter((x) => x?.isPaid == true);
+      setpaidAmount(find);
+    }
+  }, [chartsData]);
+
+  useEffect(() => {
+    if (newDateMonth !== null) {
+      dispatch(TendingApi(startDate, endDate, Userdata?.clientToken));
+    } else {
+      dispatch(TendingApi(startDate, endDate, Userdata?.clientToken));
+    }
+  }, [newDateMonth]);
 
   return (
     <Grid container spacing={gridSpacing}>
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
-          <Grid item lg={4} md={6} sm={6} xs={12}>
-            <EarningCard isLoading={isLoading} />
+          <Grid item lg={6} md={6} sm={6} xs={12}>
+            <EarningCard paidAmount={paidAmount} isLoading={isLoadingCharts} />
           </Grid>
-          <Grid item lg={4} md={6} sm={6} xs={12}>
-            <TotalOrderLineChartCard isLoading={isLoading} />
+          <Grid item lg={6} md={6} sm={6} xs={12}>
+            <TotalOrderLineChartCard paidAmount={paidAmount} isLoading={isLoadingCharts} />
           </Grid>
-          <Grid item lg={4} md={12} sm={12} xs={12}>
+          {/* <Grid item lg={4} md={12} sm={12} xs={12}>
             <Grid container spacing={gridSpacing}>
               <Grid item sm={6} xs={12} md={6} lg={12}>
                 <TotalIncomeDarkCard isLoading={isLoading} />
@@ -39,16 +99,26 @@ const Dashboard = () => {
                 <TotalIncomeLightCard isLoading={isLoading} />
               </Grid>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
           <Grid item xs={12} md={8}>
-            <TotalGrowthBarChart isLoading={isLoading} />
+            <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'flex-end' }}>
+              <LocalizationProvider dateAdapter={AdapterMoment}>
+                <DatePicker type="date" name="year" views={['year']} onChange={(e) => setDate(moment(e).format('YYYY'))} />
+              </LocalizationProvider>
+            </div>
+            <TotalGrowthBarChart chartGrowthData={chartGrowthData} isLoading={isLoadingChartGrowth} />
           </Grid>
           <Grid item xs={12} md={4}>
-            <PopularCard isLoading={isLoading} />
+            <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'flex-end' }}>
+              <LocalizationProvider dateAdapter={AdapterMoment}>
+                <DatePicker type="date" name="expiry" views={['month']} onChange={(e) => setDateMonth(moment(e).format('MM'))} />
+              </LocalizationProvider>
+            </div>
+            <PopularCard chartstartData={chartstartData} isLoading={isLoadingCharts} />
           </Grid>
         </Grid>
       </Grid>

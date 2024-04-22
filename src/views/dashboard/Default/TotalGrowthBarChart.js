@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+//import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+
 import { useSelector } from 'react-redux';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Grid, MenuItem, TextField, Typography } from '@mui/material';
+//import { Grid, MenuItem, TextField, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 // third-party
 import ApexCharts from 'apexcharts';
@@ -16,28 +19,125 @@ import MainCard from 'ui-component/cards/MainCard';
 import { gridSpacing } from 'store/constant';
 
 // chart data
-import chartData from './chart-data/total-growth-bar-chart';
+// import chartData from './chart-data/total-growth-bar-chart';
 
-const status = [
-  {
-    value: 'today',
-    label: 'Today'
-  },
-  {
-    value: 'month',
-    label: 'This Month'
-  },
-  {
-    value: 'year',
-    label: 'This Year'
-  }
-];
+// const status = [
+//   {
+//     value: 'today',
+//     label: 'Today'
+//   },
+//   {
+//     value: 'month',
+//     label: 'This Month'
+//   },
+//   {
+//     value: 'year',
+//     label: 'This Year'
+//   }
+// ];
 
 // ==============================|| DASHBOARD DEFAULT - TOTAL GROWTH BAR CHART ||============================== //
 
-const TotalGrowthBarChart = ({ isLoading }) => {
-  const [value, setValue] = useState('today');
+const TotalGrowthBarChart = ({ isLoading, chartGrowthData }) => {
+  //const [value, setValue] = useState('today');
   const theme = useTheme();
+
+  let resultArray = Array(12).fill(0);
+
+  chartGrowthData?.forEach((item) => {
+    const key = Object.keys(item)[0];
+    const value = item[key];
+    resultArray[key - 1] = value;
+  });
+
+  const totalSum = resultArray?.reduce((sum, value) => sum + value, 0);
+
+  const chartData = {
+    height: 480,
+    type: 'bar',
+    options: {
+      chart: {
+        id: 'bar-chart',
+        stacked: true,
+        toolbar: {
+          show: true
+        },
+        zoom: {
+          enabled: true
+        }
+      },
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            legend: {
+              position: 'bottom',
+              offsetX: -10,
+              offsetY: 0
+            }
+          }
+        }
+      ],
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '50%'
+        }
+      },
+      xaxis: {
+        type: 'category',
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      },
+      legend: {
+        show: true,
+        fontSize: '14px',
+        fontFamily: `'Roboto', sans-serif`,
+        position: 'bottom',
+        offsetX: 20,
+        labels: {
+          useSeriesColors: false
+        },
+        markers: {
+          width: 16,
+          height: 16,
+          radius: 5
+        },
+        itemMargin: {
+          horizontal: 15,
+          vertical: 8
+        }
+      },
+      fill: {
+        type: 'solid'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      grid: {
+        show: true
+      }
+    },
+    series: [
+      // {
+      //   name: 'Investment',
+      //   data: [35, 125, 35, 35, 35, 80, 35, 20, 35, 45, 15, 75]
+      // },
+      {
+        name: '',
+        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      },
+      {
+        name: 'Sales',
+        data: resultArray ? resultArray : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      }
+      // {
+      //   name: 'Maintenance',
+      //   data: [0, 0, 75, 0, 0, 115, 0, 0, 0, 0, 150, 0]
+      // }
+    ]
+  };
+
+  // console.log(chartGrowthData, 'chartGrowthData');
   const customization = useSelector((state) => state.customization);
 
   const { navType } = customization;
@@ -103,18 +203,18 @@ const TotalGrowthBarChart = ({ isLoading }) => {
                       <Typography variant="subtitle2">Total Growth</Typography>
                     </Grid>
                     <Grid item>
-                      <Typography variant="h3">$2,324.00</Typography>
+                      <Typography variant="h3">AED {totalSum}</Typography>
                     </Grid>
                   </Grid>
                 </Grid>
                 <Grid item>
-                  <TextField id="standard-select-currency" select value={value} onChange={(e) => setValue(e.target.value)}>
+                  {/* <TextField id="standard-select-currency" select value={value} onChange={(e) => setValue(e.target.value)}>
                     {status.map((option) => (
                       <MenuItem key={option.value} value={option.value}>
                         {option.label}
                       </MenuItem>
                     ))}
-                  </TextField>
+                  </TextField> */}
                 </Grid>
               </Grid>
             </Grid>

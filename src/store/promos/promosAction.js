@@ -72,3 +72,52 @@ export const DeletePromo = (id, token, onSuccess) => {
       });
   };
 };
+
+export const GetDiscount = (token) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.isDiscountLoading });
+    Get(`discount`, token)
+      .then(function (response) {
+        console.log(response,"GetDiscount")
+        if (response?.isSuccess) {
+          dispatch({
+            type: actionTypes.DiscountSuccess,
+            payload: response?.data
+          });
+        } else {
+          dispatch({ type: actionTypes.DiscountFailed });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.DiscountFailed });
+      });
+  };
+};
+
+export const UpdateDiscount = (data, token,setsnackOpen) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.isUpdateDiscountLoading });
+    Post(`discount`, data, token)
+      .then(function (response) {
+        console.log(response,"UpdateDiscount")
+        if (response?.isSuccess) {
+          setsnackOpen(true);
+          dispatch({
+            type: actionTypes.UpdateDiscountSuccess,
+            payload: response?.data
+          });
+
+        } else {
+          dispatch({ type: actionTypes.UpdateDiscountFailed });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.UpdateDiscountFailed });
+      });
+  };
+};
+

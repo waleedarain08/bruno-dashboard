@@ -75,10 +75,13 @@ const PetsProfile = () => {
                   <TableCell align="left">Name</TableCell>
                   <TableCell align="left">Breed</TableCell>
                   <TableCell align="left">Born</TableCell>
+                  <TableCell align="left">Gender</TableCell>
                   <TableCell align="left">Feeding-Routine</TableCell>
                   <TableCell align="left">Primary</TableCell>
                   <TableCell align="left">Owner</TableCell>
-                  <TableCell align="right">Current Weight</TableCell>
+                  <TableCell align="left">Current Weight</TableCell>
+                  <TableCell align="right">Actual Weight</TableCell>
+                  <TableCell align="right">Activity Level</TableCell>
                 </TableRow>
               </TableHead>
               {rows?.length > 0 ? (
@@ -91,10 +94,13 @@ const PetsProfile = () => {
                       <TableCell align="left">{row?.name}</TableCell>
                       <TableCell align="left">{row?.breed}</TableCell>
                       <TableCell align="left">{moment(row?.bornOnDate).format('MMM Do YY')}</TableCell>
+                      <TableCell align="left">{row?.gender}</TableCell>
                       <TableCell align="left">{row?.feedingRoutine ? row?.feedingRoutine : 1} times per day</TableCell>
                       <TableCell align="left">{row?.isDefault ? <CheckCircleOutlineIcon /> : <CancelIcon />}</TableCell>
                       <TableCell align="left">{row?.user?.fullName}</TableCell>
-                      <TableCell align="right">{row?.currentWeight} kg</TableCell>
+                      <TableCell align="left">{row?.currentWeight} kg</TableCell>
+                      <TableCell align="right">{row?.actualWeight} kg</TableCell>
+                      <TableCell align="right">{row?.activityLevel} </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

@@ -5,7 +5,7 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
-import UserAccounts from 'views/user-accounts/user_accounts';
+// import UserAccounts from 'views/user-accounts/user_accounts';
 import PetsProfile from 'views/pets-profile/pets-profile';
 import FoodRecipes from 'views/food-recipes/food-recipes';
 import ProductCategories from 'views/product-categories/product-categories';
@@ -15,6 +15,13 @@ import Cookingsheet from 'views/cooking-sheet/cooking-sheet';
 import PromoLoyality from 'views/promo-codes&loyality-points/promo-loyality';
 import Ingredients from 'views/ingredients/Ingredients';
 import Categories from 'views/categories/Categories';
+import OrderList from 'views/order-list/OrderList';
+import IngredientsQuantitySheet from 'views/cooking-sheet/IngredientsQuantitySheet';
+import IngredientsPortioningSheet from 'views/cooking-sheet/IngredientsPortioningSheet';
+import DeliveryReport from 'views/delivery-report/DeliveryReport';
+import CookingBatch from 'views/cooking-sheet/cookingBatch';
+import EditBatch from 'views/cooking-sheet/editBatch';
+import BatchLable from 'views/cooking-sheet/batchLable';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -29,6 +36,8 @@ const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons
 // sample page routing
 const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
+const UserAccounts = Loadable(lazy(() => import('views/user-accounts/user_accounts')));
+
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -40,14 +49,10 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
-      path: '/dashboard',
-      children: [
-        {
-          path: 'dashboard',
-          element: <DashboardDefault />
-        }
-      ]
+      path: '*',
+      element: <DashboardDefault />
     },
+
     {
       path: '/user-auccounts',
       children: [
@@ -90,7 +95,24 @@ const MainRoutes = {
         {
           path: '/cooking-sheet',
           element: <Cookingsheet />
-        }
+        },
+        {
+          path: '/cooking-sheet/ingredients-portioning-sheet',
+          element: <IngredientsPortioningSheet />
+        },
+        {
+          path: '/cooking-sheet/ingredients-quantity-sheet',
+          element: <IngredientsQuantitySheet />
+        },
+        {
+          path: '/cooking-sheet/edit-batch',
+          element: <EditBatch />
+        },
+        {
+          path: '/cooking-sheet/batch-lable',
+          element: <BatchLable />
+        },
+
       ]
     },
     {
@@ -103,20 +125,39 @@ const MainRoutes = {
       ]
     },
     {
-      path: '/product-categories',
+      path: '/delivery-report',
       children: [
         {
-          path: '/product-categories',
-          element: <ProductCategories />
+          path: '/delivery-report',
+          element: <DeliveryReport />
         }
       ]
     },
+    {
+      path: '/order-list',
+      children: [
+        {
+          path: '/order-list',
+          element: <OrderList />
+        }
+      ]
+    },
+
     {
       path: '/categories',
       children: [
         {
           path: '/categories',
           element: <Categories />
+        }
+      ]
+    },
+    {
+      path: '/product-categories',
+      children: [
+        {
+          path: '/product-categories',
+          element: <ProductCategories />
         }
       ]
     },
@@ -135,6 +176,15 @@ const MainRoutes = {
         {
           path: '/blog-&-FAQ',
           element: <BlogFAQ />
+        }
+      ]
+    },
+    {
+      path: '/cooking-sheet-template',
+      children: [
+        {
+          path: '/cooking-sheet-template',
+          element: <CookingBatch />
         }
       ]
     },
