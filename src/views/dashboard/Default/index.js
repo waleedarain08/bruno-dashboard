@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 // material-ui
 import { Grid } from '@mui/material';
 
@@ -35,27 +35,38 @@ const Dashboard = () => {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const [paidAmount, setpaidAmount] = React.useState(null);
   const [newDate, setDate] = React.useState(null);
+  const [DateTopChart, setDateTopChart] = React.useState(null);
+
   const [newDateMonth, setDateMonth] = React.useState(getCurrentMonth());
 
   function getMonthStartAndEndDate(month) {
     const year = new Date().getFullYear();
-    const startDate = new Date(year, month - 1, 1).getTime(); // Get timestamp for start of month
-    const endDate = new Date(year, month, 0).getTime(); // Get timestamp for end of month
+    const startDate = new Date(year, month - 1, 1).getTime();
+    const endDate = new Date(year, month, 0).getTime();
 
     return {
       startDate,
       endDate
     };
   }
+  function getMonthStartAndEndDateYear(monthYear) {
+    const [year, month] = monthYear.split('-').map(Number);
+    const startDateTopChart = new Date(year, month - 1, 1).getTime();
+    const endDateTopChart = new Date(year, month, 0).getTime();
 
+    return {
+      startDateTopChart,
+      endDateTopChart
+    };
+  }
   const { startDate, endDate } = getMonthStartAndEndDate(newDateMonth);
+  const { startDateTopChart, endDateTopChart } = getMonthStartAndEndDateYear(
+    DateTopChart !== null ? DateTopChart : `${new Date().getFullYear()}-${new Date().getMonth()}`
+  );
 
-  const [isLoading, setLoading] = useState(true);
   useEffect(() => {
-    dispatch(chatsApi(Userdata?.clientToken));
-    setLoading(false);
-  }, []);
-  console.log('chartsData', isLoading);
+    dispatch(chatsApi(startDateTopChart, endDateTopChart, Userdata?.clientToken));
+  }, [DateTopChart]);
 
   useEffect(() => {
     if (newDate !== null) {
@@ -69,6 +80,8 @@ const Dashboard = () => {
     if (chartsData?.length > 0) {
       let find = chartsData?.filter((x) => x?.isPaid == true);
       setpaidAmount(find);
+    } else {
+      setpaidAmount([]);
     }
   }, [chartsData]);
 
@@ -83,6 +96,11 @@ const Dashboard = () => {
   return (
     <Grid container spacing={gridSpacing}>
       <Grid item xs={12}>
+        <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'flex-end' }}>
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <DatePicker type="date" name="year" views={['year', 'month']} onChange={(e) => setDateTopChart(moment(e).format('YYYY-MM'))} />
+          </LocalizationProvider>
+        </div>
         <Grid container spacing={gridSpacing}>
           <Grid item lg={6} md={6} sm={6} xs={12}>
             <EarningCard paidAmount={paidAmount} isLoading={isLoadingCharts} />
