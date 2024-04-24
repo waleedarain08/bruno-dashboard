@@ -429,7 +429,7 @@ export default function OrderList() {
               <TableRow style={{ backgroundColor: '#D78809' }}>
                 <TableCell />
                 <TableCell style={{ color: '#fff' }}>Order No.</TableCell>
-                {/* <TableCell style={{ color: '#fff' }}>Order Date / Time</TableCell> */}
+                <TableCell style={{ color: '#fff' }}>Order Date / Time</TableCell>
                 <TableCell style={{ color: '#fff' }}>User Name</TableCell>
                 <TableCell style={{ color: '#fff' }} align="right">
                   Order Total (AED)
