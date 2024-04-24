@@ -2,10 +2,10 @@
 import * as actionTypes from './chartsType';
 import { Get } from '../../helpers/apicalls/apicalls';
 
-export const chatsApi = (data) => {
+export const chatsApi = (start, end, token) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.LoadingChart });
-    Get('order/report', data)
+    Get(`order/report?startingDate=${start}&endingDate=${end}`, token)
       .then(function (response) {
         if (response?.isSuccess) {
           dispatch({

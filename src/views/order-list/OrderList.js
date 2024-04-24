@@ -28,12 +28,15 @@ import { ADDToBatch } from 'store/batch/batchTypeAction';
 import SearchFeild from 'components/searchFeild';
 import { SET_MENU } from 'store/actions';
 import ExportUsers from 'views/user-accounts/exportUsers';
+import ReportModal from 'components/ReportModal';
 // material-ui
 
 function Row(props) {
   const { row, setId } = props;
   const [open, setOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalReportOpen, setModalReportOpen] = React.useState(false);
+  const [SelectRow, setSelectRow] = React.useState(null);
 
   const Userdata = useSelector((state) => state.AuthReducer.data);
   // const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
@@ -62,12 +65,23 @@ function Row(props) {
     dispatch(ViewOrderLocation(id, Userdata?.clientToken));
     setModalOpen(true);
   };
+
+  const ViewReport = (data) => {
+    dispatch(ViewOrderLocation(data?.locationId, Userdata?.clientToken));
+    setSelectRow(data);
+    setModalReportOpen(true);
+  };
+  ViewReport;
   const handleCloseModal = () => {
     setModalOpen(false);
+  };
+  const handleCloseReportModal = () => {
+    setModalReportOpen(false);
   };
 
   return (
     <React.Fragment>
+      <ReportModal open={modalReportOpen} onClose={handleCloseReportModal} location={LocationDataChange} SelectRow={SelectRow} />
       <LocationModal open={modalOpen} onClose={handleCloseModal} location={LocationDataChange} />
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
@@ -85,6 +99,19 @@ function Row(props) {
         <TableCell align="center">
           <AnimateButton>
             <Button
+              onClick={() => ViewReport(row)}
+              style={{ margin: '12px' }}
+              variant="contained"
+              color="primary"
+              sx={{ boxShadow: 'none' }}
+            >
+              Order Report
+            </Button>
+          </AnimateButton>
+        </TableCell>
+        <TableCell align="center">
+          <AnimateButton>
+            <Button
               onClick={() => ViewLocation(row?.locationId)}
               style={{ margin: '12px' }}
               variant="contained"
@@ -95,24 +122,7 @@ function Row(props) {
             </Button>
           </AnimateButton>
         </TableCell>
-        <TableCell align="center">
-          {row?.isCooked ? 'Yes' : 'No'}
-          {/* <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}> */}
-          {/* <AnimateButton>
-                        <Button
-                            onClick={() => OrderCooked(row?._id, "isCooked")}
-                            disabled={row?.isCooked}
-                            style={{ margin: '12px' }}
-                            variant="contained"
-                            color="primary"
-                            sx={{ boxShadow: 'none' }}
-                        >
-                            {isLoadingOrderChange ? <div style={{ marginRight: 25, marginTop: 5 }}><InfinitySpin width="30" color="#D78809" /></div> : !row?.isCooked ? "Order Cooked" : "Order Dispatched"}
-
-                        </Button>
-                    </AnimateButton> */}
-          {/* </div> */}
-        </TableCell>
+        <TableCell align="center">{row?.isCooked ? 'Yes' : 'No'}</TableCell>
         <TableCell align="center">{row?.batchNumber}</TableCell>
         <TableCell align="center">
           <Switch onChange={() => OrderCooked(row?._id, 'isCompleted', row.isCompleted)} checked={row.isCompleted} />
@@ -270,7 +280,6 @@ function Row(props) {
 }
 
 export default function OrderList() {
-
   const [page, setPage] = React.useState(0);
   const [value, setValue] = React.useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -320,20 +329,24 @@ export default function OrderList() {
     setTimeout(() => {
       window.print();
     }, 200);
-  }
+  };
   React.useEffect(() => {
-    if (value !== "") {
-      const filteredData = dataOrders?.filter(item => {
-        return item?.batchNumber?.toLowerCase()?.includes(value?.toLowerCase()) ||
-          item?._id.substr(item?._id?.length - 5)?.toLowerCase()?.includes(value?.toLowerCase()) ||
+    if (value !== '') {
+      const filteredData = dataOrders?.filter((item) => {
+        return (
+          item?.batchNumber?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          item?._id
+            .substr(item?._id?.length - 5)
+            ?.toLowerCase()
+            ?.includes(value?.toLowerCase()) ||
           item?.user?.fullName?.toLowerCase()?.includes(value?.toLowerCase()) ||
           item?.totalAmount.toString()?.toLowerCase()?.includes(value?.toLowerCase()) ||
           moment(item?.updatedOnDate).format('DD MMM YYYY, h:mm a')?.toLowerCase()?.includes(value?.toLowerCase()) ||
           moment(item?.deliveryDate).format('DD MMM YYYY, h:mm a')?.toLowerCase()?.includes(value?.toLowerCase())
+        );
       });
       setFiltredData(filteredData);
-    }
-    else {
+    } else {
       setFiltredData(dataOrders);
     }
   }, [dataOrders, value]);
@@ -342,14 +355,10 @@ export default function OrderList() {
     if (IsDelevred) {
       let findData = dataOrders?.filter((item) => item?.isCompleted === true);
       setFiltredData(findData);
-    }
-    else {
+    } else {
       setFiltredData(dataOrders);
     }
-
-  }, [IsDelevred])
-
-
+  }, [IsDelevred]);
 
   const GenerateBatch = () => {
     let allData = {
@@ -376,7 +385,7 @@ export default function OrderList() {
             <SearchFeild setValue={setValue} value={value} />
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%' }}>
               <AnimateButton>
-                <ExportUsers data={FiltredData} filename={"OrderList"} />
+                <ExportUsers data={FiltredData} filename={'OrderList'} />
                 {/* <Button onClick={() => window.print()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
                   Export
                 </Button> */}
@@ -414,7 +423,6 @@ export default function OrderList() {
                 </Button>
               </AnimateButton>
             </div>
-
           </div>
           <Table aria-label="collapsible table">
             <TableHead>
@@ -430,6 +438,9 @@ export default function OrderList() {
                   Delivery Date
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="center">
+                  Order Report
+                </TableCell>
+                <TableCell style={{ color: '#fff' }} align="center">
                   Delivery Location
                 </TableCell>
                 {/* <TableCell style={{ color: "#fff" }} align="center">Actions</TableCell> */}
@@ -440,7 +451,8 @@ export default function OrderList() {
                   Batch No.
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="center">
-                  Delivered  <Checkbox style={{ backgroundColor: "#fff" }} checked={IsDelevred} onChange={() => setIsDelevred(!IsDelevred)} />
+                  Delivered{' '}
+                  <Checkbox style={{ backgroundColor: '#fff' }} checked={IsDelevred} onChange={() => setIsDelevred(!IsDelevred)} />
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="right">
                   Add to Cooking Batch
