@@ -92,7 +92,7 @@ function Row(props) {
         <TableCell component="th" scope="row">
           {row?._id.substr(row?._id?.length - 5)}
         </TableCell>
-        <TableCell align="center">{moment(row?.updatedOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
+        <TableCell align="center">{moment(row?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
         <TableCell align="center">{row?.user?.fullName}</TableCell>
         <TableCell align="center">{row?.totalAmount}-AED</TableCell>
         <TableCell align="center">{row?.deliveryDate}</TableCell>
