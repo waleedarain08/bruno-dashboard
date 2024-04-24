@@ -9,3 +9,7 @@ export const FailedChartGrowth = 'FailedChartGrowth';
 export const LoadingChartStartEnd = 'LoadingChartStartEnd';
 export const SuccessChartStartEnd = 'SuccessChartStartEnd';
 export const FailedChartStartEnd = 'FailedChartStartEnd';
+
+export const LoadingReport = 'LoadingReport';
+export const SuccessReport = 'SuccessReport';
+export const FailedReport = 'FailedReport';
