@@ -9,7 +9,7 @@ export const initialState = {
   isLoadingChartstart: false,
   chartstartData: null,
   isLoadingreport: false,
-  reportData: null
+  reportData: []
 };
 
 // ==============================|| AuthReducer REDUCER ||============================== //
@@ -82,6 +82,12 @@ const ChartsReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoadingreport: false
+      };
+    case actionTypes.FailedReportEmpty:
+      return {
+        ...state,
+        isLoadingreport: false,
+        reportData: []
       };
 
     default:

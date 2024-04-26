@@ -89,3 +89,9 @@ export const ReportDownLoad = (start, end, token) => {
       });
   };
 };
+
+export const onEmptyReport = () => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.FailedReportEmpty });
+  };
+};
