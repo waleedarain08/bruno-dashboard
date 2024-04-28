@@ -55,6 +55,7 @@ const Dashboard = () => {
   }
   function getMonthStartAndEndDateYear(monthYear) {
     const [year, month] = monthYear.split('-').map(Number);
+    //console.log("mmm",month);
     const startDateTopChart = new Date(year, month - 1, 1).getTime();
     const endDateTopChart = new Date(year, month, 0).getTime();
 
@@ -118,7 +119,7 @@ const Dashboard = () => {
             </Button>
           </AnimateButton>
           <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DatePicker type="date" name="year" views={['year', 'month']} onChange={(e) => setDateTopChart(moment(e).format('YYYY-MM'))} />
+            <DatePicker type="date" name="month"  views={['year', 'month']} onChange={(e) => setDateTopChart(moment(e).format('YYYY-MM'))} />
           </LocalizationProvider>
           {/* <div style={{ width: 400, margin: 'auto', marginTop: 50 }}>
             <LocalizationProvider dateAdapter={AdapterMoment}>

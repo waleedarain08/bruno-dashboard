@@ -16,18 +16,18 @@ const ReportModal = ({ open, onClose, location, SelectRow }) => {
           </div>
         ) : (
           <>
-            <h2 style={{ textDecoration: 'underline' }}>Order Report</h2>
+            <h2 style={{ textDecoration: 'underline' }}>Order Invoice</h2>
             <div className="modalInnerView">
               <h2 className="modalTitle">Order No :</h2>
               <h3 className="modalTitlee"> {SelectRow?._id.substr(SelectRow?._id?.length - 5)}</h3>
             </div>
             <div className="modalInnerView">
               <h2 className="modalTitle">Order Total :</h2>
-              <h3 className="modalTitlee"> {SelectRow?.cartTotal}</h3>
+              <h3 className="modalTitlee"> {SelectRow?.cartTotal} AED</h3>
             </div>
             <div className="modalInnerView">
               <h2 className="modalTitle">Order Sub Total :</h2>
-              <h3 className="modalTitlee"> {SelectRow?.totalAmount}</h3>
+              <h3 className="modalTitlee"> {SelectRow?.totalAmount} AED</h3>
             </div>
             <div className="modalInnerView">
               <h2 className="modalTitle">Delivery Date :</h2>

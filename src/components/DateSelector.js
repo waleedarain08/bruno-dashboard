@@ -39,6 +39,10 @@ const DateSelector = ({ open, onClose }) => {
       dispatch(ReportDownLoad(timestampstart, timestampend, Userdata?.clientToken));
     }
   };
+
+  const downloadPDF = () => {
+    window.print();
+  }
   useEffect(() => {
     if (reportData?.length > 0) {
       let newData = reportData?.map((i) => {
@@ -113,6 +117,15 @@ const DateSelector = ({ open, onClose }) => {
       <Modal open={newModal} onClose={() => onCloseNewModal()} className="modalContainer">
         <Box style={{ width: 1200 }} >
           <TableContainer ref={targetRef} component={Paper}>
+          <Button
+                onClick={() => downloadPDF()}
+                style={{ margin: '12px' }}
+                variant="contained"
+                color="primary"
+                sx={{ boxShadow: 'none' }}
+              >
+                Download As PDF
+              </Button>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -132,7 +145,7 @@ const DateSelector = ({ open, onClose }) => {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.User}
+                      {row.userId}
                     </TableCell>
                     <TableCell align="center">
                       {row._id.substr(row?._id?.length - 5)}

@@ -105,7 +105,7 @@ function Row(props) {
               color="primary"
               sx={{ boxShadow: 'none' }}
             >
-              Order Report
+              Invoice
             </Button>
           </AnimateButton>
         </TableCell>
@@ -438,7 +438,7 @@ export default function OrderList() {
                   Delivery Date
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="center">
-                  Order Report
+                  Order Invoice
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="center">
                   Delivery Location
