@@ -1,7 +1,7 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // material-ui
-import { Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 
 // project imports
 import EarningCard from './EarningCard';
@@ -17,6 +17,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import moment from 'moment/moment';
+import AnimateButton from 'ui-component/extended/AnimateButton';
+import DateSelector from 'components/DateSelector';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -35,9 +37,11 @@ const Dashboard = () => {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const [paidAmount, setpaidAmount] = React.useState(null);
   const [newDate, setDate] = React.useState(null);
-  const [DateTopChart, setDateTopChart] = React.useState(null);
+  const [DateTopChart, setDateTopChart] = useState(null);
+  const [isOpen, setisOpen] = useState(false);
 
   const [newDateMonth, setDateMonth] = React.useState(getCurrentMonth());
+  // const [selectedDateRange, setSelectedDateRange] = useState([]);
 
   function getMonthStartAndEndDate(month) {
     const year = new Date().getFullYear();
@@ -51,6 +55,7 @@ const Dashboard = () => {
   }
   function getMonthStartAndEndDateYear(monthYear) {
     const [year, month] = monthYear.split('-').map(Number);
+    //console.log("mmm",month);
     const startDateTopChart = new Date(year, month - 1, 1).getTime();
     const endDateTopChart = new Date(year, month, 0).getTime();
 
@@ -93,13 +98,39 @@ const Dashboard = () => {
     }
   }, [newDateMonth]);
 
+  const onClose = () => {
+    setisOpen(false);
+  };
+
   return (
     <Grid container spacing={gridSpacing}>
+      <DateSelector open={isOpen} onClose={() => onClose()} />
       <Grid item xs={12}>
-        <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'flex-end' }}>
+        <div style={{ marginBottom: 10, display: 'flex', justifyContent: 'space-between' }}>
+          <AnimateButton>
+            <Button
+              onClick={() => setisOpen(true)}
+              style={{ margin: '12px' }}
+              variant="contained"
+              color="primary"
+              sx={{ boxShadow: 'none' }}
+            >
+              Download Report
+            </Button>
+          </AnimateButton>
           <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DatePicker type="date" name="year" views={['year', 'month']} onChange={(e) => setDateTopChart(moment(e).format('YYYY-MM'))} />
+            <DatePicker type="date" name="month"  views={['year', 'month']} onChange={(e) => setDateTopChart(moment(e).format('YYYY-MM'))} />
           </LocalizationProvider>
+          {/* <div style={{ width: 400, margin: 'auto', marginTop: 50 }}>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <DatePicker
+                type="date"
+                name="year"
+                views={['year', 'month', 'day']}
+                onChange={(e) => setDateTopChart(moment(e).format('YYYY-MM'))}
+              />
+            </LocalizationProvider>
+          </div> */}
         </div>
         <Grid container spacing={gridSpacing}>
           <Grid item lg={6} md={6} sm={6} xs={12}>

@@ -67,3 +67,31 @@ export const TendingApi = (start, end, token) => {
       });
   };
 };
+
+export const ReportDownLoad = (start, end, token) => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.LoadingReport });
+    Get(`order/earning-report?startingDate=${start}&endingDate=${end}`, token)
+      .then(function (response) {
+        if (response?.isSuccess) {
+          dispatch({
+            type: actionTypes.SuccessReport,
+            payload: response?.data
+          });
+        } else {
+          dispatch({ type: actionTypes.FailedReport });
+          alert(response.message);
+        }
+      })
+      .catch(function (error) {
+        console.log(error, 'error');
+        dispatch({ type: actionTypes.FailedReport });
+      });
+  };
+};
+
+export const onEmptyReport = () => {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.FailedReportEmpty });
+  };
+};
