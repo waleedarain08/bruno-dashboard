@@ -7,7 +7,9 @@ export const initialState = {
   chartsData: null,
   chartGrowthData: null,
   isLoadingChartstart: false,
-  chartstartData: null
+  chartstartData: null,
+  isLoadingreport: false,
+  reportData: []
 };
 
 // ==============================|| AuthReducer REDUCER ||============================== //
@@ -63,6 +65,29 @@ const ChartsReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoadingChartstart: false
+      };
+    ///
+    case actionTypes.LoadingReport:
+      return {
+        ...state,
+        isLoadingreport: true
+      };
+    case actionTypes.SuccessReport:
+      return {
+        ...state,
+        isLoadingreport: false,
+        reportData: action.payload
+      };
+    case actionTypes.FailedReport:
+      return {
+        ...state,
+        isLoadingreport: false
+      };
+    case actionTypes.FailedReportEmpty:
+      return {
+        ...state,
+        isLoadingreport: false,
+        reportData: []
       };
 
     default:

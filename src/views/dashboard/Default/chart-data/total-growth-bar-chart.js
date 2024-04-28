@@ -76,7 +76,7 @@ const chartData = {
     },
     {
       name: 'Sales',
-      data: [361, 526, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      data: [455, 248, 436, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     },
     // {
     //   name: 'Maintenance',

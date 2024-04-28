@@ -144,7 +144,7 @@ const EarningCard = ({ isLoading, paidAmount }) => {
                 <Grid container alignItems="center">
                   <Grid item>
                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                      AED {paidAmount?.[0]?.totalAmount}
+                      AED {paidAmount?.[0]?.totalAmount ? paidAmount?.[0]?.totalAmount : 0}
                     </Typography>
                   </Grid>
                   <Grid item>

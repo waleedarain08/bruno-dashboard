@@ -529,7 +529,7 @@ const FoodRecipes = () => {
                   {' '}
                   Adult
                 </MenuItem>
-                <MenuItem key={2} value="Pet">
+                <MenuItem key={2} value="Puppy">
                   Puppy{' '}
                 </MenuItem>
                 <MenuItem key={3} value="Senior">
