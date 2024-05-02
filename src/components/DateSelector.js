@@ -47,13 +47,13 @@ const DateSelector = ({ open, onClose }) => {
     if (reportData?.length > 0) {
       let newData = reportData?.map((i) => {
         return {
-          User: i?.userId,
+          User: i?.user?.fullName,
           Order_No: i?._id.substr(i?._id?.length - 5),
           Order_Total: i?.cartTotal,
           Order_Sub_Total: i?.totalAmount,
           Order_Createdon: moment(i?.createdOnDate).format('DD MMM YYYY, h:mm a'),
           Order_DeliveryDate: i?.deliveryDate,
-          Location: i?.locationId
+          Location: i?.location[0]?.address
         }
       });
       setnewModal(true);
@@ -117,15 +117,15 @@ const DateSelector = ({ open, onClose }) => {
       <Modal open={newModal} onClose={() => onCloseNewModal()} className="modalContainer">
         <Box style={{ width: 1200 }} >
           <TableContainer ref={targetRef} component={Paper}>
-          <Button
-                onClick={() => downloadPDF()}
-                style={{ margin: '12px' }}
-                variant="contained"
-                color="primary"
-                sx={{ boxShadow: 'none' }}
-              >
-                Download As PDF
-              </Button>
+            <Button
+              onClick={() => downloadPDF()}
+              style={{ margin: '12px' }}
+              variant="contained"
+              color="primary"
+              sx={{ boxShadow: 'none' }}
+            >
+              Download As PDF
+            </Button>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -145,7 +145,7 @@ const DateSelector = ({ open, onClose }) => {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.userId}
+                      {row.user?.fullName}
                     </TableCell>
                     <TableCell align="center">
                       {row._id.substr(row?._id?.length - 5)}
@@ -154,7 +154,7 @@ const DateSelector = ({ open, onClose }) => {
                     <TableCell align="center">{row.totalAmount}</TableCell>
                     <TableCell align="center">{moment(row?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
                     <TableCell align="center">{row.deliveryDate}</TableCell>
-                    <TableCell align="center">{row.locationId}</TableCell>
+                    <TableCell align="center">{row.location[0]?.address}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
