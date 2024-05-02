@@ -49,8 +49,8 @@ const DateSelector = ({ open, onClose }) => {
         return {
           User: i?.user?.fullName,
           Order_No: i?._id.substr(i?._id?.length - 5),
-          Order_Total: i?.cartTotal,
-          Order_Sub_Total: i?.totalAmount,
+          Order_Total: i?.totalAmount,
+          Order_Sub_Total: i?.cartTotal,
           Order_Createdon: moment(i?.createdOnDate).format('DD MMM YYYY, h:mm a'),
           Order_DeliveryDate: i?.deliveryDate,
           Location: i?.location[0]?.address
@@ -150,8 +150,8 @@ const DateSelector = ({ open, onClose }) => {
                     <TableCell align="center">
                       {row._id.substr(row?._id?.length - 5)}
                     </TableCell>
-                    <TableCell align="center">{row.cartTotal}</TableCell>
-                    <TableCell align="center">{row.totalAmount}</TableCell>
+                    <TableCell align="center">{row.totalAmount} AED</TableCell>
+                    <TableCell align="center">{row.cartTotal} AED</TableCell>
                     <TableCell align="center">{moment(row?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
                     <TableCell align="center">{row.deliveryDate}</TableCell>
                     <TableCell align="center">{row.location[0]?.address}</TableCell>
