@@ -18,7 +18,7 @@ import ChartDataYear from './chart-data/total-order-year-line-chart';
 
 // assets
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+//import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: theme.palette.primary.dark,
@@ -128,7 +128,7 @@ const TotalOrderLineChartCard = ({ isLoading, paidAmount }) => {
                         </Typography>
                       </Grid>
                       <Grid item>
-                        <Avatar
+                        {/* <Avatar
                           sx={{
                             ...theme.typography.smallAvatar,
                             cursor: 'pointer',
@@ -137,7 +137,7 @@ const TotalOrderLineChartCard = ({ isLoading, paidAmount }) => {
                           }}
                         >
                           <ArrowDownwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
-                        </Avatar>
+                        </Avatar> */}
                       </Grid>
                       <Grid item xs={12}>
                         <Typography
@@ -147,7 +147,7 @@ const TotalOrderLineChartCard = ({ isLoading, paidAmount }) => {
                             color: theme.palette.primary[200]
                           }}
                         >
-                          Total Paid Order
+                          Total Orders
                         </Typography>
                       </Grid>
                     </Grid>
