@@ -12,7 +12,7 @@ import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
 // assets
 import EarningIcon from 'assets/images/icons/earning.svg';
 // import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+//import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 // import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
 // import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
 // import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
@@ -148,7 +148,7 @@ const EarningCard = ({ isLoading, paidAmount }) => {
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Avatar
+                    {/* <Avatar
                       sx={{
                         cursor: 'pointer',
                         ...theme.typography.smallAvatar,
@@ -156,8 +156,8 @@ const EarningCard = ({ isLoading, paidAmount }) => {
                         color: theme.palette.secondary.dark
                       }}
                     >
-                      <ArrowUpwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
-                    </Avatar>
+                      <ArrowUpwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} /> 
+                    </Avatar> */}
                   </Grid>
                 </Grid>
               </Grid>
@@ -169,7 +169,7 @@ const EarningCard = ({ isLoading, paidAmount }) => {
                     color: theme.palette.secondary[200]
                   }}
                 >
-                  Total Paid Earning
+                  Total Earning
                 </Typography>
               </Grid>
             </Grid>

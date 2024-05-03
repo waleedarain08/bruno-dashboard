@@ -66,7 +66,7 @@ const Dashboard = () => {
   }
   const { startDate, endDate } = getMonthStartAndEndDate(newDateMonth);
   const { startDateTopChart, endDateTopChart } = getMonthStartAndEndDateYear(
-    DateTopChart !== null ? DateTopChart : `${new Date().getFullYear()}-${new Date().getMonth()}`
+    DateTopChart !== null ? DateTopChart : `${new Date().getFullYear()}-${new Date().getMonth() + 1}`
   );
 
   useEffect(() => {
@@ -119,18 +119,8 @@ const Dashboard = () => {
             </Button>
           </AnimateButton>
           <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DatePicker type="date" name="month"  views={['year', 'month']} onChange={(e) => setDateTopChart(moment(e).format('YYYY-MM'))} />
+            <DatePicker type="date" name="month" views={['year', 'month']} onChange={(e) => setDateTopChart(moment(e).format('YYYY-MM'))} />
           </LocalizationProvider>
-          {/* <div style={{ width: 400, margin: 'auto', marginTop: 50 }}>
-            <LocalizationProvider dateAdapter={AdapterMoment}>
-              <DatePicker
-                type="date"
-                name="year"
-                views={['year', 'month', 'day']}
-                onChange={(e) => setDateTopChart(moment(e).format('YYYY-MM'))}
-              />
-            </LocalizationProvider>
-          </div> */}
         </div>
         <Grid container spacing={gridSpacing}>
           <Grid item lg={6} md={6} sm={6} xs={12}>
@@ -139,16 +129,6 @@ const Dashboard = () => {
           <Grid item lg={6} md={6} sm={6} xs={12}>
             <TotalOrderLineChartCard paidAmount={paidAmount} isLoading={isLoadingCharts} />
           </Grid>
-          {/* <Grid item lg={4} md={12} sm={12} xs={12}>
-            <Grid container spacing={gridSpacing}>
-              <Grid item sm={6} xs={12} md={6} lg={12}>
-                <TotalIncomeDarkCard isLoading={isLoading} />
-              </Grid>
-              <Grid item sm={6} xs={12} md={6} lg={12}>
-                <TotalIncomeLightCard isLoading={isLoading} />
-              </Grid>
-            </Grid>
-          </Grid> */}
         </Grid>
       </Grid>
       <Grid item xs={12}>

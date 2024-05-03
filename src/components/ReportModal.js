@@ -23,11 +23,11 @@ const ReportModal = ({ open, onClose, location, SelectRow }) => {
             </div>
             <div className="modalInnerView">
               <h2 className="modalTitle">Order Total :</h2>
-              <h3 className="modalTitlee"> {SelectRow?.cartTotal} AED</h3>
+              <h3 className="modalTitlee"> {SelectRow?.totalAmount} AED</h3>
             </div>
             <div className="modalInnerView">
               <h2 className="modalTitle">Order Sub Total :</h2>
-              <h3 className="modalTitlee"> {SelectRow?.totalAmount} AED</h3>
+              <h3 className="modalTitlee"> {SelectRow?.cartTotal} AED</h3>
             </div>
             <div className="modalInnerView">
               <h2 className="modalTitle">Delivery Date :</h2>
