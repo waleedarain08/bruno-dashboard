@@ -25,8 +25,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { DeleteRecipe, GetAllRecipes } from 'store/recipe/recipeAction';
 
 const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  console.log(expand, 'RecipeReviewCard');
+  const {  ...other } = props;
+  //console.log(expand, 'RecipeReviewCard');
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
@@ -44,7 +44,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const isLoadingDelete = useSelector((state) => state.RecipeReducer.isLoadingDelete);
 
-  console.log(data, 'data');
+  //console.log(data, 'data');
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -172,7 +172,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
         )}
 
         <Typography variant="body2" color="text.secondary">
-          {data?.category !== '' ? 'Price' : 'PricePerKG'} : {data?.price1}
+          {data?.category !== '' ? 'Price' : 'PricePerKG'} :  { data?.category !== '' ? data?.pricePerKG : data?.price1}
         </Typography>
         <Tooltip title={data?.description}>
           <Typography variant="body2" color="text.secondary">
