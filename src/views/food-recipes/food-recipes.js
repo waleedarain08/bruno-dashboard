@@ -298,7 +298,7 @@ const FoodRecipes = () => {
             price6: parseInt(PriceSix),
             standaloneSize: standaloneSize
           };
-          dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
+          dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess,isStandard,callAgain));
         } else {
           let NewValues = fields?.map((i) => {
             return {
@@ -329,9 +329,10 @@ const FoodRecipes = () => {
             price3: parseInt(PriceThree),
             price4: parseInt(PriceFour),
             price5: parseInt(PriceFive),
-            price6: parseInt(PriceSix)
+            price6: parseInt(PriceSix),
+            standaloneSize: standaloneSize
           };
-          dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
+          dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess,isStandard,callAgain));
         }
       }
     } else {
@@ -349,8 +350,16 @@ const FoodRecipes = () => {
   };
 
   const callAgain = (newdata) => {
+    console.log("again",newdata);
     dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess, false, emptyCheck));
   };
+
+  // const addStandardRecipe = (newdata) => {
+  //   newdata.category="Standard Recipes";
+  //   console.log(newdata);
+  //   dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess, false, emptyCheck));
+  // };
+
   let emptyCheck = () => {};
 
   const EditValues = (data) => {

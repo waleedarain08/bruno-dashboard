@@ -3,33 +3,43 @@ import { lazy } from 'react';
 // const data = useSelector((state) => state.AuthReducer.data);
 
 // project imports
-import MainLayout from 'layout/MainLayout';
+//import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 
 // dashboard routing
 const Cookingsheet = Loadable(lazy(() => import('views/oldShookingSheet/cooking-sheet-old')));
+const OrderList = Loadable(lazy(() => import('views/order-list/OrderList')));
 
 
 // ==============================|| MAIN ROUTING ||============================== //
 
 const SpecialRoute = {
   path: '/',
-  element: <MainLayout />,
+  element: <OrderList />,
   children: [
     {
       path: '/',
-      element: <Cookingsheet />
+      element: <OrderList />
     },
     {
       path: '*',
-      element: <Cookingsheet />
+      element: <OrderList />
     },
     {
-      path: '/dashboard',
+      path: '/order-list',
       children: [
         {
-          path: 'dashboard',
-          element: <Cookingsheet />
+          path: '/order-list',
+          element: <OrderList />
+        }
+      ]
+    },
+    {
+      path: '/order-list',
+      children: [
+        {
+          path: '/order-list',
+          element: <OrderList />
         }
       ]
     },
