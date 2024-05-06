@@ -32,9 +32,14 @@ export const AddRecipe = (data, token, setLoading, onSuccess, isStandard, callAg
         if (response?.isSuccess) {
           if (isStandard) {
             let newData = data;
-            newData.category = "standard recipe";
-            newData.name = data.name + " "
-            callAgain(data);
+            newData.category = "Standard Recipes";
+            newData.name = data.name + " ";
+            newData.details = "Bruno's Kitchen";
+            newData.weight = "";
+            newData.ingredient = [];
+            newData.sizes = [];
+            console.log("here again",newData);
+            callAgain(newData);
           }
           else {
             onSuccess();
@@ -83,19 +88,33 @@ export const DeleteRecipe = (id, token, onSuccess) => {
   };
 };
 
-export const EditRecipe = (id, data, token, setLoading, onSuccess) => {
+export const EditRecipe = (id, data, token, setLoading, onSuccess, isStandard, callAgain) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingEdit });
+    //console.log("dddddddd",data);
     Put(`recipe/${id}`, data, token)
       .then(function (response) {
-        console.log(response, 'response');
+        //console.log(response, 'response');
         if (response?.isSuccess) {
-          onSuccess();
-          setLoading(false);
-          dispatch({
-            type: actionTypes.SuccessRecipeEdit,
-            payload: response?.data
-          });
+          if (isStandard) {
+            let newData = data;
+            newData.category = "Standard Recipes";
+            newData.name = data.name + " ";
+            newData.details = "Bruno's Kitchen";
+            newData.weight = "";
+            newData.ingredient = [];
+            newData.sizes = [];
+           // console.log("newwwwww",newData);
+            callAgain(newData);
+          }
+          else {
+            onSuccess();
+            setLoading(false);
+            dispatch({
+              type: actionTypes.SuccessRecipeEdit,
+              payload: response?.data
+            });
+          }
         } else {
           dispatch({ type: actionTypes.FailedRecipeEdit });
           setLoading(false);
