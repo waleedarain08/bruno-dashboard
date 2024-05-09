@@ -49,17 +49,18 @@ const ImageUploader = ({ PreviewEdit, setSelectedFiles, selectedFiles, imageCoun
               accept="image/*"
               style={{ display: 'none' }}
               id="contained-button-file"
+              name="contained-button-file"
               multiple
               type="file"
               onChange={handleFileChange}
             />
-            <label htmlFor="contained-button-file">
+            {/* <label htmlFor="file"> */}
               <IconButton color="primary" component="span">
                 <CloudUploadIcon fontSize="large" />
               </IconButton>
-            </label>
+            {/* </label> */}
             <div style={{ marginTop: '10px', display: "none" }}>
-              <Input type="file" onChange={handleFileChange} />
+              <Input type="file" name="file" onChange={handleFileChange} />
             </div>
             {/* <div style={{ marginTop: '20px' }}>
                             <Button variant="contained" color="primary" onClick={handleUpload}>
