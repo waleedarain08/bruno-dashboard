@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 // project imports
 //import MainCard from 'ui-component/cards/MainCard';
 import AnimateButton from 'ui-component/extended/AnimateButton';
+import moment from 'moment/moment';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -133,7 +134,7 @@ const UserAccounts = () => {
                         View Pets
                       </Button>
                     </TableCell>
-                    <TableCell align="center">{row?.lastOrderDate ? row?.lastOrderDate : "N/A"}</TableCell>
+                    <TableCell align="center">{row?.lastOrderDate ? moment(row?.lastOrderDate).format('MMM Do YYYY') : "N/A"}</TableCell>
                     <TableCell align="center">{Math?.trunc(row?.availablePoints)}</TableCell>
                     <TableCell align="right">
                       <Switch value={row?.isBlock} color="warning" />
