@@ -420,7 +420,7 @@ const PromoLoality = ({ ...others }) => {
                   }
                 }}
               >
-                {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
+                {/* {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
                   <form noValidate onSubmit={handleSubmit} {...others}>
                     <FormControl
                       fullWidth
@@ -465,7 +465,7 @@ const PromoLoality = ({ ...others }) => {
                       </AnimateButton>
                     </Box>
                   </form>
-                )}
+                )} */}
               </Formik>
               <Formik
                 initialValues={{

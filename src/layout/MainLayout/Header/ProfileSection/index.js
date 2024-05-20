@@ -61,6 +61,7 @@ const ProfileSection = () => {
     dispatch({
       type: actionTypes.LOGOUT
     });
+    navigate("/");
   };
 
   const handleClose = (event) => {

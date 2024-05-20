@@ -1,14 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Modal, Box, Button } from '@mui/material';
 // import { useSelector } from 'react-redux';
 // import { InfinitySpin } from 'react-loader-spinner';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -18,6 +12,7 @@ import { ReportDownLoad } from 'store/charts/chartsAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { exportToExcel } from 'react-json-to-excel';
 import generatePDF from 'react-to-pdf';
+import { useNavigate } from 'react-router';
 // onEmptyReport,
 
 const DateSelector = ({ open, onClose }) => {
@@ -27,9 +22,10 @@ const DateSelector = ({ open, onClose }) => {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const [startDate, setstartDate] = React.useState(null);
   const [endDate, setendDate] = React.useState(null);
-  const [newModal, setnewModal] = useState(false);
+  // const [newModal, setnewModal] = useState(false);
   console.log(reportData, startDate, isLoadingreport);
   const targetRef = useRef();
+  const navigate = useNavigate();
   // const { toPDF, targetRef } = usePDF({ filename: `Rerport-${startDate}-to${endDate}.pdf` });
 
   const onSubmit = () => {
@@ -40,9 +36,9 @@ const DateSelector = ({ open, onClose }) => {
     }
   };
 
-  const downloadPDF = () => {
-    window.print();
-  }
+  // const downloadPDF = () => {
+  //   window.print();
+  // };
   useEffect(() => {
     if (reportData?.length > 0) {
       let newData = reportData?.map((i) => {
@@ -54,20 +50,20 @@ const DateSelector = ({ open, onClose }) => {
           Order_Createdon: moment(i?.createdOnDate).format('DD MMM YYYY, h:mm a'),
           Order_DeliveryDate: i?.deliveryDate,
           Location: i?.location[0]?.address
-        }
+        };
       });
-      setnewModal(true);
+      navigate('/view-report', { state: { data: reportData } });
+      // setnewModal(true);
       exportToExcel(newData, `report-${startDate}-to-${endDate}`);
       generatePDF(targetRef, { filename: `Rerport-${startDate}-to${endDate}.pdf` });
-
     }
   }, [reportData]);
 
-  const onCloseNewModal = () => {
-    setnewModal(false);
-    dispatch(onEmptyReport());
-    onClose();
-  }
+  // const onCloseNewModal = () => {
+  //   setnewModal(false);
+  //   dispatch(onEmptyReport());
+  //   onClose();
+  // };
 
   return (
     <>
@@ -114,22 +110,16 @@ const DateSelector = ({ open, onClose }) => {
           </>
         </Box>
       </Modal>
-      <Modal open={newModal} onClose={() => onCloseNewModal()} className="modalContainer">
-        <Box style={{ width: 1200 }} >
-          <TableContainer ref={targetRef} component={Paper}>
-            <Button
-              onClick={() => downloadPDF()}
-              style={{ margin: '12px' }}
-              variant="contained"
-              color="primary"
-              sx={{ boxShadow: 'none' }}
-            >
+      {/* <Modal open={newModal} onClose={() => onCloseNewModal()} className="modalContainer">
+ 
+        <TableContainer ref={targetRef} component={Paper}>
+            <Button onClick={() => downloadPDF()} style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
               Download As PDF
             </Button>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell >User</TableCell>
+                  <TableCell>User</TableCell>
                   <TableCell align="center">Order_No</TableCell>
                   <TableCell align="center">Order_Total</TableCell>
                   <TableCell align="center">Order_Sub_Total</TableCell>
@@ -140,16 +130,11 @@ const DateSelector = ({ open, onClose }) => {
               </TableHead>
               <TableBody>
                 {reportData?.map((row, index) => (
-                  <TableRow
-                    key={index}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
+                  <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell component="th" scope="row">
                       {row.user?.fullName}
                     </TableCell>
-                    <TableCell align="center">
-                      {row._id.substr(row?._id?.length - 5)}
-                    </TableCell>
+                    <TableCell align="center">{row._id.substr(row?._id?.length - 5)}</TableCell>
                     <TableCell align="center">{row.totalAmount} AED</TableCell>
                     <TableCell align="center">{row.cartTotal} AED</TableCell>
                     <TableCell align="center">{moment(row?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
@@ -160,10 +145,8 @@ const DateSelector = ({ open, onClose }) => {
               </TableBody>
             </Table>
           </TableContainer>
-        </Box>
-      </Modal>
+      </Modal> */}
     </>
-
   );
 };
 
