@@ -57,7 +57,14 @@ const ProfileSection = () => {
    * */
   const anchorRef = useRef(null);
   const handleLogout = async () => {
+<<<<<<< HEAD
     console.log('Logout');
+=======
+    dispatch({
+      type: actionTypes.LOGOUT
+    });
+    navigate("/");
+>>>>>>> vercel
   };
 
   const handleClose = (event) => {

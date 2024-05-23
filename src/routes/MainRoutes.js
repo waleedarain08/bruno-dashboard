@@ -22,6 +22,7 @@ import DeliveryReport from 'views/delivery-report/DeliveryReport';
 import CookingBatch from 'views/cooking-sheet/cookingBatch';
 import EditBatch from 'views/cooking-sheet/editBatch';
 import BatchLable from 'views/cooking-sheet/batchLable';
+import ViewReport from 'views/viewReport/ViewReport';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -51,6 +52,11 @@ const MainRoutes = {
     {
       path: '*',
       element: <DashboardDefault />
+    },
+    {
+      path: '/view-report',
+      element: <ViewReport />
+      
     },
 
     {
