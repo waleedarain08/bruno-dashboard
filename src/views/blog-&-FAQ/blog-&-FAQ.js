@@ -150,7 +150,7 @@ const BlogFAQ = () => {
         type: Types,
         order: order,
         media:
-          Types === 'FAQ'
+          Types === 'FAQ' || Types === 'terms' || Types === 'privacy' || Types === 'agreement'
             ? []
             : selectedFiles?.length > 0
             ? [...PreviewEdit, ...newPath]
@@ -240,7 +240,7 @@ const BlogFAQ = () => {
           <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
             <Box sx={style}>
               <Typography style={{ textAlign: 'center', paddingBottom: 20 }} variant="h4" component="h2">
-                {Process} News,FAQs,Blogs,Greetings,Banners
+                {Process} News,FAQs,Blogs,Greetings,Banners,Terms etc
               </Typography>
               <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
                 <TextField
@@ -267,6 +267,9 @@ const BlogFAQ = () => {
                     <MenuItem value={'blogs'}>Blogs</MenuItem>
                     <MenuItem value={'greetings'}>Greetings</MenuItem>
                     <MenuItem value={'banners'}>Banners</MenuItem>
+                    {/* <MenuItem value={'terms'}>Terms</MenuItem>
+                    <MenuItem value={'privacy'}>Privacy</MenuItem>
+                    <MenuItem value={'agreement'}>Agreement</MenuItem> */}
                   </Select>
                 </FormControl>
               </Box>
@@ -298,18 +301,19 @@ const BlogFAQ = () => {
                 </>
               ) : (
                 <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
-                  <div style={{ marginLeft: 10, maxHeight: 300, overflowY: 'scroll', width: '100%' }}>
+                  <div style={{ marginLeft: 10, maxHeight: 500, overflowY: 'scroll', width: '100%' }}>
                     <RichTextEditor value={description} onChange={handleChangeValue} />
                   </div>
                 </Box>
               )}
+              {(Types !=='terms'  && Types !=='privacy'  && Types !=='agreement') &&
               <FormControlLabel
                 style={{ marginLeft: 7 }}
                 required
                 control={<Switch checked={Featured} onChange={() => setFeatured(!Featured)} />}
                 label="Featured"
-              />
-              {Types !== 'FAQ' && (
+              />}
+              { (Types !== 'FAQ' && Types !=='terms'  && Types !=='privacy'  && Types !=='agreement') && (
                 <ImageUploader
                   imageCount={5}
                   PreviewEdit={PreviewEdit}
@@ -323,12 +327,16 @@ const BlogFAQ = () => {
                   {Error}
                 </Typography>
               )}
+              {(Types !=='terms'  && Types !=='privacy'  && Types !=='agreement') && (
               <Typography style={{ textAlign: 'left', color: 'orange' }} variant="h6" component="h6">
                 * Featured will show at home screen of mobile app.
               </Typography>
+            )}
+              {(Types !=='terms'  && Types !=='privacy'  && Types !=='agreement') && (
               <Typography style={{ textAlign: 'left', color: 'orange' }} variant="h6" component="h6">
                 * Banners should be of 1005 * 488 , and upload 1 banner at a time only.
               </Typography>
+              )}
               <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
                 <AnimateButton>
                   <Button
@@ -455,6 +463,9 @@ const BlogFAQ = () => {
                 <MenuItem value={'greetings'}>Greetings</MenuItem>
                 <MenuItem value={'blogs'}>Blogs</MenuItem>
                 <MenuItem value={'banners'}>Banners</MenuItem>
+                <MenuItem value={'terms'}>Terms</MenuItem>
+                <MenuItem value={'privacy'}>Privacy</MenuItem>
+                <MenuItem value={'agreement'}>Agreement</MenuItem>      
               </Select>
             </FormControl>
           </Box>
