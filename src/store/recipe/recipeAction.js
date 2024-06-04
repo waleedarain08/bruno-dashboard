@@ -36,7 +36,7 @@ export const AddRecipe = (data, token, setLoading, onSuccess, isStandard, callAg
             newData.name = data.name + " ";
             newData.details = "Bruno's Kitchen";
             newData.weight = "";
-            newData.ingredient = [];
+            //newData.ingredient = [];
             newData.sizes = [];
             console.log("here again",newData);
             callAgain(newData);
@@ -102,7 +102,7 @@ export const EditRecipe = (id, data, token, setLoading, onSuccess, isStandard, c
             newData.name = data.name + " ";
             newData.details = "Bruno's Kitchen";
             newData.weight = "";
-            newData.ingredient = [];
+            //newData.ingredient = [];
             newData.sizes = [];
            // console.log("newwwwww",newData);
             callAgain(newData);
