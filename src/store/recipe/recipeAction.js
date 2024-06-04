@@ -91,10 +91,10 @@ export const DeleteRecipe = (id, token, onSuccess) => {
 export const EditRecipe = (id, data, token, setLoading, onSuccess, isStandard, callAgain) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingEdit });
-    //console.log("dddddddd",data);
+    console.log("dddddddd",data);
     Put(`recipe/${id}`, data, token)
       .then(function (response) {
-        //console.log(response, 'response');
+        console.log(response, 'response');
         if (response?.isSuccess) {
           if (isStandard) {
             let newData = data;
@@ -104,7 +104,7 @@ export const EditRecipe = (id, data, token, setLoading, onSuccess, isStandard, c
             newData.weight = "";
             //newData.ingredient = [];
             newData.sizes = [];
-           // console.log("newwwwww",newData);
+            console.log("newwwwww",newData);
             callAgain(newData);
           }
           else {
