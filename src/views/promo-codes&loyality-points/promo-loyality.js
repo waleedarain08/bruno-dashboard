@@ -735,7 +735,7 @@ const PromoLoality = ({ ...others }) => {
                       if (newDate !== null) {
                         let data = {
                           name: values?.Code,
-                          discount: values?.Percentage,
+                          discount: parseInt(values?.Percentage),
                           redemptionLimit: values?.limit,
                           expireOnDate: newDate
                         };
