@@ -42,6 +42,17 @@ const PetsProfile = () => {
     setPage(0);
   };
 
+  const checkWeightLevel = (weight) => {
+    if(weight === 5){
+      return "UnderWeight"
+    }else if(weight === 10){
+      return "IdealWeight"
+    }else{
+      return "OverWeight"
+    }
+  }
+
+
   return (
     <Box sx={{ width: '100%' }}>
       {isLoading ? (
@@ -65,7 +76,7 @@ const PetsProfile = () => {
                   <TableCell align="left">Primary</TableCell>
                   <TableCell align="left">Owner</TableCell>
                   <TableCell align="left">Current Weight</TableCell>
-                  <TableCell align="right">Actual Weight</TableCell>
+                  <TableCell align="right">Weight Level Selected</TableCell>
                   <TableCell align="right">Activity Level</TableCell>
                 </TableRow>
               </TableHead>
@@ -84,7 +95,7 @@ const PetsProfile = () => {
                       <TableCell align="left">{row?.isDefault ? <CheckCircleOutlineIcon /> : <CancelIcon />}</TableCell>
                       <TableCell align="left">{row?.user?.fullName}</TableCell>
                       <TableCell align="left">{row?.currentWeight} kg</TableCell>
-                      <TableCell align="right">{row?.actualWeight} kg</TableCell>
+                      <TableCell align="right">{checkWeightLevel(row?.actualWeight)}</TableCell>
                       <TableCell align="right">{row?.activityLevel} </TableCell>
                     </TableRow>
                   ))}
