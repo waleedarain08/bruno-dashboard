@@ -9,7 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Avatar from '@mui/material/Avatar';
 import Paper from '@mui/material/Paper';
-import moment from 'moment/moment';
+//import moment from 'moment/moment';
 import { useLocation } from 'react-router-dom';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -70,7 +70,7 @@ const PetsProfile = () => {
                   <TableCell>Picture</TableCell>
                   <TableCell align="left">Name</TableCell>
                   <TableCell align="left">Breed</TableCell>
-                  <TableCell align="left">Born</TableCell>
+                  <TableCell align="left">Age</TableCell>
                   <TableCell align="left">Gender</TableCell>
                   <TableCell align="left">Feeding-Routine</TableCell>
                   <TableCell align="left">Primary</TableCell>
@@ -89,7 +89,7 @@ const PetsProfile = () => {
                       </TableCell>
                       <TableCell align="left">{row?.name}</TableCell>
                       <TableCell align="left">{row?.breed}</TableCell>
-                      <TableCell align="left">{moment(row?.bornOnDate).format('MMM Do YY')}</TableCell>
+                      <TableCell align="left">{row?.year} {row?.year>1?"Years":"Year"} {row?.month} Months</TableCell>
                       <TableCell align="left">{row?.gender}</TableCell>
                       <TableCell align="left">{row?.feedingRoutine ? row?.feedingRoutine : 1} times per day</TableCell>
                       <TableCell align="left">{row?.isDefault ? <CheckCircleOutlineIcon /> : <CancelIcon />}</TableCell>
