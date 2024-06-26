@@ -26,7 +26,6 @@ import { DeleteRecipe, GetAllRecipes } from 'store/recipe/recipeAction';
 
 const ExpandMore = styled((props) => {
   const {  ...other } = props;
-  //console.log(expand, 'RecipeReviewCard');
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
@@ -44,7 +43,6 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const isLoadingDelete = useSelector((state) => state.RecipeReducer.isLoadingDelete);
 
-  //console.log(data, 'data');
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

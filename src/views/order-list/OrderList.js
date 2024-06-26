@@ -143,11 +143,11 @@ function Row(props) {
                   historyRow?.pouchesDetail?.length > 1
                     ? historyRow?.pouchesDetail
                     : newpouchesDetail && typeofPouch === 'string'
-                    ? content?.split(/\\n|\|/)
-                    : historyRow?.pouchesDetail[0]?.split('|');
-                console.log(historyRow, 'historyRow');
+                      ? content?.split(/\\n|\|/)
+                      : historyRow?.pouchesDetail[0]?.split('|');
 
                 let tArry = [3, 3, 3, 1];
+                console.log(historyRow, "historyRow")
                 return (
                   <>
                     {/* <Typography variant="h4" gutterBottom component="div">
@@ -219,7 +219,7 @@ function Row(props) {
                                     </TableBody>
                                   </Table>
                                 )}
-                                {historyRow?.planType === 'Transitional' && (
+                                {historyRow?.planType === 'Transitional' ? (
                                   <Table size="small" aria-label="purchases">
                                     <TableHead>
                                       <TableRow>
@@ -228,13 +228,13 @@ function Row(props) {
                                           Product No.
                                         </TableCell>
                                         <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold' }} align="left">
                                           Product Description
                                         </TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold' }} align="left">
                                           Quantity
                                         </TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold' }} align="left">
                                           Serving
                                         </TableCell>
                                         {/* {item?.selectedItemSize && (
@@ -245,19 +245,70 @@ function Row(props) {
                                       </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                      {resultArray?.map((item, index) => (
-                                        <>
+                                      {/* {resultArray?.map((item, index) => ( */}
+                                      <>
+                                        <TableRow>
+                                          <TableCell align="center"></TableCell>
+                                          <TableCell rowSpan={resultArray?.length} align="center">{index + 1}</TableCell>
+                                          <TableCell rowSpan={resultArray?.length} component="th" scope="row">
+                                            {historyRow?.planType}
+                                          </TableCell>
+                                          <TableCell align="center">
+                                            {resultArray?.map((x, index) =>
+                                              <TableRow key={index}>
+                                                <TableCell align="center">{historyRow?.recipes?.[0]?.name}</TableCell>
+                                              </TableRow>
+                                            )}
+                                          </TableCell>
+                                          <TableCell align="center">
+                                            {resultArray?.map((x, index) =>
+                                              <TableRow key={index}>
+                                                <TableCell align="center">{tArry?.[index]}</TableCell>
+                                              </TableRow>
+                                            )}
+                                          </TableCell>
+                                          <TableCell align="left" >
+                                            {resultArray?.map((y, index) => <TableRow key={index}>
+                                              <TableCell align="left">{y}</TableCell>
+                                            </TableRow>)}
+                                          </TableCell>
+                                        </TableRow>
+                                      </>
+                                      {/* ))} */}
+                                    </TableBody>
+                                  </Table>
+                                ) : historyRow?.planType === "Monthly" ? (
+                                  <Table size="small" aria-label="purchases">
+                                    {historyRow?.recipes?.map((item, i) => (
+                                      <>
+                                        <TableHead key={i}>
+                                          <TableRow>
+                                            <TableCell style={{ fontWeight: 'bold' }}></TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product No.
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product Description
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Quantity
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Serving
+                                            </TableCell>
+                                          </TableRow>
+                                        </TableHead>
+                                        <TableBody>
                                           <TableRow>
                                             <TableCell align="center"></TableCell>
-                                            <TableCell align="center">{1}</TableCell>
-                                            <TableCell colSpan={resultArray?.length} component="th" scope="row">
+                                            <TableCell align="center">{index + 1}</TableCell>
+                                            <TableCell component="th" scope="row">
                                               {historyRow?.planType}
                                             </TableCell>
-
-                                            <TableCell align="center">{historyRow?.recipes?.[0]?.name}</TableCell>
+                                            <TableCell align="center">{item?.name}</TableCell>
                                             <TableCell align="center">
-                                              {tArry?.[index]}
-                                              {/* {item?.quantity} {item?.quantity > 1 ? 'days' : 'day'} */}
+                                              {item?.quantity}
                                             </TableCell>
                                             <TableCell align="center" component="th" scope="row">
                                               {resultArray?.length > 1 ? (
@@ -266,74 +317,65 @@ function Row(props) {
                                                 resultArray?.map((x, index) => <p key={index}>{x}</p>)
                                               )}
                                             </TableCell>
-                                            {/* {item?.selectedItemSize && (
+                                          </TableRow>
+                                        </TableBody>
+                                      </>
+                                    ))}
+                                  </Table>) : (
+                                  <Table size="small" aria-label="purchases">
+                                    {historyRow?.recipes?.map((item, i) => (
+                                      <>
+                                        <TableHead key={i}>
+                                          <TableRow>
+                                            <TableCell style={{ fontWeight: 'bold' }}></TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product No.
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product Description
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Quantity
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Serving
+                                            </TableCell>
+                                            {item?.selectedItemSize && (
+                                              <TableCell style={{ fontWeight: 'bold' }} align="right">
+                                                Selected Size
+                                              </TableCell>
+                                            )}
+                                          </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                          <TableRow>
+                                            <TableCell align="center"></TableCell>
+                                            <TableCell align="center">{index + 1}</TableCell>
+                                            <TableCell component="th" scope="row">
+                                              {historyRow?.planType}
+                                            </TableCell>
+                                            <TableCell align="center">{item?.name}</TableCell>
+                                            <TableCell align="center">
+                                              {item?.quantity}
+                                            </TableCell>
+                                            <TableCell align="center" component="th" scope="row">
+                                              -
+                                            </TableCell>
+                                            {item?.selectedItemSize && (
                                               <TableCell align="right">
                                                 {item?.selectedItemSize?.price}-AED <br></br>
                                                 {item?.selectedItemSize?.name}
                                               </TableCell>
-                                            )} */}
+                                            )}
                                           </TableRow>
-                                        </>
-                                      ))}
-                                    </TableBody>
+                                        </TableBody>
+                                      </>
+                                    ))}
                                   </Table>
                                 )}
 
-                                {/* <Table size="small" aria-label="purchases">
-                                  {historyRow?.recipes?.map((item, index) => (
-                                    <>
-                                      <TableHead key={index}>
-                                        <TableRow>
-                                          <TableCell style={{ fontWeight: 'bold' }}></TableCell>
-                                          <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                            Product No.
-                                          </TableCell>
-                                          <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
-                                          <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                            Product Description
-                                          </TableCell>
-                                          <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                            Quantity
-                                          </TableCell>
-                                          <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                            Serving
-                                          </TableCell>
-                                          {item?.selectedItemSize && (
-                                            <TableCell style={{ fontWeight: 'bold' }} align="right">
-                                              Selected Size
-                                            </TableCell>
-                                          )}
-                                        </TableRow>
-                                      </TableHead>
-                                      <TableBody>
-                                        <TableRow>
-                                          <TableCell align="center"></TableCell>
-                                          <TableCell align="center">{index + 1}</TableCell>
-                                          <TableCell component="th" scope="row">
-                                            {historyRow?.planType}
-                                          </TableCell>
-                                          <TableCell align="center">{item?.name}</TableCell>
-                                          <TableCell align="center">
-                                            {item?.quantity} {item?.quantity > 1 ? 'days' : 'day'}
-                                          </TableCell>
-                                          <TableCell align="center" component="th" scope="row">
-                                            {resultArray?.length > 1 ? (
-                                              <p>{resultArray[index]}</p>
-                                            ) : (
-                                              resultArray?.map((x, index) => <p key={index}>{x}</p>)
-                                            )}
-                                          </TableCell>
-                                          {item?.selectedItemSize && (
-                                            <TableCell align="right">
-                                              {item?.selectedItemSize?.price}-AED <br></br>
-                                              {item?.selectedItemSize?.name}
-                                            </TableCell>
-                                          )}
-                                        </TableRow>
-                                      </TableBody>
-                                    </>
-                                  ))}
-                                </Table> */}
+
                                 {/* {resultArray?.length > 0 && (
                                   <Table size="small" aria-label="purchases">
                                     <TableHead>

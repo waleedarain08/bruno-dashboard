@@ -298,7 +298,7 @@ const FoodRecipes = () => {
             price6: parseInt(PriceSix),
             standaloneSize: standaloneSize
           };
-          dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess,isStandard,callAgain));
+          dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess, isStandard, callAgain));
         } else {
           let NewValues = fields?.map((i) => {
             return {
@@ -332,7 +332,7 @@ const FoodRecipes = () => {
             price6: parseInt(PriceSix),
             standaloneSize: standaloneSize
           };
-          dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess,isStandard,callAgain));
+          dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess, isStandard, callAgain));
         }
       }
     } else {
@@ -350,7 +350,7 @@ const FoodRecipes = () => {
   };
 
   const callAgain = (newdata) => {
-    console.log("again",newdata);
+
     dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess, false, emptyCheck));
   };
 
@@ -360,10 +360,9 @@ const FoodRecipes = () => {
   //   dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess, false, emptyCheck));
   // };
 
-  let emptyCheck = () => {};
+  let emptyCheck = () => { };
 
   const EditValues = (data) => {
-    console.log(data, 'data');
     setCondition('Edit');
     setSelectedId(data?._id);
     setNameRecipe(data?.name);
