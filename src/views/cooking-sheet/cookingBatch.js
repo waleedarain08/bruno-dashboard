@@ -257,7 +257,8 @@ const CookingBatch = () => {
                                                 <TableCell style={{ width: 250 }} align="center">{i?.key}</TableCell>
                                                 <TableCell style={{ width: 250 }} align="center">{Math.trunc(i?.CookingVolume)}</TableCell>
                                                 {BatchOrderByIdData?.map((x, index) => {
-                                                    let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
+                                                    console.log(x, "x")
+                                                    let updatedData = x?.ingredientConsumption && Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
                                                     let anOther = updatedData?.filter((u) => u?.name == i?.key);
                                                     const percentage = parseFloat(i?.ContingencyFactor?.replace('%', '')) / 100;
                                                     const adjustedWeight = anOther?.[0]?.value * (1 + percentage);
@@ -280,7 +281,7 @@ const CookingBatch = () => {
                                         </TableCell>
 
                                         {BatchOrderByIdData?.map((x, index) => {
-                                            let updatedData = Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
+                                            let updatedData = x?.ingredientConsumption && Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
                                             let newS = updatedData?.map((u) => {
                                                 const matchingItem = AllKeys.find((a) => u?.name === a.key);
                                                 let matched = matchingItem !== undefined && matchingItem !== null && u?.value * (1 + parseFloat(matchingItem?.ContingencyFactor?.replace('%', '')) / 100);
