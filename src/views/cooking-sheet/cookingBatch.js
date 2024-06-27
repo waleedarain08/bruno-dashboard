@@ -41,25 +41,33 @@ const CookingBatch = () => {
 
 
     React.useEffect(() => {
+        setAllKeys([])
         if (BatchIngredientsData?.length > 0 || BatchIngredientsData !== undefined) {
-            const formattedData = Object.keys(BatchIngredientsData).map((key) => {
-                const weight = BatchIngredientsData[key].weight;
-                const contingencyFactor = BatchIngredientsData[key].ContingencyFactor;
-                const percentage = parseFloat(contingencyFactor.replace('%', '')) / 100;
-                const adjustedWeight = weight * (1 + percentage);
+            const formattedData = Object.keys(BatchIngredientsData)?.map((key) => {
+                const weight = BatchIngredientsData[key]?.weight;
+                let contingencyFactor = BatchIngredientsData[key]?.ContingencyFactor;
+                if (typeof contingencyFactor === 'string' && contingencyFactor.includes('%')) {
+                    contingencyFactor = parseFloat(contingencyFactor.replace('%', '')) / 100;
+                } else {
+                    contingencyFactor = parseFloat(contingencyFactor);
+                    if (contingencyFactor > 1) {
+                        contingencyFactor = contingencyFactor / 100;
+                    }
+                }
+
+                const adjustedWeight = weight * (1 + contingencyFactor);
 
                 return {
                     key: key,
                     weight: weight,
                     ContingencyFactor: contingencyFactor,
                     CookingVolume: adjustedWeight,
-                    percentageObj: 1 + percentage
+                    percentageObj: 1 + contingencyFactor
                 };
             });
             setAllKeys(formattedData);
         }
     }, [BatchIngredientsData]);
-
     const sumWithInitial = AllKeys?.reduce((accumulator, currentValue) => accumulator + currentValue?.weight, 0);
     const sumWithadjustedWeight = AllKeys?.reduce((accumulator, currentValue) => accumulator + currentValue?.CookingVolume, 0);
 
@@ -67,9 +75,13 @@ const CookingBatch = () => {
     const futureDate = givenDate.add(30, 'days');
     const formattedFutureDate = futureDate.format('DD MMM YYYY');
 
-    let nameArr = BatchOrderByIdData?.map((i) => i?.orderItems?.map((u) => u?.recipes?.map((x) => x?.name)))
-        .flat(2)
-        .filter((name) => name !== undefined);
+    let nameArr = BatchOrderByIdData?.map((i) =>
+        i?.orderItems?.map((u) =>
+            u?.recipes?.map((x) =>
+                (x?.category === "" || x?.category === "Standard Recipes") && x?.name
+            )
+        )
+    ).flat(2).filter((name) => name !== undefined);
 
     React.useEffect(() => {
         if (BatchOrderByIdData?.length > 0) {
@@ -99,7 +111,7 @@ const CookingBatch = () => {
         }
     }, [BatchOrderByIdData]);
 
-    let maxLength = Math.max(...FeedingData.map(innerArray => innerArray.length));
+    let maxLength = Math.max(...FeedingData.map(innerArray => innerArray?.length));
     let rows = [];
     for (let i = 0; i < maxLength; i++) {
         rows.push(i);
@@ -223,14 +235,20 @@ const CookingBatch = () => {
                                         <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
                                         <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
                                         <TableCell style={{ width: 250, fontWeight: '800' }} align="center"></TableCell>
-                                        {BatchOrderByIdData?.map((i, index) => {
-
-                                            return (
-                                                <TableCell key={index} style={{ width: 250, fontWeight: '800' }} align="center">
-                                                    Order: {i?._id?.substring(i?._id?.length - 5)}
-                                                </TableCell>
-                                            );
-                                        })}
+                                        {BatchOrderByIdData?.map((i, index) =>
+                                            i?.orderItems?.map((z, itemIndex) =>
+                                                z?.recipes?.map((t, recipeIndex) => {
+                                                    if (t?.category === "" || t?.category === "Standard Recipes") {
+                                                        return (
+                                                            <TableCell key={`${index}-${itemIndex}-${recipeIndex}`} style={{ width: 250, fontWeight: '800' }} align="center">
+                                                                Order: {i?._id?.substring(i?._id?.length - 5)}
+                                                            </TableCell>
+                                                        );
+                                                    }
+                                                    return null;
+                                                })
+                                            )
+                                        )}
                                     </TableRow>
                                     <TableRow>
                                         <TableCell style={{ width: 250, backgroundColor: '#D78809' }} align="center">
@@ -256,20 +274,27 @@ const CookingBatch = () => {
                                                 <TableCell style={{ width: 250 }} align="center">{index + 1}</TableCell>
                                                 <TableCell style={{ width: 250 }} align="center">{i?.key}</TableCell>
                                                 <TableCell style={{ width: 250 }} align="center">{Math.trunc(i?.CookingVolume)}</TableCell>
-                                                {BatchOrderByIdData?.map((x, index) => {
-                                                    console.log(x, "x")
+                                                {BatchOrderByIdData?.map((x, newIndex) => x?.orderItems?.map((z) => z?.recipes?.map(() => {
                                                     let updatedData = x?.ingredientConsumption && Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
                                                     let anOther = updatedData?.filter((u) => u?.name == i?.key);
-                                                    const percentage = parseFloat(i?.ContingencyFactor?.replace('%', '')) / 100;
-                                                    const adjustedWeight = anOther?.[0]?.value * (1 + percentage);
-
-
+                                                    let contingencyFactor = i?.ContingencyFactor;
+                                                    if (typeof contingencyFactor === 'string' && contingencyFactor.includes('%')) {
+                                                        contingencyFactor = parseFloat(contingencyFactor.replace('%', '')) / 100;
+                                                    } else {
+                                                        contingencyFactor = parseFloat(contingencyFactor);
+                                                        if (contingencyFactor > 1) {
+                                                            contingencyFactor = contingencyFactor / 100;
+                                                        }
+                                                    }
+                                                    const adjustedWeight = anOther?.[0]?.value * (1 + contingencyFactor);
+                                                    console.log(BatchOrderByIdData,"BatchOrderByIdData")
                                                     return (
-                                                        <TableCell style={{ width: 250 }} key={index} align="center">
+                                                        <TableCell style={{ width: 250 }} key={newIndex} align="center">
                                                             {anOther?.length > 0 ? Math.trunc(adjustedWeight) : '--'}
                                                         </TableCell>
                                                     );
-                                                })}
+                                                }))
+                                                )}
                                             </TableRow>
                                         );
                                     })}
@@ -284,17 +309,30 @@ const CookingBatch = () => {
                                             let updatedData = x?.ingredientConsumption && Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
                                             let newS = updatedData?.map((u) => {
                                                 const matchingItem = AllKeys.find((a) => u?.name === a.key);
-                                                let matched = matchingItem !== undefined && matchingItem !== null && u?.value * (1 + parseFloat(matchingItem?.ContingencyFactor?.replace('%', '')) / 100);
+                                                let matched;
+                                                if (matchingItem) {
+                                                    let contingencyFactor = matchingItem?.ContingencyFactor;
+                                                    if (typeof contingencyFactor === 'string' && contingencyFactor.includes('%')) {
+                                                        contingencyFactor = parseFloat(contingencyFactor.replace('%', '')) / 100;
+                                                    } else {
+                                                        contingencyFactor = parseFloat(contingencyFactor);
+                                                        if (contingencyFactor > 1) {
+                                                            contingencyFactor = contingencyFactor / 100;
+                                                        }
+                                                    }
+                                                    matched = u?.value * (1 + contingencyFactor);
+                                                }
                                                 return { value: matched };
-                                            })
+                                            });
 
                                             const newSum = newS?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
                                             return (
                                                 <TableCell style={{ width: 250, fontWeight: '700' }} key={index} align="center">
-                                                    {Math.trunc(newSum)}
+                                                    {newSum !== undefined ? Math.trunc(newSum) : "--"}
                                                 </TableCell>
                                             );
                                         })}
+
                                     </TableRow>
                                 </TableBody>
                             </Table>
@@ -404,26 +442,6 @@ const CookingBatch = () => {
                             </Table>
                         </TableContainer>
                     </Paper>
-                    {/* <Paper sx={{ width: '100%', marginTop: 4 }}>
-                        <TableContainer>
-                            <Table aria-label="sticky table">
-                                <TableBody>
-                                    <TableRow>
-                                        <TableCell style={{ width: 250 }} align="left">No of Pouches per 1 serving:</TableCell>
-                                        <TableCell style={{ width: 250 }} align="left"></TableCell>
-                                        <TableCell style={{ width: 250 }} align="left"></TableCell>
-                                        {BatchOrderByIdData?.map((x, firstindex) => {
-                                            return (
-                                                <TableCell style={{ width: 250 }} key={firstindex} align="center">
-                                                    1
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Paper> */}
                 </>
             )}
         </>
