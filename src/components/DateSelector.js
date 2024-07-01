@@ -23,7 +23,6 @@ const DateSelector = ({ open, onClose }) => {
   const [startDate, setstartDate] = React.useState(null);
   const [endDate, setendDate] = React.useState(null);
   // const [newModal, setnewModal] = useState(false);
-  console.log(reportData, startDate, isLoadingreport);
   const targetRef = useRef();
   const navigate = useNavigate();
   // const { toPDF, targetRef } = usePDF({ filename: `Rerport-${startDate}-to${endDate}.pdf` });

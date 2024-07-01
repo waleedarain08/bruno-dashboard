@@ -15,6 +15,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { Button } from '@mui/material';
 import { SET_MENU } from 'store/actions';
+import Box from '@mui/material/Box';
+// import AvatarGroup from '@mui/material/AvatarGroup';
+// import Avatar from '@mui/material/Avatar';
 
 const CookingBatch = () => {
     const { state } = useLocation();
@@ -287,7 +290,6 @@ const CookingBatch = () => {
                                                         }
                                                     }
                                                     const adjustedWeight = anOther?.[0]?.value * (1 + contingencyFactor);
-                                                    console.log(BatchOrderByIdData,"BatchOrderByIdData")
                                                     return (
                                                         <TableCell style={{ width: 250 }} key={newIndex} align="center">
                                                             {anOther?.length > 0 ? Math.trunc(adjustedWeight) : '--'}
@@ -305,7 +307,7 @@ const CookingBatch = () => {
                                             {Math.trunc(sumWithadjustedWeight)}
                                         </TableCell>
 
-                                        {BatchOrderByIdData?.map((x, index) => {
+                                        {BatchOrderByIdData?.map((x, index) => x?.orderItems?.map((z) => z?.recipes?.map(() => {
                                             let updatedData = x?.ingredientConsumption && Object.entries(x?.ingredientConsumption).map(([name, value]) => ({ name, value }));
                                             let newS = updatedData?.map((u) => {
                                                 const matchingItem = AllKeys.find((a) => u?.name === a.key);
@@ -324,14 +326,14 @@ const CookingBatch = () => {
                                                 }
                                                 return { value: matched };
                                             });
-
                                             const newSum = newS?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
                                             return (
                                                 <TableCell style={{ width: 250, fontWeight: '700' }} key={index} align="center">
                                                     {newSum !== undefined ? Math.trunc(newSum) : "--"}
                                                 </TableCell>
                                             );
-                                        })}
+                                        }))
+                                        )}
 
                                     </TableRow>
                                 </TableBody>
@@ -339,7 +341,223 @@ const CookingBatch = () => {
                         </TableContainer>
                     </Paper>
 
-                    <Paper sx={{ width: '100%', marginTop: 5, borderTop: 1 }}>
+                    <Paper sx={{ marginTop: 4 }}>
+                        <TableContainer>
+                            {BatchOrderByIdData?.map((x) => x?.orderItems?.map((historyRow, index) => {
+                                let typeofPouch = typeof historyRow?.pouchesDetail;
+                                let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
+                                const content = newpouchesDetail && typeofPouch === 'string' && newpouchesDetail?.slice(2, -2);
+                                const resultArray =
+                                    historyRow?.pouchesDetail?.length > 1
+                                        ? historyRow?.pouchesDetail
+                                        : newpouchesDetail && typeofPouch === 'string'
+                                            ? content?.split(/\\n|\|/)
+                                            : historyRow?.pouchesDetail[0]?.split('|');
+
+                                // let tArry = [3, 3, 3, 1];
+                                return (
+                                    <>
+                                        <Table size="small" aria-label="purchases">
+                                            <TableBody>
+                                                <TableRow>
+                                                    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                                                        <Box sx={{ margin: 1 }}>
+                                                            {/* {historyRow?.pet && (
+                                                                <Table size="small" aria-label="purchases">
+                                                                    <TableHead>
+                                                                        <TableRow>
+                                                                            <TableCell style={{ fontWeight: 'bold' }} align="left">
+                                                                                Pet Name
+                                                                            </TableCell>
+                                                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                Breed
+                                                                            </TableCell>
+                                                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                Image
+                                                                            </TableCell>
+                                                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                Feeding Routine
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    </TableHead>
+                                                                    <TableBody>
+                                                                        <TableRow>
+                                                                            <TableCell align="left">{historyRow?.pet?.name}</TableCell>
+                                                                            <TableCell align="center">{historyRow?.pet?.breed}</TableCell>
+                                                                            <TableCell align="center">
+                                                                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                                                    <AvatarGroup max={2}>
+                                                                                        <Avatar key={index} alt="Remy Sharp" src={historyRow?.pet?.media} />
+                                                                                    </AvatarGroup>
+                                                                                </div>
+                                                                            </TableCell>
+                                                                            <TableCell align="center">
+                                                                                {historyRow?.pet?.feedingRoutine} {historyRow?.pet?.feedingRoutine > 1 ? 'times' : 'time'}
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    </TableBody>
+                                                                </Table>
+                                                            )} */}
+                                                            {historyRow?.planType === 'Transitional' ? (
+                                                                <Table size="small" aria-label="purchases">
+                                                                    <TableHead>
+                                                                        <TableRow>
+                                                                            <TableCell style={{ fontWeight: 'bold' }}>Order No.</TableCell>
+                                                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                Pet Name
+                                                                            </TableCell>
+                                                                            <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                                                                            <TableCell style={{ fontWeight: 'bold' }} align="left">
+                                                                                Product Description
+                                                                            </TableCell>
+                                                                            {/* <TableCell style={{ fontWeight: 'bold' }} align="left">
+                                                                                Quantity
+                                                                            </TableCell> */}
+                                                                            <TableCell style={{ fontWeight: 'bold' }} align="left">
+                                                                                Serving
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    </TableHead>
+                                                                    <TableBody>
+                                                                        <>
+                                                                            <TableRow>
+                                                                                <TableCell align="center">{x?._id?.substring(x?._id?.length - 5)}</TableCell>
+                                                                                <TableCell rowSpan={resultArray?.length} align="center">{historyRow?.pet?.name}</TableCell>
+                                                                                <TableCell rowSpan={resultArray?.length} component="th" scope="row">
+                                                                                    {historyRow?.planType}
+                                                                                </TableCell>
+                                                                                <TableCell align="center">
+                                                                                    {resultArray?.map((x, index) =>
+                                                                                        <TableRow key={index}>
+                                                                                            <TableCell align="center">{historyRow?.recipes?.[0]?.name}</TableCell>
+                                                                                        </TableRow>
+                                                                                    )}
+                                                                                </TableCell>
+
+                                                                                <TableCell align="left" >
+                                                                                    {resultArray?.map((y, index) => <TableRow key={index}>
+                                                                                        <TableCell align="left">{y}</TableCell>
+                                                                                    </TableRow>)}
+                                                                                </TableCell>
+                                                                            </TableRow>
+                                                                        </>
+                                                                        {/* ))} */}
+                                                                    </TableBody>
+                                                                </Table>
+                                                            ) : historyRow?.planType === "Monthly" ? (
+                                                                <Table size="small" aria-label="purchases">
+                                                                    {historyRow?.recipes?.map((item, i) => (
+                                                                        <>
+                                                                            <TableHead key={i}>
+                                                                                <TableRow>
+                                                                                    <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                        Order No.
+                                                                                    </TableCell>
+                                                                                    <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                        Pet Name
+                                                                                    </TableCell>
+                                                                                    <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                                                                                    <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                        Product Description
+                                                                                    </TableCell>
+                                                                                    {/* <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                        Quantity
+                                                                                    </TableCell> */}
+                                                                                    <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                        Serving
+                                                                                    </TableCell>
+                                                                                </TableRow>
+                                                                            </TableHead>
+                                                                            <TableBody>
+                                                                                <TableRow>
+                                                                                    <TableCell align="center">{x?._id?.substring(x?._id?.length - 5)}</TableCell>
+                                                                                    <TableCell align="center">{historyRow?.pet?.name}</TableCell>
+                                                                                    <TableCell component="th" scope="row">
+                                                                                        {historyRow?.planType}
+                                                                                    </TableCell>
+
+                                                                                    <TableCell align="center">{item?.name}</TableCell>
+                                                                                    {/* <TableCell align="center">
+                                                                                        {item?.quantity}
+                                                                                    </TableCell> */}
+                                                                                    <TableCell align="center" component="th" scope="row">
+                                                                                        {resultArray?.length > 1 ? (
+                                                                                            <p>{resultArray[index]}</p>
+                                                                                        ) : (
+                                                                                            resultArray?.map((x, index) => <p key={index}>{x}</p>)
+                                                                                        )}
+                                                                                    </TableCell>
+                                                                                </TableRow>
+                                                                            </TableBody>
+                                                                        </>
+                                                                    ))}
+                                                                </Table>) : (
+                                                                <Table size="small" aria-label="purchases">
+                                                                    {historyRow?.recipes?.map((item, i) => (
+                                                                        <>
+                                                                            <TableHead key={i}>
+                                                                                <TableRow>
+                                                                                    <TableCell style={{ fontWeight: 'bold' }}></TableCell>
+                                                                                    <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                        Order No.
+                                                                                    </TableCell>
+                                                                                    <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                                                                                    <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                        Product Description
+                                                                                    </TableCell>
+                                                                                    <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                        Quantity
+                                                                                    </TableCell>
+                                                                                    <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                                        Serving
+                                                                                    </TableCell>
+                                                                                    {item?.selectedItemSize && (
+                                                                                        <TableCell style={{ fontWeight: 'bold' }} align="right">
+                                                                                            Selected Size
+                                                                                        </TableCell>
+                                                                                    )}
+                                                                                </TableRow>
+                                                                            </TableHead>
+                                                                            <TableBody>
+                                                                                <TableRow>
+                                                                                    <TableCell align="center"></TableCell>
+                                                                                    <TableCell align="center">{x?._id?.substring(x?._id?.length - 5)}</TableCell>
+
+                                                                                    <TableCell component="th" scope="row">
+                                                                                        {historyRow?.planType}
+                                                                                    </TableCell>
+                                                                                    <TableCell align="center">{item?.name}</TableCell>
+                                                                                    <TableCell align="center">
+                                                                                        {item?.quantity}
+                                                                                    </TableCell>
+                                                                                    <TableCell align="center" component="th" scope="row">
+                                                                                        -
+                                                                                    </TableCell>
+                                                                                    {item?.selectedItemSize && (
+                                                                                        <TableCell align="right">
+                                                                                            {item?.selectedItemSize?.price}-AED <br></br>
+                                                                                            {item?.selectedItemSize?.name}
+                                                                                        </TableCell>
+                                                                                    )}
+                                                                                </TableRow>
+                                                                            </TableBody>
+                                                                        </>
+                                                                    ))}
+                                                                </Table>
+                                                            )}
+                                                        </Box>
+                                                    </TableCell>
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>
+                                    </>
+                                );
+                            }))}
+                        </TableContainer>
+                    </Paper>
+
+
+                    {/* <Paper sx={{ width: '100%', marginTop: 5, borderTop: 1 }}>
                         <TableContainer>
                             <Table aria-label="sticky table">
                                 <TableHead>
@@ -441,7 +659,7 @@ const CookingBatch = () => {
                                 })}
                             </Table>
                         </TableContainer>
-                    </Paper>
+                    </Paper> */}
                 </>
             )}
         </>

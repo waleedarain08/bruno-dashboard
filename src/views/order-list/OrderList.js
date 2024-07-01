@@ -28,20 +28,21 @@ import { ADDToBatch } from 'store/batch/batchTypeAction';
 import SearchFeild from 'components/searchFeild';
 import { SET_MENU } from 'store/actions';
 import ExportUsers from 'views/user-accounts/exportUsers';
-import ReportModal from 'components/ReportModal';
+// import ReportModal from 'components/ReportModal';
+import { useNavigate } from 'react-router';
 // material-ui
 
 function Row(props) {
   const { row, setId } = props;
   const [open, setOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
-  const [modalReportOpen, setModalReportOpen] = React.useState(false);
-  const [SelectRow, setSelectRow] = React.useState(null);
+  // const [modalReportOpen, setModalReportOpen] = React.useState(false);
+  // const [SelectRow, setSelectRow] = React.useState(null);
+  const navigate = useNavigate();
 
   const Userdata = useSelector((state) => state.AuthReducer.data);
-  // const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
   const LocationDataChange = useSelector((state) => state.OrderReducer.LocationDataChange);
-  // moveToBatch(row?._id)
+
 
   const dispatch = useDispatch();
   const OrderCooked = (id, name, check) => {
@@ -67,21 +68,22 @@ function Row(props) {
   // };
 
   const ViewReport = (data) => {
+    navigate('/order-list/invoice', { state: { data: data } });
     dispatch(ViewOrderLocation(data?.locationId, Userdata?.clientToken));
-    setSelectRow(data);
-    setModalReportOpen(true);
+    // setSelectRow(data);
+    // setModalReportOpen(true);
   };
   ViewReport;
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-  const handleCloseReportModal = () => {
-    setModalReportOpen(false);
-  };
+  // const handleCloseReportModal = () => {
+  //   setModalReportOpen(false);
+  // };
 
   return (
     <React.Fragment>
-      <ReportModal open={modalReportOpen} onClose={handleCloseReportModal} location={LocationDataChange} SelectRow={SelectRow} />
+      {/* <ReportModal open={modalReportOpen} onClose={handleCloseReportModal} location={LocationDataChange} SelectRow={SelectRow} /> */}
       <LocationModal open={modalOpen} onClose={handleCloseModal} location={LocationDataChange} />
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
@@ -147,37 +149,14 @@ function Row(props) {
                       : historyRow?.pouchesDetail[0]?.split('|');
 
                 let tArry = [3, 3, 3, 1];
-                console.log(historyRow, "historyRow")
                 return (
                   <>
-                    {/* <Typography variant="h4" gutterBottom component="div">
-                      Order
-                    </Typography> */}
                     <Table size="small" aria-label="purchases">
-                      {/* <TableHead>
-                        <TableRow>
-                          <TableCell>Type</TableCell>
-                          <TableCell>Special Instructions(If Any)</TableCell>
-                          <TableCell align="right">Total price (AED)</TableCell>
-                        </TableRow>
-                      </TableHead> */}
                       <TableBody>
-                        {/* <TableRow key={index}>
-                          <TableCell component="th" scope="row">
-                            {historyRow?.planType}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {row?.specialInstructions}
-                          </TableCell>
-                          <TableCell align="right">{historyRow?.planTotal}-AED</TableCell>
-                        </TableRow> */}
                         <TableRow>
                           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                             <Collapse in={open} timeout="auto" unmountOnExit>
                               <Box sx={{ margin: 1 }}>
-                                {/* <Typography variant="h4" gutterBottom component="div">
-                                  Details
-                                </Typography> */}
                                 {historyRow?.pet && (
                                   <Table size="small" aria-label="purchases">
                                     <TableHead>
@@ -194,8 +173,6 @@ function Row(props) {
                                         <TableCell style={{ fontWeight: 'bold' }} align="center">
                                           Feeding Routine
                                         </TableCell>
-                                        {/* <TableCell align="center">Current Weight</TableCell>
-                                        <TableCell align="right">Actual Weight</TableCell> */}
                                       </TableRow>
                                     </TableHead>
                                     <TableBody>
