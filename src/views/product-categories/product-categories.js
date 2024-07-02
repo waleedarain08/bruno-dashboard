@@ -234,16 +234,25 @@ const ProductCategories = () => {
 
   let SizesData = [
     {
-      name: 'Small'
+      name: 'XS'
     },
     {
-      name: 'Medium'
+      name: 'S'
     },
     {
-      name: 'Large'
+      name: 'M'
     },
     {
-      name: 'Extra Large'
+      name: 'L'
+    },
+    {
+      name: 'XL'
+    },
+    {
+      name: '2XL'
+    },
+    {
+      name: '3XL'
     }
   ];
 
