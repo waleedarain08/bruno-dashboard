@@ -147,7 +147,7 @@ const TotalOrderLineChartCard = ({ isLoading, paidAmount }) => {
                             color: theme.palette.primary[200]
                           }}
                         >
-                          Total Orders
+                          Total Orders Per Month
                         </Typography>
                       </Grid>
                     </Grid>

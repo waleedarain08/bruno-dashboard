@@ -8,6 +8,8 @@ import { Avatar, Box, Grid, Typography } from '@mui/material';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
+//import moment from 'moment/moment';
+
 
 // assets
 import EarningIcon from 'assets/images/icons/earning.svg';
@@ -169,7 +171,7 @@ const EarningCard = ({ isLoading, paidAmount }) => {
                     color: theme.palette.secondary[200]
                   }}
                 >
-                  Total Earning
+                  Total Earnings Per Month 
                 </Typography>
               </Grid>
             </Grid>
