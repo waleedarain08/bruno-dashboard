@@ -87,7 +87,7 @@ const ProductCategories = () => {
   };
   const handleNumberChange = (index, value) => {
     const updatedFields = [...fields];
-    updatedFields[index].price = value;
+    updatedFields[index].price = parseInt(value);
     setFields(updatedFields);
   };
   const handleRemoveField = (index) => {
@@ -323,7 +323,7 @@ const ProductCategories = () => {
                   sx={{ width: '80%' }}
                   label="Price"
                   type="number"
-                  value={field?.price}
+                  value={parseInt(field?.price)}
                   onChange={(e) => handleNumberChange(index, e.target.value)}
                 />
               </Box>
