@@ -279,17 +279,17 @@ function Row(props) {
                                         <TableBody>
                                           <TableRow>
                                             <TableCell align="center"></TableCell>
-                                            <TableCell align="center">{index + 1}</TableCell>
+                                            <TableCell align="center">{i + 1}</TableCell>
                                             <TableCell component="th" scope="row">
                                               {historyRow?.planType}
                                             </TableCell>
                                             <TableCell align="center">{item?.name}</TableCell>
                                             <TableCell align="center">
-                                              {item?.quantity}
+                                              {item?.totalDays}
                                             </TableCell>
                                             <TableCell align="center" component="th" scope="row">
                                               {resultArray?.length > 1 ? (
-                                                <p>{resultArray[index]}</p>
+                                                <p>{resultArray[i]}</p>
                                               ) : (
                                                 resultArray?.map((x, index) => <p key={index}>{x}</p>)
                                               )}

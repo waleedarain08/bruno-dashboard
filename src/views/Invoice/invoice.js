@@ -110,8 +110,11 @@ const Invoice = () => {
                                     let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
                                     const content = newpouchesDetail && typeofPouch === 'string' && newpouchesDetail?.slice(2, -2);
                                     const resultArray =
-                                        newpouchesDetail && typeofPouch === 'string' ? content?.split(/\\n|\|/) : historyRow?.pouchesDetail[0]?.split('|');
-                                    return (
+                                    historyRow?.pouchesDetail?.length > 1
+                                    ? historyRow?.pouchesDetail
+                                    : newpouchesDetail && typeofPouch === 'string'
+                                      ? content?.split(/\\n|\|/)
+                                      : historyRow?.pouchesDetail[0]?.split('|');                                    return (
                                         <>
                                             <Typography variant="h4" style={{ paddingBottom: 10, paddingTop: 10 }} gutterBottom component="div">
                                                 Item : {index + 1}
@@ -192,10 +195,10 @@ const Invoice = () => {
                                                                     <TableBody>
                                                                         <TableRow>
                                                                             <TableCell component="th" scope="row">
-                                                                                {item?.category !== '' ? item?.category : '---'}
+                                                                                {item?.category !== '' ? item?.category : 'Recipe'}
                                                                             </TableCell>
                                                                             <TableCell align="center">{item?.name}</TableCell>
-                                                                            <TableCell align="center">{item?.quantity}</TableCell>
+                                                                            <TableCell align="center">{historyRow?.planType==="Monthly"?item?.totalDays:item?.quantity}</TableCell>
                                                                             <TableCell align="right">{item?.finalPrice}-AED</TableCell>
                                                                             {item?.selectedItemSize && (
                                                                                 <TableCell align="right">
@@ -218,7 +221,16 @@ const Invoice = () => {
                                                                 <TableBody>
                                                                     <TableRow>
                                                                         <TableCell component="th" scope="row">
-                                                                            {resultArray?.map((x, index) => (
+                                                                            {
+                                                                            historyRow?.planType=="Monthly"?
+                                                                            historyRow?.recipes?.map((item, i) => (
+                                                                            resultArray?.length > 1 ? (
+                                                                                <p key={i}>{`${item.name} : ${resultArray[i]}`}</p>
+                                                                              ) : (
+                                                                                resultArray?.map((x, index) => <p key={index}>{x}</p>)
+                                                                              )
+                                                                            )) :
+                                                                            resultArray?.map((x, index) => (
                                                                                 <p key={index}>{x}</p>
                                                                             ))}
                                                                         </TableCell>
@@ -265,7 +277,7 @@ const Invoice = () => {
                                 </TableBody>
                             </Table>
                             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: 20 }}>
-                                <h4>{`THANK YOU for being part of Brino's family where every tail wag tells a story of love, care, and culinary excellence.`}</h4>
+                                <h4>{`THANK YOU for being part of Bruno's family where every tail wag tells a story of love, care, and culinary excellence.`}</h4>
                             </div>
                         </div>
                     </div>
