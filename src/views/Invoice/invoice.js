@@ -130,7 +130,7 @@ const Invoice = () => {
                                                 <TableBody>
                                                     <TableRow key={index}>
                                                         <TableCell component="th" scope="row">
-                                                            {historyRow?.planType}
+                                                            {historyRow?.planType} Order
                                                         </TableCell>
                                                         {/* <TableCell component="th" scope="row">
                                                             {SelectRow?.specialInstructions}
@@ -195,7 +195,7 @@ const Invoice = () => {
                                                                     <TableBody>
                                                                         <TableRow>
                                                                             <TableCell component="th" scope="row">
-                                                                                {item?.category !== '' ? item?.category : 'Recipe'}
+                                                                                {item?.category !== '' ? item?.category : historyRow?.planType}
                                                                             </TableCell>
                                                                             <TableCell align="center">{item?.name}</TableCell>
                                                                             <TableCell align="center">{historyRow?.planType==="Monthly"?item?.totalDays:item?.quantity}</TableCell>
@@ -252,6 +252,7 @@ const Invoice = () => {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell style={{ fontWeight: 'bold' }}>Area</TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }}>Street</TableCell>
                                         <TableCell style={{ fontWeight: 'bold' }} align="center">
                                             House/Flat/Building
                                         </TableCell>
@@ -261,6 +262,12 @@ const Invoice = () => {
                                         <TableCell style={{ fontWeight: 'bold' }} align="center">
                                             Address
                                         </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                            Contact Person
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                            Contact Number
+                                        </TableCell>
                                         {/* <Table Cell align="center">Location</TableCell> */}
                                     </TableRow>
                                 </TableHead>
@@ -269,11 +276,23 @@ const Invoice = () => {
                                         <TableCell component="th" scope="row">
                                             {location?.area}
                                         </TableCell>
+                                        <TableCell align="center">{location?.street}</TableCell>
                                         <TableCell align="center">{location?.flatHouseNumber} AED</TableCell>
                                         <TableCell align="center">{location?.floor}</TableCell>
 
                                         <TableCell align="center">{location?.address}</TableCell>
+                                        <TableCell align="center">{location?.contactName}</TableCell>
+                                        <TableCell align="center">{location?.contactNumber}</TableCell>
+
+
                                     </TableRow>
+                                    <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                    <TableCell style={{ fontWeight: 'bold' }} >
+                                    Special Instructions
+                                        </TableCell>
+                                    <TableCell >{location?.deliveryInstruction}</TableCell>
+                                        </TableRow>
+
                                 </TableBody>
                             </Table>
                             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: 20 }}>
