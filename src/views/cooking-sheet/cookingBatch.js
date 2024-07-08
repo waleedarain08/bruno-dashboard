@@ -356,7 +356,7 @@ const CookingBatch = () => {
                   <TableContainer>
                     <TableRow>
                       <TableCell style={{ fontWeight: '800' }} align="left" colSpan={2}>
-                        COOKING SHEET PER ORDER :
+                      ORDER PACKAGING INSTRUCTIONS :
                       </TableCell>
                     </TableRow>
                     {items?.orderItems?.map((historyRow, index) => {
@@ -380,12 +380,13 @@ const CookingBatch = () => {
                                   <Box sx={{ margin: 1 }}>
                                     {historyRow?.planType === 'Transitional' ? (
                                       <Table size="small" aria-label="purchases">
-                                        <TableHead>
+                                        <TableHead key={index}>
                                           <TableRow>
                                             <TableCell style={{ fontWeight: 'bold' }} align="center">
                                               Pet Name
                                             </TableCell>
                                             <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }}>Feeding Routine Per Day</TableCell>
                                             <TableCell style={{ fontWeight: 'bold' }} align="left">
                                               Product Description
                                             </TableCell>
@@ -400,8 +401,12 @@ const CookingBatch = () => {
                                               <TableCell rowSpan={resultArray?.length} align="center">
                                                 {historyRow?.pet?.name}
                                               </TableCell>
+                                              
                                               <TableCell rowSpan={resultArray?.length} component="th" scope="row">
                                                 {historyRow?.planType}
+                                              </TableCell>
+                                              <TableCell rowSpan={resultArray?.length} align="center">
+                                                {historyRow?.pet?.feedingRoutine} times
                                               </TableCell>
                                               <TableCell align="center">
                                                 {resultArray?.map((x, index) => (
@@ -433,6 +438,7 @@ const CookingBatch = () => {
                                                   Pet Name
                                                 </TableCell>
                                                 <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                                                <TableCell style={{ fontWeight: 'bold' }}>Feeding Routine Per Day</TableCell>
                                                 <TableCell style={{ fontWeight: 'bold' }} align="center">
                                                   Product Description
                                                 </TableCell>
@@ -447,12 +453,14 @@ const CookingBatch = () => {
                                                 <TableCell component="th" scope="row">
                                                   {historyRow?.planType}
                                                 </TableCell>
-
+                                                <TableCell rowSpan={resultArray?.length} align="center">
+                                                {historyRow?.pet?.feedingRoutine} times
+                                              </TableCell>
                                                 <TableCell align="center">{item?.name}</TableCell>
 
                                                 <TableCell align="center" component="th" scope="row">
                                                   {resultArray?.length > 1 ? (
-                                                    <p>{resultArray[index]}</p>
+                                                    <p>{resultArray[i]}</p>
                                                   ) : (
                                                     resultArray?.map((x, index) => <p key={index}>{x}</p>)
                                                   )}

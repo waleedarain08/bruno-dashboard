@@ -122,7 +122,7 @@ const Invoice = () => {
                                             <Table size="small" aria-label="purchases">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell>Type</TableCell>
+                                                        <TableCell style={{ fontWeight: 'bold' }}>Type</TableCell>
                                                         {/* <TableCell>Special Instructions(If Any)</TableCell> */}
                                                         <TableCell align="right">Total price (AED)</TableCell>
                                                     </TableRow>
@@ -142,25 +142,26 @@ const Invoice = () => {
                                                             <Table size="small" aria-label="purchases">
                                                                 <TableHead>
                                                                     <TableRow>
-                                                                        <TableCell align="left">Pet Name</TableCell>
-                                                                        <TableCell align="center">Breed</TableCell>
-                                                                        <TableCell align="center">Media</TableCell>
-                                                                        <TableCell align="center">Feeding Routine</TableCell>
+                                                                        <TableCell align="left" style={{ fontWeight: 'bold' }}>Pet</TableCell>
+                                                                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Pet Name</TableCell>
+                                                                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Breed</TableCell>
+                                                                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Feeding Routine</TableCell>
                                                                         {/* <TableCell align="center">Current Weight</TableCell>
                                                                         <TableCell align="right">Actual Weight</TableCell> */}
                                                                     </TableRow>
                                                                 </TableHead>
                                                                 <TableBody>
                                                                     <TableRow>
-                                                                        <TableCell align="left">{historyRow?.pet?.name}</TableCell>
-                                                                        <TableCell align="center">{historyRow?.pet?.breed}</TableCell>
-                                                                        <TableCell align="center">
-                                                                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                                    <TableCell align="left">
+                                                                            <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                                                                                 <AvatarGroup max={2}>
                                                                                     <Avatar key={index} alt="Remy Sharp" src={historyRow?.pet?.media} />
                                                                                 </AvatarGroup>
                                                                             </div>
                                                                         </TableCell>
+                                                                        <TableCell align="center">{historyRow?.pet?.name}</TableCell>
+                                                                        <TableCell align="center">{historyRow?.pet?.breed}</TableCell>
+                                                                       
                                                                         <TableCell align="center">{historyRow?.pet?.feedingRoutine}</TableCell>
                                                                         {/* 
                                                                         <TableCell align="center">{historyRow?.pet?.currentWeight}</TableCell>
@@ -183,7 +184,10 @@ const Invoice = () => {
                                                                                 Quantity
                                                                             </TableCell>
                                                                             <TableCell style={{ fontWeight: 'bold' }} align="right">
-                                                                                Price (AED)
+                                                                                Unit Price (AED)
+                                                                            </TableCell>
+                                                                            <TableCell style={{ fontWeight: 'bold' }} align="right">
+                                                                                Total Price (AED)
                                                                             </TableCell>
                                                                             {item?.selectedItemSize && (
                                                                                 <TableCell style={{ fontWeight: 'bold' }} align="right">
@@ -198,7 +202,8 @@ const Invoice = () => {
                                                                                 {item?.category !== '' ? item?.category : historyRow?.planType}
                                                                             </TableCell>
                                                                             <TableCell align="center">{item?.name}</TableCell>
-                                                                            <TableCell align="center">{historyRow?.planType==="Monthly"?item?.totalDays:item?.quantity}</TableCell>
+                                                                            <TableCell align="center">{historyRow?.planType==="Monthly"?item?.totalDays:historyRow?.planType==="Transitional"?historyRow?.pet?.feedingRoutine*10:item?.quantity}</TableCell>
+                                                                            <TableCell align="center">{historyRow?.planType==="Product"?`${item?.finalPrice/item?.quantity} -AED`:"-"}</TableCell>
                                                                             <TableCell align="right">{item?.finalPrice}-AED</TableCell>
                                                                             {item?.selectedItemSize && (
                                                                                 <TableCell align="right">
@@ -211,7 +216,6 @@ const Invoice = () => {
                                                                 </>
                                                             ))}
                                                         </Table>
-                                                        {resultArray?.length > 0 && (
                                                             <Table size="small" aria-label="purchases">
                                                                 <TableHead>
                                                                     <TableRow>
@@ -220,6 +224,8 @@ const Invoice = () => {
                                                                 </TableHead>
                                                                 <TableBody>
                                                                     <TableRow>
+                                                                    {resultArray?.length > 0 ? (
+
                                                                         <TableCell component="th" scope="row">
                                                                             {
                                                                             historyRow?.planType=="Monthly"?
@@ -234,10 +240,22 @@ const Invoice = () => {
                                                                                 <p key={index}>{x}</p>
                                                                             ))}
                                                                         </TableCell>
+                                                                         ) : 
+                                                                         (
+                                                                            <TableCell component="th" scope="row">
+                                                                               {historyRow?.recipes?.map((item, i) => (
+                                                                                 <p key={i}>{`${item.quantity} Servings x 400 grams`}</p>
+
+                                                                               ))}
+                                                                            </TableCell>    
+
+
+                                                                         )
+                                                                         }
                                                                     </TableRow>
                                                                 </TableBody>
                                                             </Table>
-                                                        )}
+                                                       
                                                     </TableRow>
                                                 </TableBody>
                                             </Table>
