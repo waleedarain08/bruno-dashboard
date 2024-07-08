@@ -110,8 +110,11 @@ const Invoice = () => {
                                     let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
                                     const content = newpouchesDetail && typeofPouch === 'string' && newpouchesDetail?.slice(2, -2);
                                     const resultArray =
-                                        newpouchesDetail && typeofPouch === 'string' ? content?.split(/\\n|\|/) : historyRow?.pouchesDetail[0]?.split('|');
-                                    return (
+                                    historyRow?.pouchesDetail?.length > 1
+                                    ? historyRow?.pouchesDetail
+                                    : newpouchesDetail && typeofPouch === 'string'
+                                      ? content?.split(/\\n|\|/)
+                                      : historyRow?.pouchesDetail[0]?.split('|');                                    return (
                                         <>
                                             <Typography variant="h4" style={{ paddingBottom: 10, paddingTop: 10 }} gutterBottom component="div">
                                                 Item : {index + 1}
@@ -127,7 +130,7 @@ const Invoice = () => {
                                                 <TableBody>
                                                     <TableRow key={index}>
                                                         <TableCell component="th" scope="row">
-                                                            {historyRow?.planType}
+                                                            {historyRow?.planType} Order
                                                         </TableCell>
                                                         {/* <TableCell component="th" scope="row">
                                                             {SelectRow?.specialInstructions}
@@ -192,10 +195,10 @@ const Invoice = () => {
                                                                     <TableBody>
                                                                         <TableRow>
                                                                             <TableCell component="th" scope="row">
-                                                                                {item?.category !== '' ? item?.category : '---'}
+                                                                                {item?.category !== '' ? item?.category : historyRow?.planType}
                                                                             </TableCell>
                                                                             <TableCell align="center">{item?.name}</TableCell>
-                                                                            <TableCell align="center">{item?.quantity}</TableCell>
+                                                                            <TableCell align="center">{historyRow?.planType==="Monthly"?item?.totalDays:item?.quantity}</TableCell>
                                                                             <TableCell align="right">{item?.finalPrice}-AED</TableCell>
                                                                             {item?.selectedItemSize && (
                                                                                 <TableCell align="right">
@@ -218,7 +221,16 @@ const Invoice = () => {
                                                                 <TableBody>
                                                                     <TableRow>
                                                                         <TableCell component="th" scope="row">
-                                                                            {resultArray?.map((x, index) => (
+                                                                            {
+                                                                            historyRow?.planType=="Monthly"?
+                                                                            historyRow?.recipes?.map((item, i) => (
+                                                                            resultArray?.length > 1 ? (
+                                                                                <p key={i}>{`${item.name} : ${resultArray[i]}`}</p>
+                                                                              ) : (
+                                                                                resultArray?.map((x, index) => <p key={index}>{x}</p>)
+                                                                              )
+                                                                            )) :
+                                                                            resultArray?.map((x, index) => (
                                                                                 <p key={index}>{x}</p>
                                                                             ))}
                                                                         </TableCell>
@@ -240,6 +252,7 @@ const Invoice = () => {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell style={{ fontWeight: 'bold' }}>Area</TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }}>Street</TableCell>
                                         <TableCell style={{ fontWeight: 'bold' }} align="center">
                                             House/Flat/Building
                                         </TableCell>
@@ -249,6 +262,12 @@ const Invoice = () => {
                                         <TableCell style={{ fontWeight: 'bold' }} align="center">
                                             Address
                                         </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                            Contact Person
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                            Contact Number
+                                        </TableCell>
                                         {/* <Table Cell align="center">Location</TableCell> */}
                                     </TableRow>
                                 </TableHead>
@@ -257,15 +276,27 @@ const Invoice = () => {
                                         <TableCell component="th" scope="row">
                                             {location?.area}
                                         </TableCell>
+                                        <TableCell align="center">{location?.street}</TableCell>
                                         <TableCell align="center">{location?.flatHouseNumber} AED</TableCell>
                                         <TableCell align="center">{location?.floor}</TableCell>
 
                                         <TableCell align="center">{location?.address}</TableCell>
+                                        <TableCell align="center">{location?.contactName}</TableCell>
+                                        <TableCell align="center">{location?.contactNumber}</TableCell>
+
+
                                     </TableRow>
+                                    <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                    <TableCell style={{ fontWeight: 'bold' }} >
+                                    Special Instructions
+                                        </TableCell>
+                                    <TableCell >{location?.deliveryInstruction}</TableCell>
+                                        </TableRow>
+
                                 </TableBody>
                             </Table>
                             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: 20 }}>
-                                <h4>{`THANK YOU for being part of Brino's family where every tail wag tells a story of love, care, and culinary excellence.`}</h4>
+                                <h4>{`THANK YOU for being part of Bruno's family where every tail wag tells a story of love, care, and culinary excellence.`}</h4>
                             </div>
                         </div>
                     </div>
