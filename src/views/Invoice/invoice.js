@@ -244,7 +244,7 @@ const Invoice = () => {
                                                                          (
                                                                             <TableCell component="th" scope="row">
                                                                                {historyRow?.recipes?.map((item, i) => (
-                                                                                 <p key={i}>{`${item.quantity} Servings x 400 grams`}</p>
+                                                                                 <p key={i}>{item.category=="Standard Recipes"?`${item.quantity} Servings x ${item.standaloneSize} grams`:'-'}</p>
 
                                                                                ))}
                                                                             </TableCell>    
