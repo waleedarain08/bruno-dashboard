@@ -28,6 +28,8 @@ import { GetAllCategories } from 'store/categories/categoriesAction';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchFeild from 'components/searchFeild';
+import RichTextEditor from 'components/RichTextEditor';
+
 
 const style = {
   position: 'absolute',
@@ -55,6 +57,7 @@ const ProductCategories = () => {
   const [Details, setDetails] = React.useState('');
   const [Description, setDescription] = React.useState('');
   const [Featured, setFeatured] = React.useState(false);
+  const [Visible, setVisible] = React.useState(true);
   const [Loading, setLoading] = React.useState(false);
   const [Error, setError] = React.useState('');
   const [Condition, setCondition] = React.useState(null);
@@ -69,6 +72,7 @@ const ProductCategories = () => {
     setDetails('');
     setDescription('');
     setFeatured('');
+    setVisible('');
     setSelectedFiles([]);
     setPreviewEdit([]);
     setSelectedId(null);
@@ -90,6 +94,13 @@ const ProductCategories = () => {
     updatedFields[index].price = parseInt(value);
     setFields(updatedFields);
   };
+
+  const handleStockChange = (index, value) => {
+    const updatedFields = [...fields];
+    updatedFields[index].stock = parseInt(value);
+    setFields(updatedFields);
+  };
+
   const handleRemoveField = (index) => {
     const updatedFields = [...fields];
     updatedFields.splice(index, 1);
@@ -153,6 +164,7 @@ const ProductCategories = () => {
         let newdata = {
           name: NameRecipe,
           isFeatured: Featured,
+          isVisible: Visible,
           description: Description,
           details: Details,
           pricePerKG: parseInt(KG),
@@ -177,6 +189,7 @@ const ProductCategories = () => {
           let newdata = {
             name: NameRecipe,
             isFeatured: Featured,
+            isVisible: Visible,
             description: Description,
             details: Details,
             pricePerKG: parseInt(KG),
@@ -198,6 +211,7 @@ const ProductCategories = () => {
           let newdata = {
             name: NameRecipe,
             isFeatured: Featured,
+            isVisible: Visible,
             description: Description,
             details: Details,
             pricePerKG: parseInt(KG),
@@ -266,6 +280,7 @@ const ProductCategories = () => {
     setDetails(data?.details);
     setDescription(data?.description);
     setFeatured(data?.isFeatured);
+    setVisible(data?.isVisible);
     setPreviewEdit(data?.media);
     setCategoryes(data?.category);
     setFields(data?.sizes);
@@ -306,7 +321,7 @@ const ProductCategories = () => {
                     <DeleteIcon variant="contained" color="secondary" onClick={() => handleRemoveField(index)} />{' '}
                   </div>
                 )}
-                <FormControl sx={{ width: '80%' }}>
+                <FormControl sx={{ width: '50%' }}>
                   <InputLabel>Size</InputLabel>
                   <Select value={field?.name} onChange={(e) => handleSelectChange(index, e.target.value)}>
                     {SizesData?.map((i, index) => {
@@ -319,12 +334,21 @@ const ProductCategories = () => {
                   </Select>
                 </FormControl>
                 <TextField
-                  style={{ marginLeft: 10 }}
-                  sx={{ width: '80%' }}
+                  style={{ marginLeft: 5 }}
+                  sx={{ width: '40%' }}
                   label="Price"
                   type="number"
-                  value={parseInt(field?.price)}
+                  step="any"
+                  value={field?.price}
                   onChange={(e) => handleNumberChange(index, e.target.value)}
+                />
+                 <TextField
+                  style={{ marginLeft: 5 }}
+                  sx={{ width: '40%' }}
+                  label="Stock"
+                  type="number"
+                  value={field?.stock}
+                  onChange={(e) => handleStockChange(index, e.target.value)}
                 />
               </Box>
             ))}
@@ -363,8 +387,9 @@ const ProductCategories = () => {
               style={{ margin: 5 }}
               sx={{ width: '100%' }}
               type={'number'}
+              step="any"
               id="outlined-basic"
-              label="Price"
+              label="Standard Price (for without size products)"
               variant="outlined"
             />
           </Box>
@@ -383,7 +408,7 @@ const ProductCategories = () => {
             </FormControl>
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
-            <TextField
+            {/* <TextField
               value={Description}
               onChange={(e) => setDescription(e.target.value)}
               style={{ marginTop: 5 }}
@@ -391,7 +416,13 @@ const ProductCategories = () => {
               id="outlined-basic"
               label="Description"
               variant="outlined"
-            />
+            /> */}
+            <div style={{  maxHeight: 500, overflowY: 'scroll', maxWidth:'460px' }}>
+                    <RichTextEditor 
+                    value={Description}               
+                    onChange={(value) => setDescription(value)}
+                    />
+             </div>
             {/* <StyledTextarea sx={{ width: '100%' }} maxRows={5} aria-label="maximum height" placeholder="Description" defaultValue="" /> */}
           </Box>
           <FormControlLabel
@@ -399,6 +430,12 @@ const ProductCategories = () => {
             required
             control={<Switch checked={Featured} onChange={() => setFeatured(!Featured)} />}
             label="Featured"
+          />
+          <FormControlLabel
+            style={{ marginLeft: 7 }}
+            required
+            control={<Switch checked={Visible} onChange={() => setVisible(!Visible)} />}
+            label="Visible"
           />
           <ImageUploader
             imageCount={5}
