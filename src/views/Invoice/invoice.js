@@ -42,8 +42,8 @@ const Invoice = () => {
                     <InfinitySpin width="120" color="#D78809" />
                 </div>
             ) : (
-                <div className="reportView">
-                    <div style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="reportView" style={{width: '40%',marginLeft: '30%'}}>
+                    <div className="print" style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Button
                             onClick={() => downloadPDF()}
                             style={{ margin: '12px' }}
@@ -56,11 +56,11 @@ const Invoice = () => {
                     </div>
                     <div className="innderView">
                         <div style={{ display: 'flex', justifyContent: 'flex-start', flexDirection: "column" }}>
-                            <div style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                                <h4>Order No : </h4> <h4 style={{ marginLeft: 10 }}> {SelectRow?._id.substr(SelectRow?._id?.length - 5)}</h4>
+                            <div style={{ display: 'flex', justifyContent: 'flex-start', height:'15px' }}>
+                                <h6>Order No : </h6> <h6 style={{ marginLeft: 10 }}> {SelectRow?._id.substr(SelectRow?._id?.length - 5)}</h6>
                             </div>
-                            <div style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                                <h4>Batch No : </h4> <h4 style={{ marginLeft: 10 }}> {SelectRow?.batchNumber}</h4>
+                            <div style={{ display: 'flex', justifyContent: 'flex-start', height:'54px' }}>
+                                <h6>Batch No : </h6> <h6 style={{ marginLeft: 10 }}> {SelectRow?.batchNumber}</h6>
                             </div>
                         </div>
                         {/* <Divider>Order Details</Divider> */}
@@ -68,20 +68,20 @@ const Invoice = () => {
                             <Table aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell style={{ fontWeight: 'bold' }}>Customer Name</TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }}>Customer Name</TableCell>
+                                        <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }} align="center">
                                             Order Total
                                         </TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }} align="center">
                                             Discount Applied
                                         </TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }} align="center">
                                             Order Payable Total
                                         </TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }} align="center">
                                             Order Date
                                         </TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }} align="center">
                                             Delivery Date
                                         </TableCell>
                                         {/* <Table Cell align="center">Location</TableCell> */}
@@ -89,20 +89,20 @@ const Invoice = () => {
                                 </TableHead>
                                 <TableBody>
                                     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                        <TableCell component="th" scope="row">
+                                        <TableCell style={{fontSize:'8px',padding:'5px'}} component="th" scope="row">
                                             {SelectRow?.user?.fullName}
                                         </TableCell>
-                                        <TableCell align="center">{SelectRow?.totalAmount} AED</TableCell>
-                                        <TableCell align="center">{SelectRow?.totalAmount - SelectRow?.cartTotal} AED</TableCell>
-                                        <TableCell align="center">{SelectRow?.cartTotal} AED</TableCell>
-                                        <TableCell align="center">{moment(SelectRow?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
-                                        <TableCell align="center">{SelectRow?.deliveryDate}</TableCell>
+                                        <TableCell style={{fontSize:'8px',padding:'5px'}} align="center">{SelectRow?.totalAmount} AED</TableCell>
+                                        <TableCell style={{fontSize:'8px',padding:'5px'}} align="center">{SelectRow?.totalAmount - SelectRow?.cartTotal} AED</TableCell>
+                                        <TableCell style={{fontSize:'8px',padding:'5px'}} align="center">{SelectRow?.cartTotal} AED</TableCell>
+                                        <TableCell style={{fontSize:'8px',padding:'5px'}}align="center">{moment(SelectRow?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
+                                        <TableCell style={{fontSize:'8px',padding:'5px'}} align="center">{SelectRow?.deliveryDate}</TableCell>
                                         {/* <TableCell align="center">{row.location[0]?.address}</TableCell> */}
                                     </TableRow>
                                 </TableBody>
                             </Table>
                         </div>
-                        <Divider>Order Items, Total Items: {SelectRow?.orderItems?.length}</Divider>
+                        <Divider style={{fontSize:'11px'}}>Order Items, Total Items: {SelectRow?.orderItems?.length}</Divider>
                         <div>
                             <Box sx={{ margin: 1 }}>
                                 {SelectRow?.orderItems.map((historyRow, index) => {
@@ -116,15 +116,15 @@ const Invoice = () => {
                                       ? content?.split(/\\n|\|/)
                                       : historyRow?.pouchesDetail[0]?.split('|');                                    return (
                                         <>
-                                            <Typography variant="h4" style={{ paddingBottom: 10, paddingTop: 10 }} gutterBottom component="div">
+                                            <Typography variant="h2" style={{ paddingBottom: 2, paddingTop: 2 }} gutterBottom component="div">
                                                 Item : {index + 1}
                                             </Typography>
                                             <Table size="small" aria-label="purchases">
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell style={{ fontWeight: 'bold' }}>Type</TableCell>
+                                                        <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }}>Type</TableCell>
                                                         {/* <TableCell>Special Instructions(If Any)</TableCell> */}
-                                                        <TableCell align="right">Total price (AED)</TableCell>
+                                                        <TableCell>Total price (AED)</TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
