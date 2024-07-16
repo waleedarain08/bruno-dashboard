@@ -121,7 +121,7 @@ const ProductCategories = () => {
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(GetAllRecipes(Userdata?.clientToken));
+    dispatch(GetAllRecipes(Userdata?.clientToken,true));
     dispatch(GetAllCategories(Userdata?.clientToken));
   }, []);
 
@@ -144,7 +144,7 @@ const ProductCategories = () => {
   });
 
   const onSuccess = () => {
-    dispatch(GetAllRecipes(Userdata?.clientToken));
+    dispatch(GetAllRecipes(Userdata?.clientToken,true));
     InitialState();
     handleClose();
   };

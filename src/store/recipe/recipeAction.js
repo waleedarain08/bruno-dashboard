@@ -2,10 +2,12 @@
 import * as actionTypes from './recipeType';
 import { Delete, Get, Post, Put } from '../../helpers/apicalls/apicalls';
 
-export const GetAllRecipes = (data) => {
+export const GetAllRecipes = (data,isAdmin=false) => {
+  let url  = isAdmin?`recipe/adminRecipes/`:`recipe/`;
+  console.log(url);
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoading });
-    Get(`recipe/`, data)
+    Get(url, data)
       .then(function (response) {
         if (response?.isSuccess) {
           dispatch({
