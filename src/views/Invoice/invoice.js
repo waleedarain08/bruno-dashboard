@@ -54,7 +54,7 @@ const Invoice = () => {
                             Print
                         </Button>
                     </div>
-                    <div className="innderView">
+                    <div className="innderView" style={{border:'0.2px solid #000'}}>
                         <div style={{ display: 'flex', justifyContent: 'flex-start', flexDirection: "column" }}>
                             <div style={{ display: 'flex', justifyContent: 'flex-start', height:'15px' }}>
                                 <h6>Order No : </h6> <h6 style={{ marginLeft: 10 }}> {SelectRow?._id.substr(SelectRow?._id?.length - 5)}</h6>
@@ -89,14 +89,14 @@ const Invoice = () => {
                                 </TableHead>
                                 <TableBody>
                                     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                        <TableCell style={{fontSize:'8px',padding:'5px'}} component="th" scope="row">
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} component="th" scope="row">
                                             {SelectRow?.user?.fullName}
                                         </TableCell>
-                                        <TableCell style={{fontSize:'8px',padding:'5px'}} align="center">{SelectRow?.totalAmount} AED</TableCell>
-                                        <TableCell style={{fontSize:'8px',padding:'5px'}} align="center">{SelectRow?.totalAmount - SelectRow?.cartTotal} AED</TableCell>
-                                        <TableCell style={{fontSize:'8px',padding:'5px'}} align="center">{SelectRow?.cartTotal} AED</TableCell>
-                                        <TableCell style={{fontSize:'8px',padding:'5px'}}align="center">{moment(SelectRow?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
-                                        <TableCell style={{fontSize:'8px',padding:'5px'}} align="center">{SelectRow?.deliveryDate}</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.cartTotal+SelectRow?.shippingFees} AED</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.discountPercentage} AED</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.totalAmount} AED</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}}align="center">{moment(SelectRow?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.deliveryDate}</TableCell>
                                         {/* <TableCell align="center">{row.location[0]?.address}</TableCell> */}
                                     </TableRow>
                                 </TableBody>
@@ -116,53 +116,53 @@ const Invoice = () => {
                                       ? content?.split(/\\n|\|/)
                                       : historyRow?.pouchesDetail[0]?.split('|');                                    return (
                                         <>
-                                            <Typography variant="h2" style={{ paddingBottom: 2, paddingTop: 2 }} gutterBottom component="div">
+                                            <Typography variant="h2" style={{ paddingBottom: 2, paddingTop: 2, fontSize:'12px', fontWeight:600}} gutterBottom component="div">
                                                 Item : {index + 1}
                                             </Typography>
-                                            <Table size="small" aria-label="purchases">
+                                            <Table  aria-label="purchases">
                                                 <TableHead>
                                                     <TableRow>
                                                         <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }}>Type</TableCell>
                                                         {/* <TableCell>Special Instructions(If Any)</TableCell> */}
-                                                        <TableCell>Total price (AED)</TableCell>
+                                                        <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'2px', lineHeight:'1rem' }}>Total Price</TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
                                                     <TableRow key={index}>
-                                                        <TableCell component="th" scope="row">
+                                                        <TableCell component="th" scope="row" style={{ fontWeight: 'bold',fontSize:'10px',padding:'4px' }}>
                                                             {historyRow?.planType} Order
                                                         </TableCell>
                                                         {/* <TableCell component="th" scope="row">
                                                             {SelectRow?.specialInstructions}
                                                         </TableCell> */}
-                                                        <TableCell align="right">{historyRow?.planTotal}-AED</TableCell>
+                                                        <TableCell align="left" style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }}>{historyRow?.planTotal} AED</TableCell>
                                                     </TableRow>
                                                     <TableRow>
                                                         {historyRow?.pet && (
                                                             <Table size="small" aria-label="purchases">
                                                                 <TableHead>
                                                                     <TableRow>
-                                                                        <TableCell align="left" style={{ fontWeight: 'bold' }}>Pet</TableCell>
-                                                                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Pet Name</TableCell>
-                                                                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Breed</TableCell>
-                                                                        <TableCell align="center" style={{ fontWeight: 'bold' }}>Feeding Routine</TableCell>
+                                                                        <TableCell align="left" style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }}>Pet</TableCell>
+                                                                        <TableCell align="center" style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }}>Pet Name</TableCell>
+                                                                        <TableCell align="center" style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }}>Breed</TableCell>
+                                                                        <TableCell align="center" style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }}>Feeding Routine</TableCell>
                                                                         {/* <TableCell align="center">Current Weight</TableCell>
                                                                         <TableCell align="right">Actual Weight</TableCell> */}
                                                                     </TableRow>
                                                                 </TableHead>
                                                                 <TableBody>
                                                                     <TableRow>
-                                                                    <TableCell align="left">
+                                                                    <TableCell align="left" style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }}>
                                                                             <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                                                                                 <AvatarGroup max={2}>
                                                                                     <Avatar key={index} alt="Remy Sharp" src={historyRow?.pet?.media} />
                                                                                 </AvatarGroup>
                                                                             </div>
                                                                         </TableCell>
-                                                                        <TableCell align="center">{historyRow?.pet?.name}</TableCell>
-                                                                        <TableCell align="center">{historyRow?.pet?.breed}</TableCell>
+                                                                        <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }} align="center">{historyRow?.pet?.name}</TableCell>
+                                                                        <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }} align="center">{historyRow?.pet?.breed}</TableCell>
                                                                        
-                                                                        <TableCell align="center">{historyRow?.pet?.feedingRoutine}</TableCell>
+                                                                        <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }} align="center">{historyRow?.pet?.feedingRoutine}</TableCell>
                                                                         {/* 
                                                                         <TableCell align="center">{historyRow?.pet?.currentWeight}</TableCell>
                                                                         <TableCell align="right">{historyRow?.pet?.actualWeight}</TableCell> */}
@@ -176,21 +176,21 @@ const Invoice = () => {
                                                                 <>
                                                                     <TableHead key={index}>
                                                                         <TableRow>
-                                                                            <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
-                                                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                            <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px' }}>Category</TableCell>
+                                                                            <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px',lineHeight:'1rem' }} align="center">
                                                                                 Product Description
                                                                             </TableCell>
-                                                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                                            <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px' }} align="center">
                                                                                 Quantity
                                                                             </TableCell>
-                                                                            <TableCell style={{ fontWeight: 'bold' }} align="right">
-                                                                                Unit Price (AED)
+                                                                            <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px', lineHeight:'1rem' }} align="right">
+                                                                                Unit Price
                                                                             </TableCell>
-                                                                            <TableCell style={{ fontWeight: 'bold' }} align="right">
-                                                                                Total Price (AED)
+                                                                            <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px', lineHeight:'1rem' }} align="right">
+                                                                                Total Price
                                                                             </TableCell>
                                                                             {item?.selectedItemSize && (
-                                                                                <TableCell style={{ fontWeight: 'bold' }} align="right">
+                                                                                <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px', lineHeight:'1rem' }} align="right">
                                                                                     Selected Size
                                                                                 </TableCell>
                                                                             )}
@@ -198,16 +198,16 @@ const Invoice = () => {
                                                                     </TableHead>
                                                                     <TableBody>
                                                                         <TableRow>
-                                                                            <TableCell component="th" scope="row">
+                                                                            <TableCell component="th" scope="row" style={{ fontSize:'10px',padding:'3px' }}>
                                                                                 {item?.category !== '' ? item?.category : historyRow?.planType}
                                                                             </TableCell>
-                                                                            <TableCell align="center">{item?.name}</TableCell>
-                                                                            <TableCell align="center">{historyRow?.planType==="Monthly"?item?.totalDays:historyRow?.planType==="Transitional"?historyRow?.pet?.feedingRoutine*10:item?.quantity}</TableCell>
-                                                                            <TableCell align="center">{historyRow?.planType==="Product"?`${item?.finalPrice/item?.quantity} -AED`:"-"}</TableCell>
-                                                                            <TableCell align="right">{item?.finalPrice}-AED</TableCell>
+                                                                            <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{item?.name}</TableCell>
+                                                                            <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{historyRow?.planType==="Monthly"?item?.totalDays:historyRow?.planType==="Transitional"?historyRow?.pet?.feedingRoutine*10:item?.quantity}</TableCell>
+                                                                            <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{historyRow?.planType==="Product"?`${item?.finalPrice/item?.quantity} AED`:"-"}</TableCell>
+                                                                            <TableCell style={{ fontSize:'10px',padding:'3px' }} align="right">{item?.finalPrice} AED</TableCell>
                                                                             {item?.selectedItemSize && (
-                                                                                <TableCell align="right">
-                                                                                    {item?.selectedItemSize?.price}-AED <br></br>
+                                                                                <TableCell align="right" style={{ fontSize:'10px',padding:'3px' }}>
+                                                                                    {item?.selectedItemSize?.price} AED <br></br>
                                                                                     {item?.selectedItemSize?.name}
                                                                                 </TableCell>
                                                                             )}
@@ -219,14 +219,14 @@ const Invoice = () => {
                                                             <Table size="small" aria-label="purchases">
                                                                 <TableHead>
                                                                     <TableRow>
-                                                                        <TableCell style={{ fontWeight: 'bold' }}>Serving</TableCell>
+                                                                        <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }}>Serving</TableCell>
                                                                     </TableRow>
                                                                 </TableHead>
                                                                 <TableBody>
                                                                     <TableRow>
                                                                     {resultArray?.length > 0 ? (
 
-                                                                        <TableCell component="th" scope="row">
+                                                                        <TableCell component="th" scope="row" style={{ fontSize:'10px',padding:'0px' }}>
                                                                             {
                                                                             historyRow?.planType=="Monthly"?
                                                                             historyRow?.recipes?.map((item, i) => (
@@ -242,7 +242,7 @@ const Invoice = () => {
                                                                         </TableCell>
                                                                          ) : 
                                                                          (
-                                                                            <TableCell component="th" scope="row">
+                                                                            <TableCell component="th" scope="row" style={{ fontSize:'10px',padding:'0px' }}>
                                                                                {historyRow?.recipes?.map((item, i) => (
                                                                                  <p key={i}>{item.category=="Standard Recipes"?`${item.quantity} Servings x ${item.standaloneSize} grams`:'-'}</p>
 
@@ -264,26 +264,26 @@ const Invoice = () => {
                                 })}
                             </Box>
                         </div>
-                        <Divider>Address</Divider>
+                        <Divider style={{fontSize:'11px'}}>Address</Divider>
                         <div>
-                            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <Table  aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell style={{ fontWeight: 'bold' }}>Area</TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }}>Street</TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                            House/Flat/Building
+                                        <TableCell style={{ fontWeight: 'bold',fontSize:'8px',padding:'0px' }}>Area</TableCell>
+                                        <TableCell style={{ fontWeight: 'bold',fontSize:'8px',padding:'0px' }}>Street</TableCell>
+                                        <TableCell style={{ fontWeight: 'bold',fontSize:'8px',padding:'0px' }} align="center">
+                                            Building
                                         </TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold',fontSize:'8px',paddingLeft:'5px' }} align="center">
                                             Floor
                                         </TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold',fontSize:'8px',padding:'0px' }} align="center">
                                             Address
                                         </TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold',fontSize:'8px',padding:'0px' }} align="center">
                                             Contact Person
                                         </TableCell>
-                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                        <TableCell style={{ fontWeight: 'bold',fontSize:'8px',padding:'0px' }} align="center">
                                             Contact Number
                                         </TableCell>
                                         {/* <Table Cell align="center">Location</TableCell> */}
@@ -291,30 +291,30 @@ const Invoice = () => {
                                 </TableHead>
                                 <TableBody>
                                     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                        <TableCell component="th" scope="row">
+                                        <TableCell  style={{ fontSize:'10px',padding:'0px' }}>
                                             {location?.area}
                                         </TableCell>
-                                        <TableCell align="center">{location?.street}</TableCell>
-                                        <TableCell align="center">{location?.flatHouseNumber} AED</TableCell>
-                                        <TableCell align="center">{location?.floor}</TableCell>
+                                        <TableCell align="center" style={{ fontSize:'8px',padding:'0px' }}>{location?.street}</TableCell>
+                                        <TableCell align="center"  style={{ fontSize:'8px',padding:'0px' }}>{location?.flatHouseNumber} </TableCell>
+                                        <TableCell align="center"  style={{ fontSize:'8px',padding:'0px' }}>{location?.floor}</TableCell>
 
-                                        <TableCell align="center">{location?.address}</TableCell>
-                                        <TableCell align="center">{location?.contactName}</TableCell>
-                                        <TableCell align="center">{location?.contactNumber}</TableCell>
+                                        <TableCell align="center"  style={{ fontSize:'8px',padding:'0px' }}>{location?.address}</TableCell>
+                                        <TableCell align="center"  style={{ fontSize:'8px',padding:'0px' }}>{location?.contactName}</TableCell>
+                                        <TableCell align="center"  style={{ fontSize:'8px',padding:'0px' }}>{location?.contactNumber}</TableCell>
 
 
                                     </TableRow>
                                     <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                    <TableCell style={{ fontWeight: 'bold' }} >
+                                    <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }} >
                                     Special Instructions
                                         </TableCell>
-                                    <TableCell >{location?.deliveryInstruction}</TableCell>
+                                    <TableCell  style={{fontSize:'8px',padding:'0px' }}>{location?.deliveryInstruction}</TableCell>
                                         </TableRow>
 
                                 </TableBody>
                             </Table>
                             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: 20 }}>
-                                <h4>{`THANK YOU for being part of Bruno's family where every tail wag tells a story of love, care, and culinary excellence.`}</h4>
+                                <h5>{`THANK YOU for being part of Bruno's family where every tail wag tells a story of love, care, and culinary excellence.`}</h5>
                             </div>
                         </div>
                     </div>
