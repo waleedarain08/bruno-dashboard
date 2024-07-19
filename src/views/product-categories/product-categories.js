@@ -52,7 +52,7 @@ const ProductCategories = () => {
   const [value, setValue] = React.useState('');
   const [NameRecipe, setNameRecipe] = React.useState('');
   const [KG, setKG] = React.useState('0');
-  const [size, setSize] = React.useState('');
+  //const [size, setSize] = React.useState('');
   const [Categoryes, setCategoryes] = React.useState('');
   const [Weight, setWeight] = React.useState('');
   const [Unit, setUnit] = React.useState('');
@@ -90,7 +90,7 @@ const ProductCategories = () => {
     const updatedFields = [...fields];
     updatedFields[index].name = value;
     setFields(updatedFields);
-    setSize(value);
+    //setSize(value);
   };
   const handleNumberChange = (index, value) => {
     const updatedFields = [...fields];
