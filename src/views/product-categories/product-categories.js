@@ -51,9 +51,11 @@ const ProductCategories = () => {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
   const [NameRecipe, setNameRecipe] = React.useState('');
-  const [KG, setKG] = React.useState('');
+  const [KG, setKG] = React.useState('0');
+  const [size, setSize] = React.useState('');
   const [Categoryes, setCategoryes] = React.useState('');
   const [Weight, setWeight] = React.useState('');
+  const [Unit, setUnit] = React.useState('');
   const [Details, setDetails] = React.useState('');
   const [Description, setDescription] = React.useState('');
   const [Featured, setFeatured] = React.useState(false);
@@ -71,7 +73,7 @@ const ProductCategories = () => {
     setKG('');
     setDetails('');
     setDescription('');
-    setFeatured('');
+    setFeatured(0);
     setVisible('');
     setSelectedFiles([]);
     setPreviewEdit([]);
@@ -88,17 +90,39 @@ const ProductCategories = () => {
     const updatedFields = [...fields];
     updatedFields[index].name = value;
     setFields(updatedFields);
+    setSize(value);
   };
   const handleNumberChange = (index, value) => {
     const updatedFields = [...fields];
     updatedFields[index].price = parseInt(value);
     setFields(updatedFields);
+    if(updatedFields[index].name==="Standard"){
+      setKG(value);
+    }
   };
 
   const handleStockChange = (index, value) => {
     const updatedFields = [...fields];
     updatedFields[index].stock = parseInt(value);
     setFields(updatedFields);
+  };
+
+  const handleWeightChange = (index, value) => {
+    const updatedFields = [...fields];
+    updatedFields[index].weight = parseInt(value);
+    setFields(updatedFields);
+    if(updatedFields[index].name==="Standard"){
+      setWeight(value);
+    }
+  };
+
+  const handleUnitChange = (index, value) => {
+    const updatedFields = [...fields];
+    updatedFields[index].unit = value;
+    setFields(updatedFields);
+    if(updatedFields[index].name==="Standard"){
+      setUnit(value);
+    }
   };
 
   const handleRemoveField = (index) => {
@@ -150,13 +174,18 @@ const ProductCategories = () => {
   };
 
   const onSave = async () => {
+    //console.log(fields);
+    //console.log(KG);
+    //var filtered = fields.filter(function(el) { return el.name != "Standard"; }); 
+    //console.log(filtered);
     if (
       NameRecipe !== '' &&
       Description !== '' &&
-      KG != 0 &&
+      //KG != 0 &&
       Details != '' &&
       (fields.length === 0 || fields.some((field) => field.name !== '' && field.price > 0))
     ) {
+      
       setError('');
       setLoading(true);
       if (Condition === 'Add') {
@@ -170,7 +199,8 @@ const ProductCategories = () => {
           pricePerKG: parseInt(KG),
           media: newPath,
           category: Categoryes,
-          weight: Weight,
+          weight:parseInt(Weight),
+          unit: Unit,
           recipeNo: '',
           ingredientsComposition: '',
           sizes: fields,
@@ -194,7 +224,8 @@ const ProductCategories = () => {
             details: Details,
             pricePerKG: parseInt(KG),
             media: newPath,
-            weight: Weight,
+            weight:parseInt(Weight),
+            unit: Unit,
             category: Categoryes,
             recipeNo: '',
             ingredientsComposition: '',
@@ -216,7 +247,8 @@ const ProductCategories = () => {
             details: Details,
             pricePerKG: parseInt(KG),
             media: PreviewEdit,
-            weight: Weight,
+            weight:parseInt(Weight),
+            unit: Unit,
             category: Categoryes,
             recipeNo: '',
             ingredientsComposition: '',
@@ -233,7 +265,6 @@ const ProductCategories = () => {
       }
     } else {
       setError('All Field is Required');
-      // console.log(res?.data, 'res')
     }
   };
 
@@ -247,6 +278,9 @@ const ProductCategories = () => {
   };
 
   let SizesData = [
+    {
+      name:'Standard'
+    },
     {
       name: 'XS'
     },
@@ -274,6 +308,7 @@ const ProductCategories = () => {
     console.log(data, 'data');
     setCondition('Edit');
     setWeight(data?.weight);
+    setUnit(data?.unit);
     setSelectedId(data?._id);
     setNameRecipe(data?.name);
     setKG(data?.pricePerKG);
@@ -350,6 +385,22 @@ const ProductCategories = () => {
                   value={field?.stock}
                   onChange={(e) => handleStockChange(index, e.target.value)}
                 />
+                <TextField
+                  style={{ marginLeft: 5 }}
+                  sx={{ width: '40%' }}
+                  label="Weight"
+                  type="number"
+                  value={field?.weight}
+                  onChange={(e) => handleWeightChange(index, e.target.value)}
+                />
+                <TextField
+                  style={{ marginLeft: 5 }}
+                  sx={{ width: '40%' }}
+                  label="Unit"
+                  type="text"
+                  value={field?.unit}
+                  onChange={(e) => handleUnitChange(index, e.target.value)}
+                />
               </Box>
             ))}
             <div
@@ -367,7 +418,7 @@ const ProductCategories = () => {
               <AddCircleIcon variant="contained" color="primary" onClick={handleAddField} />
             </div>
           </Box>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+          {/* <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
               value={Weight}
               onChange={(e) => setWeight(e.target.value)}
@@ -378,11 +429,12 @@ const ProductCategories = () => {
               label="Weight (non-mandatory)"
               variant="outlined"
             />
-          </Box>
+          </Box> */}
 
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+          {/* <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
               value={KG}
+              hidden={true}
               onChange={(e) => setKG(e.target.value)}
               style={{ margin: 5 }}
               sx={{ width: '100%' }}
@@ -392,7 +444,7 @@ const ProductCategories = () => {
               label="Standard Price (for without size products)"
               variant="outlined"
             />
-          </Box>
+          </Box> */}
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <FormControl sx={{ width: '100%' }}>
               <InputLabel style={{ margin: 5 }}>Categories</InputLabel>
@@ -417,7 +469,7 @@ const ProductCategories = () => {
               label="Description"
               variant="outlined"
             /> */}
-            <div style={{  maxHeight: 500, overflowY: 'scroll', maxWidth:'460px' }}>
+            <div style={{  maxHeight: 500, overflowY: 'scroll', width:'630px' }}>
                     <RichTextEditor 
                     value={Description}               
                     onChange={(value) => setDescription(value)}
