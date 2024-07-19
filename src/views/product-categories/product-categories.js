@@ -70,7 +70,8 @@ const ProductCategories = () => {
 
   const InitialState = () => {
     setNameRecipe('');
-    setKG('');
+    setKG(0);
+    setWeight(0);
     setDetails('');
     setDescription('');
     setFeatured(0);
@@ -96,9 +97,9 @@ const ProductCategories = () => {
     const updatedFields = [...fields];
     updatedFields[index].price = parseInt(value);
     setFields(updatedFields);
-    if(updatedFields[index].name==="Standard"){
-      setKG(value);
-    }
+    // if(updatedFields[index].name==="Standard"){
+    //   setKG(value);
+    // }
   };
 
   const handleStockChange = (index, value) => {
@@ -111,18 +112,18 @@ const ProductCategories = () => {
     const updatedFields = [...fields];
     updatedFields[index].weight = parseInt(value);
     setFields(updatedFields);
-    if(updatedFields[index].name==="Standard"){
-      setWeight(value);
-    }
+    // if(updatedFields[index].name==="Standard"){
+    //   setWeight(value);
+    // }
   };
 
   const handleUnitChange = (index, value) => {
     const updatedFields = [...fields];
     updatedFields[index].unit = value;
     setFields(updatedFields);
-    if(updatedFields[index].name==="Standard"){
-      setUnit(value);
-    }
+    // if(updatedFields[index].name==="Standard"){
+    //   setUnit(value);
+    // }
   };
 
   const handleRemoveField = (index) => {
@@ -174,7 +175,7 @@ const ProductCategories = () => {
   };
 
   const onSave = async () => {
-    //console.log(fields);
+    console.log(KG,Weight,Unit);
     //console.log(KG);
     //var filtered = fields.filter(function(el) { return el.name != "Standard"; }); 
     //console.log(filtered);
@@ -196,11 +197,11 @@ const ProductCategories = () => {
           isVisible: Visible,
           description: Description,
           details: Details,
-          pricePerKG: parseInt(KG),
+          pricePerKG: fields[0].price,
           media: newPath,
           category: Categoryes,
-          weight:parseInt(Weight),
-          unit: Unit,
+          weight:fields[0].weight,
+          unit: fields[0].unit,
           recipeNo: '',
           ingredientsComposition: '',
           sizes: fields,
@@ -222,10 +223,10 @@ const ProductCategories = () => {
             isVisible: Visible,
             description: Description,
             details: Details,
-            pricePerKG: parseInt(KG),
+            pricePerKG: fields[0].price,
             media: newPath,
-            weight:parseInt(Weight),
-            unit: Unit,
+            weight:fields[0].weight,
+            unit: fields[0].unit,
             category: Categoryes,
             recipeNo: '',
             ingredientsComposition: '',
@@ -239,16 +240,17 @@ const ProductCategories = () => {
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         } else {
+          
           let newdata = {
             name: NameRecipe,
             isFeatured: Featured,
             isVisible: Visible,
             description: Description,
             details: Details,
-            pricePerKG: parseInt(KG),
+            pricePerKG: fields[0].price,
             media: PreviewEdit,
-            weight:parseInt(Weight),
-            unit: Unit,
+            weight:fields[0].weight,
+            unit: fields[0].unit,
             category: Categoryes,
             recipeNo: '',
             ingredientsComposition: '',
@@ -264,7 +266,7 @@ const ProductCategories = () => {
         }
       }
     } else {
-      setError('All Field is Required');
+      setError('Please fill all fields');
     }
   };
 
