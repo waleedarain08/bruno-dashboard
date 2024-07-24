@@ -3,7 +3,8 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { InfinitySpin } from 'react-loader-spinner';
 import Modal from '@mui/material/Modal';
-import { Button } from '@mui/material';
+import { Button , Input, IconButton} from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -29,6 +30,8 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchFeild from 'components/searchFeild';
 import RichTextEditor from 'components/RichTextEditor';
+import { storage } from "./../../utils/firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 
 
 const style = {
@@ -65,8 +68,9 @@ const ProductCategories = () => {
   const [Condition, setCondition] = React.useState(null);
   const [PreviewEdit, setPreviewEdit] = React.useState([]);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
+  //const [selectedSizeFile, setSelectedSizeFile] = React.useState('');
   const [SelectedId, setSelectedId] = React.useState(null);
-  const [fields, setFields] = React.useState([{ name: '', price: null }]);
+  const [fields, setFields] = React.useState([{ name: '', price: 0, stock:0, weight:0, unit:'' , image:'' }]);
 
   const InitialState = () => {
     setNameRecipe('');
@@ -85,6 +89,46 @@ const ProductCategories = () => {
     setCondition('Add');
     InitialState();
     setOpen(true);
+  };
+
+  const handleSizeFileUpload = (image) => {
+    // e.preventDefault();
+    return new Promise((resolve, reject) => {
+        // ref(storage, `images/${image?.name}`).put(image)
+        const storageRef = ref(storage, `files/${image.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const progress = Math.round(
+                    (snapshot?.bytesTransferred / snapshot?.totalBytes) * 100
+                );
+                console.log(progress)
+            },
+            (error) => {
+                console.log(error);
+                reject({ message: "Error", data: error })
+            },
+            () => {
+                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    resolve({ message: "Uploaded", data: url })
+                });
+            }
+        );
+
+    })
+  }
+
+  const handleFileChange = (index,value) => {
+   
+      const file = value[0];
+      //console.log(file);
+      //const viewUrl = URL.createObjectURL(file);
+      const updatedFields = [...fields];
+      updatedFields[index].image = file;
+      setFields(updatedFields);
+      console.log(updatedFields);
+        
   };
 
   const handleSelectChange = (index, value) => {
@@ -132,10 +176,10 @@ const ProductCategories = () => {
     setFields(updatedFields);
   };
   const handleAddField = () => {
-    setFields([...fields, { name: '', price: null }]);
+    setFields([...fields, { name: '', price: 0, stock:0, weight:0 , unit:'', image:'' }]);
   };
 
-  console.log(location?.state, 'location?.state');
+  //console.log(location?.state, 'location?.state');
 
   const handleClose = () => setOpen(false);
   const [rows, setrows] = React.useState([]);
@@ -175,10 +219,9 @@ const ProductCategories = () => {
   };
 
   const onSave = async () => {
-    console.log(KG,Weight,Unit);
-    //console.log(KG);
-    //var filtered = fields.filter(function(el) { return el.name != "Standard"; }); 
-    //console.log(filtered);
+    console.log(KG,Weight,Unit); // dont remove this console
+    //console.log(fields);
+   
     if (
       NameRecipe !== '' &&
       Description !== '' &&
@@ -189,6 +232,19 @@ const ProductCategories = () => {
       
       setError('');
       setLoading(true);
+
+      await Promise.all(fields?.map(async (i) => {
+        if(typeof i.image !="string"){
+          const res = await handleSizeFileUpload(i.image);
+          console.log(res.data);
+          i.image = res.data;
+        }
+        return i;
+      }));
+     // console.log(fields);
+
+      //return;
+
       if (Condition === 'Add') {
         const newPath = await Promise.all(selectedFiles?.map(async (i) => await ImageUpload(i)));
         let newdata = {
@@ -202,6 +258,7 @@ const ProductCategories = () => {
           category: Categoryes,
           weight:fields[0].weight,
           unit: fields[0].unit,
+          productImage: fields[0].image,
           recipeNo: '',
           ingredientsComposition: '',
           sizes: fields,
@@ -212,7 +269,7 @@ const ProductCategories = () => {
           price5: 0,
           price6: 0
         };
-        console.log(newdata, 'newdata');
+        //console.log(newdata, 'newdata');
         dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
       } else {
         if (selectedFiles?.length > 0) {
@@ -227,6 +284,7 @@ const ProductCategories = () => {
             media: newPath,
             weight:fields[0].weight,
             unit: fields[0].unit,
+            productImage: fields[0].image,
             category: Categoryes,
             recipeNo: '',
             ingredientsComposition: '',
@@ -251,6 +309,7 @@ const ProductCategories = () => {
             media: PreviewEdit,
             weight:fields[0].weight,
             unit: fields[0].unit,
+            productImage: fields[0].image,
             category: Categoryes,
             recipeNo: '',
             ingredientsComposition: '',
@@ -279,32 +338,32 @@ const ProductCategories = () => {
     }
   };
 
-  let SizesData = [
-    {
-      name:'Standard'
-    },
-    {
-      name: 'XS'
-    },
-    {
-      name: 'S'
-    },
-    {
-      name: 'M'
-    },
-    {
-      name: 'L'
-    },
-    {
-      name: 'XL'
-    },
-    {
-      name: '2XL'
-    },
-    {
-      name: '3XL'
-    }
-  ];
+  // let SizesData = [
+  //   {
+  //     name:'Standard'
+  //   },
+  //   {
+  //     name: 'XS'
+  //   },
+  //   {
+  //     name: 'S'
+  //   },
+  //   {
+  //     name: 'M'
+  //   },
+  //   {
+  //     name: 'L'
+  //   },
+  //   {
+  //     name: 'XL'
+  //   },
+  //   {
+  //     name: '2XL'
+  //   },
+  //   {
+  //     name: '3XL'
+  //   }
+  // ];
 
   const EditValues = (data) => {
     console.log(data, 'data');
@@ -330,7 +389,7 @@ const ProductCategories = () => {
           <Typography style={{ textAlign: 'center', paddingBottom: 20 }} variant="h4" component="h2">
             {Condition} Product
           </Typography>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
+          <Box style={{ display: 'flex', justifyContent: 'space-between' }} sx={{ width: '100%' }}>
             <TextField
               value={NameRecipe}
               onChange={(e) => setNameRecipe(e.target.value)}
@@ -349,17 +408,31 @@ const ProductCategories = () => {
               label="Brand"
               variant="outlined"
             />
+            <FormControl sx={{ width: '100%' }}>
+              <InputLabel style={{ margin: 5 }}>Categories</InputLabel>
+              <Select style={{ margin: 5 }} value={Categoryes} onChange={(e) => setCategoryes(e.target.value)}>
+                {allcategories?.map((i, index) => {
+                  return (
+                    <MenuItem key={index} value={i?.name}>
+                      {i?.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
           </Box>
           <Box sx={{ width: '100%', position: 'relative' }}>
+            <Typography style={{fontWeight:500, margin:'10px'}}>Product Options:</Typography>
             {fields.map((field, index) => (
-              <Box key={index} style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+              <Box key={index} style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }} sx={{ width: '100%' }}>
                 {fields?.length > 1 && (
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: -20, cursor: 'pointer' }}>
                     <DeleteIcon variant="contained" color="secondary" onClick={() => handleRemoveField(index)} />{' '}
                   </div>
                 )}
-                <FormControl sx={{ width: '50%' }}>
-                  <InputLabel>Size</InputLabel>
+                {/* <FormControl sx={{ width: '50%' }}>
+                
+                  <InputLabel>Option Description</InputLabel>
                   <Select value={field?.name} onChange={(e) => handleSelectChange(index, e.target.value)}>
                     {SizesData?.map((i, index) => {
                       return (
@@ -369,7 +442,15 @@ const ProductCategories = () => {
                       );
                     })}
                   </Select>
-                </FormControl>
+                </FormControl> */}
+                <TextField
+                  style={{ marginLeft: 5 }}
+                  sx={{ width: '40%' }}
+                  label="Option Description"
+                  type="text"
+                  value={field?.name}
+                  onChange={(e) => handleSelectChange(index, e.target.value)}
+                />
                 <TextField
                   style={{ marginLeft: 5 }}
                   sx={{ width: '40%' }}
@@ -403,6 +484,24 @@ const ProductCategories = () => {
                   value={field?.unit}
                   onChange={(e) => handleUnitChange(index, e.target.value)}
                 />
+                {field?.image!=""?
+                 <img
+                 alt={field?.image}
+                 width={50}
+                 height={50}
+                 style={{marginLeft: 5, witdth:"50px",borderRadius:"8px"}}
+                 src={typeof field?.image=="string"?field?.image:URL.createObjectURL(field?.image)}
+                 >
+                 </img>:
+                 <Paper elevation={3} style={{  marginLeft: 5, width: '50px', textAlign: 'center' }}>
+                  <label htmlFor="sizeImage">
+                      <IconButton color="primary" component="span">
+                        <CloudUploadIcon fontSize="large" />
+                      </IconButton>
+                  </label>
+                               <Input id="sizeImage" type="file" style={{display:"none"}} onChange={(e)=>handleFileChange(index,e.target.files)} />
+                  </Paper>
+                }
               </Box>
             ))}
             <div
@@ -414,7 +513,7 @@ const ProductCategories = () => {
                 cursor: 'pointer',
                 position: 'absolute',
                 right: -11,
-                top: 14
+                top: 44
               }}
             >
               <AddCircleIcon variant="contained" color="primary" onClick={handleAddField} />
@@ -447,7 +546,7 @@ const ProductCategories = () => {
               variant="outlined"
             />
           </Box> */}
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+          {/* <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <FormControl sx={{ width: '100%' }}>
               <InputLabel style={{ margin: 5 }}>Categories</InputLabel>
               <Select style={{ margin: 5 }} value={Categoryes} onChange={(e) => setCategoryes(e.target.value)}>
@@ -460,8 +559,10 @@ const ProductCategories = () => {
                 })}
               </Select>
             </FormControl>
-          </Box>
-          <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
+          </Box> */}
+          <Box style={{ display: 'flex', justifyContent: 'center', marginTop: 10 ,alignItems:"flex-start", flexDirection:"column" }} sx={{ width: '100%' }}>
+          <Typography style={{fontWeight:500,padding:'8px'}}>Product Description:</Typography>
+
             {/* <TextField
               value={Description}
               onChange={(e) => setDescription(e.target.value)}
