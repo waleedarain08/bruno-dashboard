@@ -202,7 +202,10 @@ function Row(props) {
                                       <TableRow>
                                         <TableCell style={{ fontWeight: 'bold' }}></TableCell>
                                         <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                          Product No.
+                                          Product No
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                          Product ID
                                         </TableCell>
                                         <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
                                         <TableCell style={{ fontWeight: 'bold' }} align="left">
@@ -227,6 +230,7 @@ function Row(props) {
                                         <TableRow>
                                           <TableCell align="center"></TableCell>
                                           <TableCell rowSpan={resultArray?.length} align="center">{index + 1}</TableCell>
+                                          <TableCell rowSpan={resultArray?.length} align="center">{historyRow?.recipes?.[0]?._id.substr(historyRow?.recipes?.[0]?._id?.length - 5)}</TableCell>
                                           <TableCell rowSpan={resultArray?.length} component="th" scope="row">
                                             {historyRow?.planType}
                                           </TableCell>
@@ -262,7 +266,10 @@ function Row(props) {
                                           <TableRow>
                                             <TableCell style={{ fontWeight: 'bold' }}></TableCell>
                                             <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                              Product No.
+                                              Product No
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product ID
                                             </TableCell>
                                             <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
                                             <TableCell style={{ fontWeight: 'bold' }} align="center">
@@ -280,6 +287,7 @@ function Row(props) {
                                           <TableRow>
                                             <TableCell align="center"></TableCell>
                                             <TableCell align="center">{i + 1}</TableCell>
+                                            <TableCell align="center">{item?._id.substr(item?._id?.length - 5)}</TableCell>
                                             <TableCell component="th" scope="row">
                                               {historyRow?.planType}
                                             </TableCell>
@@ -306,7 +314,10 @@ function Row(props) {
                                           <TableRow>
                                             <TableCell style={{ fontWeight: 'bold' }}></TableCell>
                                             <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                              Product No.
+                                              Product No
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product ID
                                             </TableCell>
                                             <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
                                             <TableCell style={{ fontWeight: 'bold' }} align="center">
@@ -329,6 +340,7 @@ function Row(props) {
                                           <TableRow>
                                             <TableCell align="center"></TableCell>
                                             <TableCell align="center">{index + 1}</TableCell>
+                                            <TableCell align="center">{item?._id.substr(item?._id?.length - 5)}</TableCell>
                                             <TableCell component="th" scope="row">
                                               {historyRow?.planType}
                                             </TableCell>

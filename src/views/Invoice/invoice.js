@@ -180,17 +180,20 @@ const Invoice = () => {
                                                                             <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px',lineHeight:'1rem' }} align="center">
                                                                                 Product Description
                                                                             </TableCell>
+                                                                            <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px',lineHeight:'1rem' }} align="center">
+                                                                                Product ID
+                                                                            </TableCell>
                                                                             <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px' }} align="center">
                                                                                 Quantity
                                                                             </TableCell>
-                                                                            <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px', lineHeight:'1rem' }} align="right">
+                                                                            <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px', lineHeight:'1rem' }} align="center">
                                                                                 Unit Price
                                                                             </TableCell>
-                                                                            <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px', lineHeight:'1rem' }} align="right">
+                                                                            <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px', lineHeight:'1rem' }} align="center">
                                                                                 Total Price
                                                                             </TableCell>
                                                                             {item?.selectedItemSize && (
-                                                                                <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px', lineHeight:'1rem' }} align="right">
+                                                                                <TableCell style={{ fontWeight: 'bold',fontSize:'10px',padding:'3px', lineHeight:'1rem' }} align="center">
                                                                                     Selected Size
                                                                                 </TableCell>
                                                                             )}
@@ -202,11 +205,12 @@ const Invoice = () => {
                                                                                 {item?.category !== '' ? item?.category : historyRow?.planType}
                                                                             </TableCell>
                                                                             <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{item?.name}</TableCell>
+                                                                            <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{item?._id.substr(item?._id?.length - 5)}</TableCell>
                                                                             <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{historyRow?.planType==="Monthly"?item?.totalDays:historyRow?.planType==="Transitional"?historyRow?.pet?.feedingRoutine*10:item?.quantity}</TableCell>
                                                                             <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{historyRow?.planType==="Product"?`${item?.finalPrice/item?.quantity} AED`:"-"}</TableCell>
-                                                                            <TableCell style={{ fontSize:'10px',padding:'3px' }} align="right">{item?.finalPrice} AED</TableCell>
+                                                                            <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{item?.finalPrice} AED</TableCell>
                                                                             {item?.selectedItemSize && (
-                                                                                <TableCell align="right" style={{ fontSize:'10px',padding:'3px' }}>
+                                                                                <TableCell align="center" style={{ fontSize:'10px',padding:'3px' }}>
                                                                                     {item?.selectedItemSize?.price} AED <br></br>
                                                                                     {item?.selectedItemSize?.name}
                                                                                 </TableCell>
