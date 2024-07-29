@@ -139,7 +139,7 @@ const ProductCategories = () => {
   };
   const handleNumberChange = (index, value) => {
     const updatedFields = [...fields];
-    updatedFields[index].price = parseInt(value);
+    updatedFields[index].price = parseFloat(value);
     setFields(updatedFields);
     // if(updatedFields[index].name==="Standard"){
     //   setKG(value);
@@ -149,6 +149,12 @@ const ProductCategories = () => {
   const handleStockChange = (index, value) => {
     const updatedFields = [...fields];
     updatedFields[index].stock = parseInt(value);
+    setFields(updatedFields);
+  };
+
+  const handleSkuChange = (index, value) => {
+    const updatedFields = [...fields];
+    updatedFields[index].sku = value;
     setFields(updatedFields);
   };
 
@@ -446,6 +452,14 @@ const ProductCategories = () => {
                 <TextField
                   style={{ marginLeft: 5 }}
                   sx={{ width: '40%' }}
+                  label="SKU"
+                  type="text"
+                  value={field?.sku}
+                  onChange={(e) => handleSkuChange(index, e.target.value)}
+                />
+                <TextField
+                  style={{ marginLeft: 5 }}
+                  sx={{ width: '40%' }}
                   label="Option Description"
                   type="text"
                   value={field?.name}
@@ -456,7 +470,7 @@ const ProductCategories = () => {
                   sx={{ width: '40%' }}
                   label="Price"
                   type="number"
-                  step="any"
+                  step="2"
                   value={field?.price}
                   onChange={(e) => handleNumberChange(index, e.target.value)}
                 />
