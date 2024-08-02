@@ -96,7 +96,7 @@ const UserAccounts = () => {
   // }
   return (
     <Box sx={{ width: '100%' }}>
-      <input type="file" id="input" />
+      {/* <input type="file" id="input" /> */}
 
       {isLoading ? (
         <Paper sx={{ width: '100%', mb: 2 }}>

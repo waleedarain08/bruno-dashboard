@@ -3,7 +3,8 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { InfinitySpin } from 'react-loader-spinner';
 import Modal from '@mui/material/Modal';
-import { Button, Checkbox } from '@mui/material';
+import { Button, Checkbox, Input, IconButton } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
@@ -27,6 +28,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchFeild from 'components/searchFeild';
+import readXlsxFile from 'read-excel-file';
+//import readXlsxFile from 'read-excel-file'
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -99,6 +103,7 @@ const FoodRecipes = () => {
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [PreviewTableEdit, setPreviewTableEdit] = React.useState(null);
   const [selectedTableFiles, setSelectedTableFiles] = React.useState([]);
+  const [newPrices, setNewPrices] = React.useState([]);
   const [IngredientsComposition, setIngredientsComposition] = React.useState('');
   const [standaloneSize, setstandaloneSize] = React.useState('');
   const [SelectedId, setSelectedId] = React.useState(null);
@@ -111,6 +116,24 @@ const FoodRecipes = () => {
     updatedFields[index].name = value;
     setFields(updatedFields);
   };
+
+  const readExcel = (value) => {
+  
+  const input = value[0];
+  readXlsxFile(input).then((rows) => {
+    var output = [];
+    rows.map((data,index) => {
+      output.push([{weight:index+1,activityLevel:"lessActive",price:data[0]},
+        {weight:index+1,activityLevel:"active",price:data[1]},
+        {weight:index+1,activityLevel:"veryActive",price:data[2]},
+        {weight:index+1,activityLevel:"transitional",price:data[3]}
+      ])
+    });
+    console.log(output.flat(1));
+    setNewPrices(output.flat(1));
+    
+  })
+  }
 
   const InitialState = () => {
     setNameRecipe('');
@@ -132,6 +155,7 @@ const FoodRecipes = () => {
     setDescription('');
     setFeatured(false);
     setSelectedFiles([]);
+    setNewPrices([]);
     setSelectedTableFiles([]);
     setPreviewEdit([]);
     setPreviewTableEdit([]);
@@ -205,8 +229,9 @@ const FoodRecipes = () => {
     if (
       NameRecipe !== '' &&
       fields?.length > 0 &&
+      newPrices?.length > 0 &&
       Description !== '' &&
-      KG != 0 &&
+      //KG != 0 &&
       RecipeNo != 0 &&
       Details != '' &&
       ContentNo != 0 &&
@@ -235,6 +260,7 @@ const FoodRecipes = () => {
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
             ingredient: NewValues,
+            newPrices: newPrices,
             description: Description,
             details: Details,
             instructions: Instructions,
@@ -278,6 +304,7 @@ const FoodRecipes = () => {
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
             ingredient: NewValues,
+            newPrices: newPrices,
             description: Description,
             expiryPeriod: expiryPeriod,
             details: Details,
@@ -312,6 +339,7 @@ const FoodRecipes = () => {
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
             ingredient: NewValues,
+            newPrices: newPrices,
             description: Description,
             details: Details,
             instructions: Instructions,
@@ -370,6 +398,7 @@ const FoodRecipes = () => {
     setNnutrition(data?.nutrition);
     setLifeStage(data?.lifeStage);
     setKG(data?.pricePerKG);
+    setNewPrices(data?.newPrices);
     setContentNo(data?.caloriesContentNo);
     setInstructions(data?.instructions);
     setDetails(data?.details);
@@ -718,6 +747,18 @@ const FoodRecipes = () => {
                 setSelectedFiles={setSelectedTableFiles}
               />
             </div>
+            <div>
+              <p>{newPrices.length>0?'Re Upload':'Upload'} Pricing Excel Sheet : </p>
+              <a href="https://firebasestorage.googleapis.com/v0/b/bruno-s-kitchen.appspot.com/o/Pricing%20New%20to%20JSON%20(2).xlsx?alt=media&token=461e3d97-fb66-481c-a5f6-b68ecf7d334f">Sample excel file</a>
+              <Paper elevation={3} style={{  marginLeft: 5, width: '50px', textAlign: 'center' , marginTop:"10px" }}>
+                  <label htmlFor="sizeImage">
+                      <IconButton color="primary" component="span">
+                        <CloudUploadIcon fontSize="large" />
+                      </IconButton>
+                  </label>
+                               <Input id="sizeImage" type="file" style={{display:"none"}} onChange={(e)=>readExcel(e.target.files)} />
+                </Paper>
+            </div>
           </Box>
           {Error && (
             <Typography style={{ textAlign: 'center', color: 'red' }} variant="h4" component="h2">
@@ -746,6 +787,16 @@ const FoodRecipes = () => {
               </Button>
             </AnimateButton>
           </Box>
+
+          <table border="1">
+            <tr><th style={{padding:"6px"}}>Weight</th><th style={{padding:"6px"}}>Activity Level</th><th style={{padding:"6px"}}>Price</th></tr>
+            {newPrices.map((value,index)=>{
+              return (
+                <tr key={index}><td style={{padding:"3px"}}>{value.weight} KG</td><td style={{padding:"3px"}}>{value.activityLevel}</td><td style={{padding:"3px"}}>{value.price}</td></tr>    
+              );
+            })}
+          </table>
+
         </Box>
       </Modal>
       {isLoading ? (
