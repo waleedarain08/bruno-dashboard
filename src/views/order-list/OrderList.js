@@ -96,7 +96,7 @@ function Row(props) {
         </TableCell>
         <TableCell align="center">{moment(row?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
         <TableCell align="center">{row?.user?.fullName}</TableCell>
-        <TableCell align="center">{row?.totalAmount}-AED</TableCell>
+        <TableCell align="center">{row?.totalAmount} AED</TableCell>
         <TableCell align="center">{row?.deliveryDate}</TableCell>
         <TableCell align="center">
           <AnimateButton>
@@ -353,7 +353,7 @@ function Row(props) {
                                             </TableCell>
                                             {item?.selectedItemSize && (
                                               <TableCell align="right">
-                                                {item?.selectedItemSize?.price}-AED <br></br>
+                                                {item?.selectedItemSize?.price} AED <br></br>
                                                 {item?.selectedItemSize?.name}
                                               </TableCell>
                                             )}
@@ -552,7 +552,7 @@ export default function OrderList() {
                 <TableCell style={{ color: '#fff' }}>Order No.</TableCell>
                 <TableCell style={{ color: '#fff' }}>Order Date / Time</TableCell>
                 <TableCell style={{ color: '#fff' }}>Customer Name</TableCell>
-                <TableCell style={{ color: '#fff' }} align="right">
+                <TableCell style={{ color: '#fff' }} align="center">
                   Order Total (AED)
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="right">

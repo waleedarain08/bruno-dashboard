@@ -93,7 +93,7 @@ const Invoice = () => {
                                             {SelectRow?.user?.fullName}
                                         </TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.cartTotal+SelectRow?.shippingFees} AED</TableCell>
-                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.discountPercentage} AED</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.discount} AED</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.totalAmount} AED</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}}align="center">{moment(SelectRow?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.deliveryDate}</TableCell>
