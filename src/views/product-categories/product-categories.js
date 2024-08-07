@@ -78,7 +78,7 @@ const ProductCategories = () => {
     setWeight(0);
     setDetails('');
     setDescription('');
-    setFeatured(0);
+    setFeatured(false);
     setVisible('');
     setSelectedFiles([]);
     setPreviewEdit([]);
