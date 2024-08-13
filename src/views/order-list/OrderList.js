@@ -96,7 +96,7 @@ function Row(props) {
         </TableCell>
         <TableCell align="center">{moment(row?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
         <TableCell align="center">{row?.user?.fullName}</TableCell>
-        <TableCell align="center">{row?.totalAmount} AED</TableCell>
+        <TableCell align="center">{row?.totalAmount.toFixed(2)} AED</TableCell>
         <TableCell align="center">{row?.deliveryDate}</TableCell>
         <TableCell align="center">
           <AnimateButton>

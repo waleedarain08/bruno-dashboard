@@ -92,9 +92,9 @@ const Invoice = () => {
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} component="th" scope="row">
                                             {SelectRow?.user?.fullName}
                                         </TableCell>
-                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.cartTotal+SelectRow?.shippingFees} AED</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{(parseFloat(SelectRow?.cartTotal)+parseFloat(SelectRow?.shippingFees)).toFixed(2)} AED</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.discount} AED</TableCell>
-                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.totalAmount} AED</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.totalAmount.toFixed(2)} AED</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}}align="center">{moment(SelectRow?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.deliveryDate}</TableCell>
                                         {/* <TableCell align="center">{row.location[0]?.address}</TableCell> */}
@@ -135,7 +135,7 @@ const Invoice = () => {
                                                         {/* <TableCell component="th" scope="row">
                                                             {SelectRow?.specialInstructions}
                                                         </TableCell> */}
-                                                        <TableCell align="left" style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }}>{historyRow?.planTotal} AED</TableCell>
+                                                        <TableCell align="left" style={{ fontWeight: 'bold',fontSize:'10px',padding:'0px' }}>{historyRow?.planTotal.toFixed(2)} AED</TableCell>
                                                     </TableRow>
                                                     <TableRow>
                                                         {historyRow?.pet && (
@@ -208,7 +208,7 @@ const Invoice = () => {
                                                                             <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{item?._id.substr(item?._id?.length - 5)}</TableCell>
                                                                             <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{historyRow?.planType==="Monthly"?item?.totalDays:historyRow?.planType==="Transitional"?historyRow?.pet?.feedingRoutine*10:item?.quantity}</TableCell>
                                                                             <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{historyRow?.planType==="Product"?`${item?.finalPrice/item?.quantity} AED`:"-"}</TableCell>
-                                                                            <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{item?.finalPrice} AED</TableCell>
+                                                                            <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{item?.finalPrice.toFixed(2)} AED</TableCell>
                                                                             {item?.selectedItemSize && (
                                                                                 <TableCell align="center" style={{ fontSize:'10px',padding:'3px' }}>
                                                                                     {item?.selectedItemSize?.price} AED <br></br>
@@ -248,7 +248,7 @@ const Invoice = () => {
                                                                          (
                                                                             <TableCell component="th" scope="row" style={{ fontSize:'10px',padding:'0px' }}>
                                                                                {historyRow?.recipes?.map((item, i) => (
-                                                                                 <p key={i}>{item.category=="Standard Recipes"?`${item.quantity} Servings x ${item.standaloneSize} grams`:'-'}</p>
+                                                                                 <p key={i}>{item.category=="Standard Recipes"?`${item.quantity} Servings x ${item.weight} grams`:'-'}</p>
 
                                                                                ))}
                                                                             </TableCell>    
