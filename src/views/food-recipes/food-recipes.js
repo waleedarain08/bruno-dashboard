@@ -131,12 +131,9 @@ const FoodRecipes = () => {
       ]);
       transitional.push([{weight:index+1,activityLevel:"transitional",price:data[3]}]);
     });
-    console.log(monthly.flat(1));
-    console.log(transitional.flat(1));
+    //console.log(monthly.flat(1));
+    //console.log(transitional.flat(1));
 
-    //var output = {"monthly":monthly.flat(1),"transitional":transitional.flat(1)};
-
-    //console.log(output);
 
     setMonthlyPrices(monthly.flat(1));
     setTransitionalPrices(transitional.flat(1));
