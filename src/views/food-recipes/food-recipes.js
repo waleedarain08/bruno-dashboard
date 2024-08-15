@@ -3,7 +3,8 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { InfinitySpin } from 'react-loader-spinner';
 import Modal from '@mui/material/Modal';
-import { Button, Checkbox } from '@mui/material';
+import { Button, Input, IconButton } from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { useNavigate } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
@@ -27,6 +28,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchFeild from 'components/searchFeild';
+import readXlsxFile from 'read-excel-file';
+//import readXlsxFile from 'read-excel-file'
+
 const style = {
   position: 'absolute',
   top: '50%',
@@ -99,6 +103,8 @@ const FoodRecipes = () => {
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [PreviewTableEdit, setPreviewTableEdit] = React.useState(null);
   const [selectedTableFiles, setSelectedTableFiles] = React.useState([]);
+  const [monthlyPrices, setMonthlyPrices] = React.useState([]);
+  const [transitionalPrices, setTransitionalPrices] = React.useState([]);
   const [IngredientsComposition, setIngredientsComposition] = React.useState('');
   const [standaloneSize, setstandaloneSize] = React.useState('');
   const [SelectedId, setSelectedId] = React.useState(null);
@@ -111,6 +117,32 @@ const FoodRecipes = () => {
     updatedFields[index].name = value;
     setFields(updatedFields);
   };
+
+  const readExcel = (value) => {
+  
+  const input = value[0];
+  readXlsxFile(input).then((rows) => {
+    var monthly = [];
+    var transitional = [];
+    rows.map((data,index) => {
+      monthly.push([{weight:index+1,activityLevel:"lessActive",price:data[0]},
+        {weight:index+1,activityLevel:"active",price:data[1]},
+        {weight:index+1,activityLevel:"veryActive",price:data[2]},
+      ]);
+      transitional.push([{weight:index+1,activityLevel:"transitional",price:data[3]}]);
+    });
+    console.log(monthly.flat(1));
+    console.log(transitional.flat(1));
+
+    //var output = {"monthly":monthly.flat(1),"transitional":transitional.flat(1)};
+
+    //console.log(output);
+
+    setMonthlyPrices(monthly.flat(1));
+    setTransitionalPrices(transitional.flat(1));
+    
+  })
+  }
 
   const InitialState = () => {
     setNameRecipe('');
@@ -132,6 +164,8 @@ const FoodRecipes = () => {
     setDescription('');
     setFeatured(false);
     setSelectedFiles([]);
+    setMonthlyPrices([]);
+    setTransitionalPrices([]);
     setSelectedTableFiles([]);
     setPreviewEdit([]);
     setPreviewTableEdit([]);
@@ -205,8 +239,9 @@ const FoodRecipes = () => {
     if (
       NameRecipe !== '' &&
       fields?.length > 0 &&
+      monthlyPrices?.length > 0 &&
       Description !== '' &&
-      KG != 0 &&
+      //KG != 0 &&
       RecipeNo != 0 &&
       Details != '' &&
       ContentNo != 0 &&
@@ -235,6 +270,8 @@ const FoodRecipes = () => {
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
             ingredient: NewValues,
+            monthlyPrices: monthlyPrices,
+            transitionalPrices: transitionalPrices,
             description: Description,
             details: Details,
             instructions: Instructions,
@@ -278,6 +315,8 @@ const FoodRecipes = () => {
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
             ingredient: NewValues,
+            monthlyPrices: monthlyPrices,
+            transitionalPrices: transitionalPrices,
             description: Description,
             expiryPeriod: expiryPeriod,
             details: Details,
@@ -312,6 +351,8 @@ const FoodRecipes = () => {
             isFeatured: Featured,
             isComboRecipe: isComboRecipe,
             ingredient: NewValues,
+            monthlyPrices: monthlyPrices,
+            transitionalPrices: transitionalPrices,
             description: Description,
             details: Details,
             instructions: Instructions,
@@ -370,6 +411,8 @@ const FoodRecipes = () => {
     setNnutrition(data?.nutrition);
     setLifeStage(data?.lifeStage);
     setKG(data?.pricePerKG);
+    setMonthlyPrices(data?.monthlyPrices);
+    setTransitionalPrices(data?.transitionalPrices);
     setContentNo(data?.caloriesContentNo);
     setInstructions(data?.instructions);
     setDetails(data?.details);
@@ -693,10 +736,10 @@ const FoodRecipes = () => {
             control={<Switch checked={isComboRecipe} onChange={() => setisComboRecipe(!isComboRecipe)} />}
             label="Combo Recipe"
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox checked={isStandard} onChange={() => setisStandard(!isStandard)} name="standard_Recipe" />}
             label="Standalone Recipe"
-          />
+          /> */}
           <Box style={{ display: 'flex', justifyContent: 'space-between' }} sx={{ width: '100%' }}>
             <div>
               <p>Recipe Images : </p>
@@ -717,6 +760,19 @@ const FoodRecipes = () => {
                 selectedFiles={selectedTableFiles}
                 setSelectedFiles={setSelectedTableFiles}
               />
+            </div>
+            <div>
+              <p style={{marginLeft:"10%"}}>{monthlyPrices.length>0?'Re Upload':'Upload'} Pricing Excel Sheet:</p>
+              <Paper elevation={3} style={{  marginLeft: 15, width: '50px', textAlign: 'center' , marginTop:"10px" }}>
+                  <label htmlFor="sizeImage">
+                      <IconButton color="primary" component="span">
+                        <CloudUploadIcon fontSize="large" />
+                      </IconButton>
+                  </label>
+                               <Input id="sizeImage" type="file" style={{display:"none"}} onChange={(e)=>readExcel(e.target.files)} />
+                </Paper>
+                <a style={{marginLeft:"11%", fontSize:"9px" }} href="https://firebasestorage.googleapis.com/v0/b/bruno-s-kitchen.appspot.com/o/Pricing%20New%20to%20JSON%20(2).xlsx?alt=media&token=461e3d97-fb66-481c-a5f6-b68ecf7d334f">Download Sample File</a>
+
             </div>
           </Box>
           {Error && (
@@ -746,6 +802,26 @@ const FoodRecipes = () => {
               </Button>
             </AnimateButton>
           </Box>
+           <div style={{display:"flex",flexDirection:"row",justifyContent:"space-between"}}>    
+           <table border="1" >
+            <tr><th colSpan={3}>Monthly</th></tr>
+            <tr><th style={{padding:"6px"}}>Weight</th><th style={{padding:"6px"}}>Activity Level</th><th style={{padding:"6px"}}>Price</th></tr>
+            {monthlyPrices.map((value,index)=>{
+              return (
+                <tr key={index}><td style={{padding:"3px"}}>{value.weight} KG</td><td style={{padding:"3px"}}>{value.activityLevel}</td><td style={{padding:"3px"}}>{value.price}</td></tr>    
+              );
+            })}
+          </table>
+          <table border="1">
+            <tr><th colSpan={2}>Transitional</th></tr>
+            <tr><th style={{padding:"2px"}}>Weight</th><th style={{padding:"2px"}}>Price</th></tr>
+            {transitionalPrices.map((value,index)=>{
+              return (
+                <tr key={index}><td style={{padding:"3px"}}>{value.weight} KG</td><td style={{padding:"3px"}}>{value.price}</td></tr>    
+              );
+            })}
+          </table> 
+          </div> 
         </Box>
       </Modal>
       {isLoading ? (
