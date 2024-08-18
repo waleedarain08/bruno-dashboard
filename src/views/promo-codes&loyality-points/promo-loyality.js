@@ -425,7 +425,7 @@ const PromoLoality = ({ ...others }) => {
                       error={Boolean(touched.VAT && errors.VAT)}
                       sx={{ ...theme.typography.customInput }}
                     >
-                      <InputLabel htmlFor="outlined-adornment-email-login">VAT</InputLabel>
+                      <InputLabel htmlFor="outlined-adornment-email-login">VAT %</InputLabel>
                       <OutlinedInput
                         id="outlined-adornment-email-login"
                         type="text"
