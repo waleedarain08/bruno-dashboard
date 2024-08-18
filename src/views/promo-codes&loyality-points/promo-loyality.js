@@ -116,6 +116,8 @@ const PromoLoality = ({ ...others }) => {
   let pointsLimit = dicountdata?.filter((i) => i?.name === "pointsLimit");
   let deliveryFeesInCity = dicountdata?.filter((i) => i?.name === "deliveryFeesInCity");
   let deliveryFeesOutside = dicountdata?.filter((i) => i?.name === "deliveryFeesOutside");
+  let VAT = dicountdata?.filter((i) => i?.name === "VAT");
+
 
 
 
@@ -221,7 +223,7 @@ const PromoLoality = ({ ...others }) => {
               <Grid container direction="column" justifyContent="center" spacing={2}>
                 <Grid item xs={12} container alignItems="center" justifyContent="center">
                   <Box sx={{ mb: 2 }}>
-                    <Typography variant="subtitle1">Delivery Charges</Typography>
+                    <Typography variant="subtitle1">Delivery Charges & VAT</Typography>
                   </Box>
                 </Grid>
                 <Formik
@@ -354,6 +356,89 @@ const PromoLoality = ({ ...others }) => {
                       {touched.DeliveryFeesOutside && errors.DeliveryFeesOutside && (
                         <FormHelperText error id="standard-weight-helper-text-email-login">
                           {errors.DeliveryFeesOutside}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                    {errors.submit && (
+                      <Box sx={{ mt: 3 }}>
+                        <FormHelperText error>{errors.submit}</FormHelperText>
+                      </Box>
+                    )}
+                    <Box sx={{ mt: 2 }}>
+                      <AnimateButton>
+                        <Button
+                          disableElevation
+                          disabled={updateDiscountLoading}
+                          fullWidth
+                          size="large"
+                          type="submit"
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Box>
+                  </form>
+                )}
+              </Formik>
+              </Grid>
+        </CardContent>}
+
+        {!isDiscountLoading && <CardContent>
+              <Grid container direction="column" justifyContent="center" spacing={2}>
+                {/* <Grid item xs={12} container alignItems="center" justifyContent="center">
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle1">Delivery Charges</Typography>
+                  </Box>
+                </Grid> */}
+                <Formik
+                initialValues={{
+                  VAT: parseFloat(VAT?.[0]?.aggregate),
+                  submit: null
+                }}
+
+                onSubmit={async (values, { setStatus, setSubmitting }) => {
+                  try {
+                    if (scriptedRef.current) {
+                      let data = {
+                        name: VAT?.[0]?.name,
+                        aggregate: parseFloat(values?.VAT),
+
+                      };
+                      dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    if (scriptedRef.current) {
+                      setStatus({ success: false });
+                      // setErrors({ submit: err.message });
+                      setSubmitting(false);
+                    }
+                  }
+                }}
+              >
+                {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
+                  <form noValidate onSubmit={handleSubmit} {...others}>
+                    <FormControl
+                      fullWidth
+                      error={Boolean(touched.VAT && errors.VAT)}
+                      sx={{ ...theme.typography.customInput }}
+                    >
+                      <InputLabel htmlFor="outlined-adornment-email-login">VAT</InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-email-login"
+                        type="text"
+                        value={values.VAT}
+                        name="VAT"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        label="VAT Charges"
+                        inputProps={{}}
+                      />
+                      {touched.VAT && errors.VAT && (
+                        <FormHelperText error id="standard-weight-helper-text-email-login">
+                          {errors.VAT}
                         </FormHelperText>
                       )}
                     </FormControl>
