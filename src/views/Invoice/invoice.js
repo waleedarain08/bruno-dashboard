@@ -76,6 +76,9 @@ const Invoice = () => {
                                             Discount Applied
                                         </TableCell>
                                         <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }} align="center">
+                                            VAT
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }} align="center">
                                             Order Payable Total
                                         </TableCell>
                                         <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }} align="center">
@@ -93,7 +96,8 @@ const Invoice = () => {
                                             {SelectRow?.user?.fullName}
                                         </TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{(parseFloat(SelectRow?.cartTotal)+parseFloat(SelectRow?.shippingFees)).toFixed(2)} AED</TableCell>
-                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.discount} AED</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.discount.toFixed(2)} AED</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.vat.toFixed(2)} AED</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.totalAmount.toFixed(2)} AED</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}}align="center">{moment(SelectRow?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.deliveryDate}</TableCell>
