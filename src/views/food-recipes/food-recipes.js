@@ -17,6 +17,7 @@ import { styled } from '@mui/system';
 import Grid from '@mui/material/Grid';
 import { TextareaAutosize } from '@mui/base';
 import ImageUploader from 'ui-component/ImageUploader';
+import TableImageUploader from 'ui-component/TableImageUploader';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -95,7 +96,7 @@ const FoodRecipes = () => {
   const [Details, setDetails] = React.useState('');
   const [Description, setDescription] = React.useState('');
   const [Featured, setFeatured] = React.useState(false);
-  const [isComboRecipe, setisComboRecipe] = React.useState(false);
+  const [isComboRecipe, setisComboRecipe] = React.useState(0);
   const [Loading, setLoading] = React.useState(false);
   const [Error, setError] = React.useState('');
   const [Condition, setCondition] = React.useState(null);
@@ -105,7 +106,7 @@ const FoodRecipes = () => {
   const [selectedTableFiles, setSelectedTableFiles] = React.useState([]);
   const [monthlyPrices, setMonthlyPrices] = React.useState([]);
   const [transitionalPrices, setTransitionalPrices] = React.useState([]);
-  const [IngredientsComposition, setIngredientsComposition] = React.useState('');
+  const [IngredientsComposition, setIngredientsComposition] = React.useState('0');
   const [standaloneSize, setstandaloneSize] = React.useState('');
   const [SelectedId, setSelectedId] = React.useState(null);
   const [isStandard, setisStandard] = React.useState(false);
@@ -120,25 +121,25 @@ const FoodRecipes = () => {
 
   const readExcel = (value) => {
   
-  const input = value[0];
-  readXlsxFile(input).then((rows) => {
-    var monthly = [];
-    var transitional = [];
-    rows.map((data,index) => {
-      monthly.push([{weight:index+1,activityLevel:"lessActive",price:data[0]},
-        {weight:index+1,activityLevel:"active",price:data[1]},
-        {weight:index+1,activityLevel:"veryActive",price:data[2]},
-      ]);
-      transitional.push([{weight:index+1,activityLevel:"transitional",price:data[3]}]);
-    });
-    //console.log(monthly.flat(1));
-    //console.log(transitional.flat(1));
+    const input = value[0];
+    readXlsxFile(input).then((rows) => {
+      var monthly = [];
+      var transitional = [];
+      rows.map((data,index) => {
+        monthly.push([{weight:index+1,activityLevel:"lessActive",price:data[0]},
+          {weight:index+1,activityLevel:"active",price:data[1]},
+          {weight:index+1,activityLevel:"veryActive",price:data[2]},
+        ]);
+        transitional.push([{weight:index+1,activityLevel:"transitional",price:data[3]}]);
+      });
+      //console.log(monthly.flat(1));
+      //console.log(transitional.flat(1));
 
 
-    setMonthlyPrices(monthly.flat(1));
-    setTransitionalPrices(transitional.flat(1));
-    
-  })
+      setMonthlyPrices(monthly.flat(1));
+      setTransitionalPrices(transitional.flat(1));
+      
+    })
   }
 
   const InitialState = () => {
@@ -160,7 +161,9 @@ const FoodRecipes = () => {
     setDetails('');
     setDescription('');
     setFeatured(false);
+    setisComboRecipe(0);
     setSelectedFiles([]);
+    setSelectedTableFiles([]);
     setMonthlyPrices([]);
     setTransitionalPrices([]);
     setSelectedTableFiles([]);
@@ -173,7 +176,7 @@ const FoodRecipes = () => {
 
   const handleNumberChange = (index, value) => {
     const updatedFields = [...fields];
-    updatedFields[index].aggregate = value;
+    updatedFields[index].aggregate = parseFloat(value);
     setFields(updatedFields);
   };
   const handleRemoveField = (index) => {
@@ -233,10 +236,12 @@ const FoodRecipes = () => {
   };
 
   const onSave = async () => {
+    console.log(selectedTableFiles);
     if (
       NameRecipe !== '' &&
       fields?.length > 0 &&
       monthlyPrices?.length > 0 &&
+      selectedTableFiles?.length > 0 &&
       Description !== '' &&
       //KG != 0 &&
       RecipeNo != 0 &&
@@ -246,7 +251,7 @@ const FoodRecipes = () => {
       Instructions != '' &&
       IngredientsComposition != '' &&
       LifeStage != '' &&
-      standaloneSize != '' &&
+     // standaloneSize != '' &&
       expiryPeriod != ''
     ) {
       setError('');
@@ -458,7 +463,7 @@ const FoodRecipes = () => {
             />
           </Box>
           <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-            <TextField
+            {/* <TextField
               value={KG}
               onChange={(e) => setKG(e.target.value)}
               style={{ margin: 5 }}
@@ -467,7 +472,7 @@ const FoodRecipes = () => {
               id="outlined-basic"
               label="Standalone Price"
               variant="outlined"
-            />
+            /> */}
             <TextField
               value={ContentNo}
               onChange={(e) => setContentNo(e.target.value)}
@@ -478,8 +483,34 @@ const FoodRecipes = () => {
               label="Calories Content No"
               variant="outlined"
             />
+            <TextField
+              value={expiryPeriod}
+              onChange={(e) => setexpiryPeriod(e.target.value)}
+              style={{ margin: 5 }}
+              sx={{ width: '100%' }}
+              id="outlined-basic"
+              placeholder="Expiry Period In Months"
+              label="Expiry Period In Months"
+              variant="outlined"
+            />
+            <FormControl sx={{ width: '100%', marginTop: 0.7 }}>
+              <InputLabel>LifeStage</InputLabel>
+              <Select value={LifeStage} onChange={(e) => setLifeStage(e.target.value)}>
+                <MenuItem key={1} value="Adult">
+                  {' '}
+                  Adult
+                </MenuItem>
+                <MenuItem key={2} value="Puppy">
+                  Puppy{' '}
+                </MenuItem>
+                <MenuItem key={3} value="Senior">
+                  {' '}
+                  Senior
+                </MenuItem>
+              </Select>
+            </FormControl>
           </Box>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+          {/* <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
               value={PriceOne}
               onChange={(e) => setPriceOne(e.target.value)}
@@ -544,20 +575,9 @@ const FoodRecipes = () => {
               label="Price 6 (1001g onwords)"
               variant="outlined"
             />
-          </Box>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-            <TextField
-              value={expiryPeriod}
-              onChange={(e) => setexpiryPeriod(e.target.value)}
-              style={{ margin: 5 }}
-              sx={{ width: '100%' }}
-              id="outlined-basic"
-              placeholder="Expiry Period In Months"
-              label="Expiry Period In Months"
-              variant="outlined"
-            />
-          </Box>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+          </Box> */}
+          
+          {/* <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
             <TextField
               value={standaloneSize}
               onChange={(e) => setstandaloneSize(e.target.value)}
@@ -567,26 +587,9 @@ const FoodRecipes = () => {
               placeholder="Standalone Size(e.g. 400 grams / 1 Liter/ 1 Can / etc...)"
               variant="outlined"
             />
-          </Box>
+          </Box> */}
 
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-            <FormControl sx={{ width: '100%', marginTop: 0.7 }}>
-              <InputLabel>LifeStage</InputLabel>
-              <Select value={LifeStage} onChange={(e) => setLifeStage(e.target.value)}>
-                <MenuItem key={1} value="Adult">
-                  {' '}
-                  Adult
-                </MenuItem>
-                <MenuItem key={2} value="Puppy">
-                  Puppy{' '}
-                </MenuItem>
-                <MenuItem key={3} value="Senior">
-                  {' '}
-                  Senior
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
+          
           <Box sx={{ width: '100%', position: 'relative' }}>
             {fields.map((field, index) => (
               <Box key={index} style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
@@ -750,12 +753,12 @@ const FoodRecipes = () => {
             </div>
             <div>
               <p>Table Images : </p>
-              <ImageUploader
-                imageCount={1}
-                PreviewEdit={PreviewTableEdit}
-                setPreviewEdit={setPreviewTableEdit}
-                selectedFiles={selectedTableFiles}
-                setSelectedFiles={setSelectedTableFiles}
+              <TableImageUploader
+                imageCountTable={1}
+                PreviewTableEdit={PreviewTableEdit}
+                setPreviewTableEdit={setPreviewTableEdit}
+                selectedTableFiles={selectedTableFiles}
+                setSelectedTableFiles={setSelectedTableFiles}
               />
             </div>
             <div>
