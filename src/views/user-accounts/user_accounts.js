@@ -26,6 +26,8 @@ import { useEffect } from 'react';
 import { GetUsers } from 'store/users/usersAction';
 import SearchFeild from 'components/searchFeild';
 import ExportUsers from './exportUsers';
+//import readXlsxFile from 'read-excel-file'
+
 // import { SET_MENU } from 'store/actions';
 
 
@@ -47,6 +49,7 @@ const UserAccounts = () => {
 
   console.log(rows, "rows,rows")
   React.useEffect(() => {
+    //readExcel();
     if (value !== "") {
       const filteredData = newRows?.filter(item => {
         return item?.fullName?.toLowerCase()?.includes(value?.toLowerCase());
@@ -72,6 +75,25 @@ const UserAccounts = () => {
     navigate('/user-auccounts/pet-profile', { state: row });
   };
 
+//   const readExcel = () => {
+  
+//   const input = document.getElementById('input')
+//   input.addEventListener('change', () => {
+//   readXlsxFile(input.files[0]).then((rows) => {
+//     var output = [];
+//     rows.map((data,index) => {
+//       output.push([{weight:index+1,activityLevel:"lessActive",price:data[0]},
+//         {weight:index+1,activityLevel:"active",price:data[1]},
+//         {weight:index+1,activityLevel:"veryActive",price:data[2]},
+//         {weight:index+1,activityLevel:"transitional",price:data[3]}
+//       ])
+//     });
+//     console.log(output.flat(1));
+    
+//   })
+// })
+//   }
+
   // const onExport = () => {
   //   dispatch({ type: SET_MENU, opened: false });
   //   setTimeout(() => {
@@ -80,6 +102,8 @@ const UserAccounts = () => {
   // }
   return (
     <Box sx={{ width: '100%' }}>
+      {/* <input type="file" id="input" /> */}
+
       {isLoading ? (
         <Paper sx={{ width: '100%', mb: 2 }}>
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>

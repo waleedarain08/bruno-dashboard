@@ -8,8 +8,6 @@ import Terms from 'views/login/terms';
 import Agreement from 'views/login/agreement';
 import Privacy from 'views/login/privacy';
 
-
-
 // login option 3 routing
 // const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
 const AuthRegister3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Register3')));

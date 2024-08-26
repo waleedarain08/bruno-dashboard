@@ -8,6 +8,8 @@ import { Avatar, Box, Grid, Typography } from '@mui/material';
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
+//import moment from 'moment/moment';
+
 
 // assets
 import EarningIcon from 'assets/images/icons/earning.svg';
@@ -144,7 +146,7 @@ const EarningCard = ({ isLoading, paidAmount }) => {
                 <Grid container alignItems="center">
                   <Grid item>
                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                      AED {paidAmount?.[0]?.totalAmount ? paidAmount?.[0]?.totalAmount : 0}
+                      AED {paidAmount?.[0]?.totalAmount ? paidAmount?.[0]?.totalAmount.toFixed(2) : 0}
                     </Typography>
                   </Grid>
                   <Grid item>
@@ -169,7 +171,7 @@ const EarningCard = ({ isLoading, paidAmount }) => {
                     color: theme.palette.secondary[200]
                   }}
                 >
-                  Total Earning
+                  Total Earnings Per Month 
                 </Typography>
               </Grid>
             </Grid>

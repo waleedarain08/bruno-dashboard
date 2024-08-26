@@ -4,38 +4,38 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
-const ImageUploader = ({ PreviewEdit, setSelectedFiles, selectedFiles, imageCount, setPreviewEdit }) => {
+const TableImageUploader = ({ PreviewTableEdit, setSelectedTableFiles, selectedTableFiles, imageCountTable, setPreviewTableEdit }) => {
   const [previewUrls, setPreviewUrls] = useState([]);
-  //console.log(selectedFiles);
   const handleFileChange = (e) => {
-    if (selectedFiles?.length == imageCount) {
-      alert(`only ${imageCount} Images is allowed`)
+    if (selectedTableFiles?.length > imageCountTable) {
+      alert(`only ${imageCountTable} Images is allowed`)
     } else {
       const files = e.target.files;
-      const newSelectedFiles = Array.from(files).slice(0, imageCount);
-      setSelectedFiles((prevSelectedFiles) => [...prevSelectedFiles, ...newSelectedFiles]);
+      console.log(files);
+      const newSelectedFiles = Array.from(files).slice(0, imageCountTable);
+      setSelectedTableFiles((prevSelectedFiles) => [...prevSelectedFiles, ...newSelectedFiles]);
       const newPreviewUrls = newSelectedFiles.map((file) => URL.createObjectURL(file));
       setPreviewUrls((prevPreviewUrls) => [...prevPreviewUrls, ...newPreviewUrls]);
     }
   };
 
   useEffect(() => {
-    if (typeof PreviewEdit === "string") {
-      setPreviewUrls([PreviewEdit])
+    if (typeof PreviewTableEdit === "string") {
+      setPreviewUrls([PreviewTableEdit])
     }
     else {
-      setPreviewUrls([...PreviewEdit])
+      setPreviewUrls([...PreviewTableEdit])
     }
 
-  }, [PreviewEdit]);
+  }, [PreviewTableEdit]);
 
 
   const handleRemoveImage = (index) => {
     const newPreviewUrls = [...previewUrls];
     const selectedFilesUrls = [...selectedFiles];
     selectedFilesUrls.splice(index, 1);
-    PreviewEdit?.length > 0 && setPreviewEdit(selectedFilesUrls);
-    setSelectedFiles(selectedFilesUrls);
+    PreviewTableEdit?.length > 0 && setPreviewTableEdit(selectedFilesUrls);
+    setSelectedTableFiles(selectedFilesUrls);
     newPreviewUrls.splice(index, 1);
     setPreviewUrls(newPreviewUrls);
   };
@@ -49,19 +49,18 @@ const ImageUploader = ({ PreviewEdit, setSelectedFiles, selectedFiles, imageCoun
             <input
               accept="image/*"
               style={{ display: 'none' }}
-              id="contained-button-file"
-              name="contained-button-file"
+              id="contained-button-file-table"
               multiple
               type="file"
               onChange={handleFileChange}
             />
-            {/* <label htmlFor="file"> */}
+            <label htmlFor="contained-button-file-table">
               <IconButton color="primary" component="span">
                 <CloudUploadIcon fontSize="large" />
               </IconButton>
-            {/* </label> */}
+            </label>
             <div style={{ marginTop: '10px', display: "none" }}>
-              <Input type="file" name="file" onChange={handleFileChange} />
+              <Input type="file" onChange={handleFileChange} />
             </div>
             {/* <div style={{ marginTop: '20px' }}>
                             <Button variant="contained" color="primary" onClick={handleUpload}>
@@ -105,4 +104,4 @@ const ImageUploader = ({ PreviewEdit, setSelectedFiles, selectedFiles, imageCoun
   );
 };
 
-export default ImageUploader;
+export default TableImageUploader;

@@ -21,8 +21,6 @@ import { SET_MENU } from 'store/actions';
 
 const ReportModal = ({ open, onClose, location, SelectRow }) => {
   const isLoadingLocation = useSelector((state) => state.OrderReducer.isLoadingLocation);
-  console.log(SelectRow, 'SelectRow', location);
-
   const dispatch = useDispatch();
 
   const downloadPDF = () => {

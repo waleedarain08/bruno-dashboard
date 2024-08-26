@@ -9,7 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import Avatar from '@mui/material/Avatar';
 import Switch from '@mui/material/Switch';
@@ -28,20 +28,21 @@ import { ADDToBatch } from 'store/batch/batchTypeAction';
 import SearchFeild from 'components/searchFeild';
 import { SET_MENU } from 'store/actions';
 import ExportUsers from 'views/user-accounts/exportUsers';
-import ReportModal from 'components/ReportModal';
+// import ReportModal from 'components/ReportModal';
+import { useNavigate } from 'react-router';
 // material-ui
 
 function Row(props) {
   const { row, setId } = props;
   const [open, setOpen] = React.useState(false);
   const [modalOpen, setModalOpen] = React.useState(false);
-  const [modalReportOpen, setModalReportOpen] = React.useState(false);
-  const [SelectRow, setSelectRow] = React.useState(null);
+  // const [modalReportOpen, setModalReportOpen] = React.useState(false);
+  // const [SelectRow, setSelectRow] = React.useState(null);
+  const navigate = useNavigate();
 
   const Userdata = useSelector((state) => state.AuthReducer.data);
-  // const isLoadingOrderChange = useSelector((state) => state.OrderReducer.isLoadingOrderChange);
   const LocationDataChange = useSelector((state) => state.OrderReducer.LocationDataChange);
-  // moveToBatch(row?._id)
+
 
   const dispatch = useDispatch();
   const OrderCooked = (id, name, check) => {
@@ -61,27 +62,28 @@ function Row(props) {
   const onSuccess = () => {
     dispatch(GetAllOrder(Userdata?.clientToken));
   };
-  const ViewLocation = (id) => {
-    dispatch(ViewOrderLocation(id, Userdata?.clientToken));
-    setModalOpen(true);
-  };
+  // const ViewLocation = (id) => {
+  //   dispatch(ViewOrderLocation(id, Userdata?.clientToken));
+  //   setModalOpen(true);
+  // };
 
   const ViewReport = (data) => {
+    navigate('/order-list/invoice', { state: { data: data } });
     dispatch(ViewOrderLocation(data?.locationId, Userdata?.clientToken));
-    setSelectRow(data);
-    setModalReportOpen(true);
+    // setSelectRow(data);
+    // setModalReportOpen(true);
   };
   ViewReport;
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-  const handleCloseReportModal = () => {
-    setModalReportOpen(false);
-  };
+  // const handleCloseReportModal = () => {
+  //   setModalReportOpen(false);
+  // };
 
   return (
     <React.Fragment>
-      <ReportModal open={modalReportOpen} onClose={handleCloseReportModal} location={LocationDataChange} SelectRow={SelectRow} />
+      {/* <ReportModal open={modalReportOpen} onClose={handleCloseReportModal} location={LocationDataChange} SelectRow={SelectRow} /> */}
       <LocationModal open={modalOpen} onClose={handleCloseModal} location={LocationDataChange} />
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
@@ -94,7 +96,7 @@ function Row(props) {
         </TableCell>
         <TableCell align="center">{moment(row?.createdOnDate).format('DD MMM YYYY, h:mm a')}</TableCell>
         <TableCell align="center">{row?.user?.fullName}</TableCell>
-        <TableCell align="center">{row?.totalAmount}-AED</TableCell>
+        <TableCell align="center">{row?.totalAmount.toFixed(2)} AED</TableCell>
         <TableCell align="center">{row?.deliveryDate}</TableCell>
         <TableCell align="center">
           <AnimateButton>
@@ -109,7 +111,7 @@ function Row(props) {
             </Button>
           </AnimateButton>
         </TableCell>
-        <TableCell align="center">
+        {/* <TableCell align="center">
           <AnimateButton>
             <Button
               onClick={() => ViewLocation(row?.locationId)}
@@ -121,7 +123,7 @@ function Row(props) {
               View Location
             </Button>
           </AnimateButton>
-        </TableCell>
+        </TableCell> */}
         <TableCell align="center">{row?.isCooked ? 'Yes' : 'No'}</TableCell>
         <TableCell align="center">{row?.batchNumber}</TableCell>
         <TableCell align="center">
@@ -140,47 +142,37 @@ function Row(props) {
                 let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
                 const content = newpouchesDetail && typeofPouch === 'string' && newpouchesDetail?.slice(2, -2);
                 const resultArray =
-                  newpouchesDetail && typeofPouch === 'string' ? content?.split(/\\n|\|/) : historyRow?.pouchesDetail[0]?.split('|');
+                  historyRow?.pouchesDetail?.length > 1
+                    ? historyRow?.pouchesDetail
+                    : newpouchesDetail && typeofPouch === 'string'
+                      ? content?.split(/\\n|\|/)
+                      : historyRow?.pouchesDetail[0]?.split('|');
+
+                let tArry = [3, 3, 3, 1];
                 return (
                   <>
-                    <Typography variant="h4" gutterBottom component="div">
-                      Order
-                    </Typography>
                     <Table size="small" aria-label="purchases">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Type</TableCell>
-                          <TableCell>Special Instructions(If Any)</TableCell>
-                          <TableCell align="right">Total price (AED)</TableCell>
-                        </TableRow>
-                      </TableHead>
                       <TableBody>
-                        <TableRow key={index}>
-                          <TableCell component="th" scope="row">
-                            {historyRow?.planType}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {row?.specialInstructions}
-                          </TableCell>
-                          <TableCell align="right">{historyRow?.planTotal}-AED</TableCell>
-                        </TableRow>
                         <TableRow>
                           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
                             <Collapse in={open} timeout="auto" unmountOnExit>
                               <Box sx={{ margin: 1 }}>
-                                <Typography variant="h4" gutterBottom component="div">
-                                  Details
-                                </Typography>
                                 {historyRow?.pet && (
                                   <Table size="small" aria-label="purchases">
                                     <TableHead>
                                       <TableRow>
-                                        <TableCell align="left">Pet Name</TableCell>
-                                        <TableCell align="center">Breed</TableCell>
-                                        <TableCell align="center">Media</TableCell>
-                                        <TableCell align="center">Feeding Routine</TableCell>
-                                        <TableCell align="center">Current Weight</TableCell>
-                                        <TableCell align="right">Actual Weight</TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="left">
+                                          Pet Name
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                          Breed
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                          Image
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                          Feeding Routine
+                                        </TableCell>
                                       </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -194,57 +186,186 @@ function Row(props) {
                                             </AvatarGroup>
                                           </div>
                                         </TableCell>
-                                        <TableCell align="center">{historyRow?.pet?.feedingRoutine}</TableCell>
+                                        <TableCell align="center">
+                                          {historyRow?.pet?.feedingRoutine} {historyRow?.pet?.feedingRoutine > 1 ? 'times' : 'time'}
+                                        </TableCell>
 
-                                        <TableCell align="center">{historyRow?.pet?.currentWeight}</TableCell>
-                                        <TableCell align="right">{historyRow?.pet?.actualWeight}</TableCell>
+                                        {/* <TableCell align="center">{historyRow?.pet?.currentWeight}</TableCell>
+                                        <TableCell align="right">{historyRow?.pet?.actualWeight}</TableCell> */}
                                       </TableRow>
                                     </TableBody>
                                   </Table>
                                 )}
-
-                                <Table size="small" aria-label="purchases">
-                                  {historyRow?.recipes?.map((item, index) => (
-                                    <>
-                                      <TableHead key={index}>
-                                        <TableRow>
-                                          <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
-                                          <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                            Name
-                                          </TableCell>
-                                          <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                            Quantity
-                                          </TableCell>
+                                {historyRow?.planType === 'Transitional' ? (
+                                  <Table size="small" aria-label="purchases">
+                                    <TableHead>
+                                      <TableRow>
+                                        <TableCell style={{ fontWeight: 'bold' }}></TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                          Product No
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                          Product ID
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="left">
+                                          Product Description
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="left">
+                                          Quantity
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold' }} align="left">
+                                          Serving
+                                        </TableCell>
+                                        {/* {item?.selectedItemSize && (
                                           <TableCell style={{ fontWeight: 'bold' }} align="right">
-                                            Price (AED)
+                                            Selected Size
                                           </TableCell>
-                                          {item?.selectedItemSize && (
-                                            <TableCell style={{ fontWeight: 'bold' }} align="right">
-                                              Selected Size
-                                            </TableCell>
-                                          )}
-                                        </TableRow>
-                                      </TableHead>
-                                      <TableBody>
+                                        )} */}
+                                      </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                      {/* {resultArray?.map((item, index) => ( */}
+                                      <>
                                         <TableRow>
-                                          <TableCell component="th" scope="row">
-                                            {item?.category !== '' ? item?.category : '---'}
+                                          <TableCell align="center"></TableCell>
+                                          <TableCell rowSpan={resultArray?.length} align="center">{index + 1}</TableCell>
+                                          <TableCell rowSpan={resultArray?.length} align="center">{historyRow?.recipes?.[0]?._id.substr(historyRow?.recipes?.[0]?._id?.length - 5)}</TableCell>
+                                          <TableCell rowSpan={resultArray?.length} component="th" scope="row">
+                                            {historyRow?.planType}
                                           </TableCell>
-                                          <TableCell align="center">{item?.name}</TableCell>
-                                          <TableCell align="center">{item?.quantity}</TableCell>
-                                          <TableCell align="right">{item?.finalPrice}-AED</TableCell>
-                                          {item?.selectedItemSize && (
-                                            <TableCell align="right">
-                                              {item?.selectedItemSize?.price}-AED <br></br>
-                                              {item?.selectedItemSize?.name}
-                                            </TableCell>
-                                          )}
+                                          <TableCell align="center">
+                                            {resultArray?.map((x, index) =>
+                                              <TableRow key={index}>
+                                                <TableCell align="center">{historyRow?.recipes?.[0]?.name}</TableCell>
+                                              </TableRow>
+                                            )}
+                                          </TableCell>
+                                          <TableCell align="center">
+                                            {resultArray?.map((x, index) =>
+                                              <TableRow key={index}>
+                                                <TableCell align="center">{tArry?.[index]}</TableCell>
+                                              </TableRow>
+                                            )}
+                                          </TableCell>
+                                          <TableCell align="left" >
+                                            {resultArray?.map((y, index) => <TableRow key={index}>
+                                              <TableCell align="left">{y}</TableCell>
+                                            </TableRow>)}
+                                          </TableCell>
                                         </TableRow>
-                                      </TableBody>
-                                    </>
-                                  ))}
-                                </Table>
-                                {resultArray?.length > 0 && (
+                                      </>
+                                      {/* ))} */}
+                                    </TableBody>
+                                  </Table>
+                                ) : historyRow?.planType === "Monthly" ? (
+                                  <Table size="small" aria-label="purchases">
+                                    {historyRow?.recipes?.map((item, i) => (
+                                      <>
+                                        <TableHead key={i}>
+                                          <TableRow>
+                                            <TableCell style={{ fontWeight: 'bold' }}></TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product No
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product ID
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product Description
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Quantity
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Serving
+                                            </TableCell>
+                                          </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                          <TableRow>
+                                            <TableCell align="center"></TableCell>
+                                            <TableCell align="center">{i + 1}</TableCell>
+                                            <TableCell align="center">{item?._id.substr(item?._id?.length - 5)}</TableCell>
+                                            <TableCell component="th" scope="row">
+                                              {historyRow?.planType}
+                                            </TableCell>
+                                            <TableCell align="center">{item?.name}</TableCell>
+                                            <TableCell align="center">
+                                              {item?.totalDays}
+                                            </TableCell>
+                                            <TableCell align="center" component="th" scope="row">
+                                              {resultArray?.length > 1 ? (
+                                                <p>{resultArray[i]}</p>
+                                              ) : (
+                                                resultArray?.map((x, index) => <p key={index}>{x}</p>)
+                                              )}
+                                            </TableCell>
+                                          </TableRow>
+                                        </TableBody>
+                                      </>
+                                    ))}
+                                  </Table>) : (
+                                  <Table size="small" aria-label="purchases">
+                                    {historyRow?.recipes?.map((item, i) => (
+                                      <>
+                                        <TableHead key={i}>
+                                          <TableRow>
+                                            <TableCell style={{ fontWeight: 'bold' }}></TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product No
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product ID
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Product Description
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Quantity
+                                            </TableCell>
+                                            <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                              Serving
+                                            </TableCell>
+                                            {item?.selectedItemSize && (
+                                              <TableCell style={{ fontWeight: 'bold' }} align="right">
+                                                Selected Size
+                                              </TableCell>
+                                            )}
+                                          </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                          <TableRow>
+                                            <TableCell align="center"></TableCell>
+                                            <TableCell align="center">{index + 1}</TableCell>
+                                            <TableCell align="center">{item?._id.substr(item?._id?.length - 5)}</TableCell>
+                                            <TableCell component="th" scope="row">
+                                              {historyRow?.planType}
+                                            </TableCell>
+                                            <TableCell align="center">{item?.name}</TableCell>
+                                            <TableCell align="center">
+                                              {item?.quantity}
+                                            </TableCell>
+                                            <TableCell align="center" component="th" scope="row">
+                                              -
+                                            </TableCell>
+                                            {item?.selectedItemSize && (
+                                              <TableCell align="right">
+                                                {item?.selectedItemSize?.price} AED <br></br>
+                                                {item?.selectedItemSize?.name}
+                                              </TableCell>
+                                            )}
+                                          </TableRow>
+                                        </TableBody>
+                                      </>
+                                    ))}
+                                  </Table>
+                                )}
+
+
+                                {/* {resultArray?.length > 0 && (
                                   <Table size="small" aria-label="purchases">
                                     <TableHead>
                                       <TableRow>
@@ -261,7 +382,7 @@ function Row(props) {
                                       </TableRow>
                                     </TableBody>
                                   </Table>
-                                )}
+                                )} */}
                               </Box>
                             </Collapse>
                           </TableCell>
@@ -430,19 +551,19 @@ export default function OrderList() {
                 <TableCell />
                 <TableCell style={{ color: '#fff' }}>Order No.</TableCell>
                 <TableCell style={{ color: '#fff' }}>Order Date / Time</TableCell>
-                <TableCell style={{ color: '#fff' }}>User Name</TableCell>
-                <TableCell style={{ color: '#fff' }} align="right">
+                <TableCell style={{ color: '#fff' }}>Customer Name</TableCell>
+                <TableCell style={{ color: '#fff' }} align="center">
                   Order Total (AED)
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="right">
-                  Delivery Date
+                  Delivery Date (on or before)
                 </TableCell>
                 <TableCell style={{ color: '#fff' }} align="center">
-                  Order Invoice
+                  Print Invoice
                 </TableCell>
-                <TableCell style={{ color: '#fff' }} align="center">
+                {/* <TableCell style={{ color: '#fff' }} align="center">
                   Delivery Location
-                </TableCell>
+                </TableCell> */}
                 {/* <TableCell style={{ color: "#fff" }} align="center">Actions</TableCell> */}
                 <TableCell style={{ color: '#fff' }} align="center">
                   Cooked

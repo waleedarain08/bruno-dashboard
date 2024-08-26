@@ -43,14 +43,20 @@ const TotalGrowthBarChart = ({ isLoading, chartGrowthData }) => {
   const theme = useTheme();
 
   let resultArray = Array(12).fill(0);
+  let resultArray2 = Array(12).fill(0);
+
 
   chartGrowthData?.forEach((item) => {
     const key = Object.keys(item)[0];
     const value = item[key];
     resultArray[key - 1] = value;
+    resultArray2[key - 1] = value.toFixed(2);
+
   });
 
-  const totalSum = resultArray?.reduce((sum, value) => sum + value, 0);
+  
+
+  const totalSum = resultArray?.reduce((sum, value) => (sum + value), 0);
 
   const chartData = {
     height: 480,
@@ -128,7 +134,7 @@ const TotalGrowthBarChart = ({ isLoading, chartGrowthData }) => {
       },
       {
         name: 'Sales',
-        data: resultArray ? resultArray : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        data: resultArray2 ? resultArray2 : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
       }
       // {
       //   name: 'Maintenance',
@@ -203,7 +209,7 @@ const TotalGrowthBarChart = ({ isLoading, chartGrowthData }) => {
                       <Typography variant="subtitle2">Total Growth</Typography>
                     </Grid>
                     <Grid item>
-                      <Typography variant="h3">AED {totalSum}</Typography>
+                      <Typography variant="h3">AED {totalSum.toFixed(2)}</Typography>
                     </Grid>
                   </Grid>
                 </Grid>

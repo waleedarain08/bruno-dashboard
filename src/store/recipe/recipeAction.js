@@ -2,10 +2,12 @@
 import * as actionTypes from './recipeType';
 import { Delete, Get, Post, Put } from '../../helpers/apicalls/apicalls';
 
-export const GetAllRecipes = (data) => {
+export const GetAllRecipes = (data,isAdmin=false) => {
+  let url  = isAdmin?`recipe/adminRecipes/`:`recipe/`;
+  console.log(url);
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoading });
-    Get(`recipe/`, data)
+    Get(url, data)
       .then(function (response) {
         if (response?.isSuccess) {
           dispatch({
@@ -27,8 +29,11 @@ export const GetAllRecipes = (data) => {
 export const AddRecipe = (data, token, setLoading, onSuccess, isStandard, callAgain) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingAdd });
+    data.isVisible=true;
+    console.log("dddddd",data);
     Post(`recipe/`, data, token)
       .then(function (response) {
+        //console.log(response, 'response');
         if (response?.isSuccess) {
           if (isStandard) {
             let newData = data;
@@ -36,9 +41,9 @@ export const AddRecipe = (data, token, setLoading, onSuccess, isStandard, callAg
             newData.name = data.name + " ";
             newData.details = "Bruno's Kitchen";
             newData.weight = "";
-            newData.ingredient = [];
             newData.sizes = [];
-            console.log("here again",newData);
+            //newData.ingredient = data.ingredient;
+            //console.log("here again",newData);
             callAgain(newData);
           }
           else {
@@ -69,7 +74,7 @@ export const DeleteRecipe = (id, token, onSuccess) => {
     dispatch({ type: actionTypes.isLoadingDelete });
     Delete(`recipe/${id}`, token)
       .then(function (response) {
-        console.log(response, 'response');
+        //console.log(response, 'response');
         if (response?.isSuccess) {
           onSuccess();
           dispatch({
@@ -91,20 +96,21 @@ export const DeleteRecipe = (id, token, onSuccess) => {
 export const EditRecipe = (id, data, token, setLoading, onSuccess, isStandard, callAgain) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingEdit });
-    //console.log("dddddddd",data);
+    data.isVisible=true;
+    console.log("dddddddd",data);
     Put(`recipe/${id}`, data, token)
       .then(function (response) {
-        //console.log(response, 'response');
+        console.log(response, 'response');
         if (response?.isSuccess) {
           if (isStandard) {
             let newData = data;
-            newData.category = "Standard Recipes";
             newData.name = data.name + " ";
             newData.details = "Bruno's Kitchen";
             newData.weight = "";
-            newData.ingredient = [];
             newData.sizes = [];
-           // console.log("newwwwww",newData);
+            newData.category = "Standard Recipes";
+            //newData.ingredient = [];
+            console.log("newwwwww",newData);
             callAgain(newData);
           }
           else {

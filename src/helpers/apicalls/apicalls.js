@@ -2,7 +2,9 @@ import { BASE_URL } from "./constants/constants";
 import axios from "axios";
 
 async function Post(path, data, token) {
+  //console.log(data);
   let url = BASE_URL + path;
+  //console.log(url);
   var config = {
     method: "post",
     url: url,
@@ -18,7 +20,7 @@ async function Post(path, data, token) {
   };
 
   let response = await axios(config);
-
+  console.log(response);
   return response.data;
 }
 

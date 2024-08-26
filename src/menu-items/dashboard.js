@@ -81,7 +81,7 @@ const dashboard = {
     // },
     {
       id: 'blog-&-FAQ',
-      title: 'News,FAQ,Blog, Banner, Greeting & Feedback',
+      title: 'News, FAQ, Blog, Banner, Greeting, Feedback, Terms, Privacy & Agreement',
       type: 'item',
       url: '/blog-&-FAQ',
       icon: NoteAltIcon,
