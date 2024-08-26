@@ -83,7 +83,7 @@ const FoodRecipes = () => {
   const [RecipeNo, setRecipeNo] = React.useState(0);
   const [Nnutrition, setNnutrition] = React.useState('');
   const [LifeStage, setLifeStage] = React.useState('Adult');
-  const [KG, setKG] = React.useState('');
+  //const [KG, setKG] = React.useState('');
   const [expiryPeriod, setexpiryPeriod] = React.useState('');
   const [ContentNo, setContentNo] = React.useState(0);
   const [PriceOne, setPriceOne] = React.useState(0);
@@ -154,7 +154,7 @@ const FoodRecipes = () => {
     setPriceSix(0);
     setNnutrition('');
     setLifeStage('');
-    setKG('');
+    //setKG('');
     setIngredientsComposition('');
     setContentNo(0);
     setInstructions('');
@@ -236,12 +236,12 @@ const FoodRecipes = () => {
   };
 
   const onSave = async () => {
-    console.log(selectedTableFiles);
+    //console.log(selectedTableFiles);
     if (
       NameRecipe !== '' &&
       fields?.length > 0 &&
       monthlyPrices?.length > 0 &&
-      selectedTableFiles?.length > 0 &&
+      //selectedTableFiles?.length > 0 &&
       Description !== '' &&
       //KG != 0 &&
       RecipeNo != 0 &&
@@ -278,7 +278,7 @@ const FoodRecipes = () => {
             details: Details,
             instructions: Instructions,
             nutrition: Nnutrition,
-            pricePerKG: parseInt(KG),
+            pricePerKG: 0,
             expiryPeriod: expiryPeriod,
             media: newPath,
             tableImage: table_Images,
@@ -324,7 +324,7 @@ const FoodRecipes = () => {
             details: Details,
             instructions: Instructions,
             nutrition: Nnutrition,
-            pricePerKG: parseInt(KG),
+            pricePerKG: 0,
             media: [...allmedia, ...newPath],
             tableImage: [...alltableImage, ...table_Images],
             recipeNo: RecipeNo,
@@ -359,7 +359,7 @@ const FoodRecipes = () => {
             details: Details,
             instructions: Instructions,
             nutrition: Nnutrition,
-            pricePerKG: parseInt(KG),
+            pricePerKG: 0,
             media: PreviewEdit,
             tableImage: PreviewTableEdit,
             recipeNo: RecipeNo,
@@ -412,7 +412,7 @@ const FoodRecipes = () => {
     setRecipeNo(data?.recipeNo);
     setNnutrition(data?.nutrition);
     setLifeStage(data?.lifeStage);
-    setKG(data?.pricePerKG);
+    //setKG(data?.pricePerKG);
     setMonthlyPrices(data?.monthlyPrices);
     setTransitionalPrices(data?.transitionalPrices);
     setContentNo(data?.caloriesContentNo);
