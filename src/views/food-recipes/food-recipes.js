@@ -96,7 +96,7 @@ const FoodRecipes = () => {
   const [Details, setDetails] = React.useState('');
   const [Description, setDescription] = React.useState('');
   const [Featured, setFeatured] = React.useState(false);
-  const [isComboRecipe, setisComboRecipe] = React.useState(0);
+  const [isComboRecipe, setisComboRecipe] = React.useState(false);
   const [Loading, setLoading] = React.useState(false);
   const [Error, setError] = React.useState('');
   const [Condition, setCondition] = React.useState(null);
@@ -161,7 +161,7 @@ const FoodRecipes = () => {
     setDetails('');
     setDescription('');
     setFeatured(false);
-    setisComboRecipe(0);
+    setisComboRecipe(false);
     setSelectedFiles([]);
     setSelectedTableFiles([]);
     setMonthlyPrices([]);
