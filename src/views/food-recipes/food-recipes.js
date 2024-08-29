@@ -774,7 +774,7 @@ const FoodRecipes = () => {
                   </label>
                                <Input id="sizeImage" type="file" style={{display:"none"}} onChange={(e)=>readExcel(e.target.files)} />
                 </Paper>
-                <a style={{marginLeft:"11%", fontSize:"9px" }} href="https://firebasestorage.googleapis.com/v0/b/bruno-s-kitchen.appspot.com/o/Pricing%20New%20to%20JSON%20(2).xlsx?alt=media&token=461e3d97-fb66-481c-a5f6-b68ecf7d334f">Download Sample File</a>
+                <a style={{marginLeft:"8%", fontSize:"8px" }} href="https://firebasestorage.googleapis.com/v0/b/bruno-s-kitchen.appspot.com/o/RecipeSamplePricing-PerDay.xlsx?alt=media&token=9159c42f-9001-4a09-b380-2d09595acfd0">Download Sample Sheet For Reference</a>
 
             </div>
           </Box>
