@@ -492,7 +492,7 @@ const FoodRecipes = () => {
               style={{ margin: 5 }}
               sx={{ width: '100%' }}
               id="outlined-basic"
-              placeholder="Expiry Period In Months"
+              placeholder="2"
               label="Expiry Period In Months"
               variant="outlined"
             />
@@ -774,7 +774,7 @@ const FoodRecipes = () => {
                   </label>
                                <Input id="sizeImage" type="file" style={{display:"none"}} onChange={(e)=>readExcel(e.target.files)} />
                 </Paper>
-                <a style={{marginLeft:"8%", fontSize:"8px" }} href="https://firebasestorage.googleapis.com/v0/b/bruno-s-kitchen.appspot.com/o/RecipeSamplePricing-PerDay.xlsx?alt=media&token=9159c42f-9001-4a09-b380-2d09595acfd0">Download Sample Sheet For Reference</a>
+                <div style={{marginLeft:"8%"}}><a style={{ fontSize:"8px" }} href="https://firebasestorage.googleapis.com/v0/b/bruno-s-kitchen.appspot.com/o/RecipeSamplePricing-PerDay.xlsx?alt=media&token=9159c42f-9001-4a09-b380-2d09595acfd0">Download Sample Sheet For Reference</a></div>
 
             </div>
           </Box>
