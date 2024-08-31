@@ -473,6 +473,7 @@ const CookingBatch = () => {
                                     ) : (
                                       <Table size="small" aria-label="purchases">
                                         {historyRow?.recipes?.map((item, i) => (
+                                          //item.category === "Standard Recipes" &&
                                           <>
                                             <TableHead key={i}>
                                               <TableRow>
