@@ -48,12 +48,12 @@ const style = {
 
 const StyledTextarea = styled(TextareaAutosize)(
   ({ theme }) => `
-    width: 320px;
+    width: 460px;
     font-family: inherit;
     font-size: 0.875rem;
     font-weight: 400;
     line-height: 1.5;
-    padding: 12px;
+    padding: 8px;
     border-radius: 12px 12px 12px 12px;
     color:#121926;
     background: ${theme.palette.mode === 'dark' ? '#D78809' : '#fff'};
@@ -638,62 +638,70 @@ const FoodRecipes = () => {
               <AddCircleIcon variant="contained" color="primary" onClick={handleAddField} />
             </div>
           </Box>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
-            <StyledTextarea
-              value={IngredientsComposition}
-              onChange={(e) => setIngredientsComposition(e.target.value)}
-              style={{ width: '105%', height: 50, marginTop: 7 }}
-              maxRows={5}
-              aria-label="maximum height"
-              placeholder="Ingredients Composition"
-              defaultValue=""
-            />
-          </Box>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+          <Box style={{ display: 'flex', flexDirection:"column" ,justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <Typography style={{fontWeight:800}}>Description:</Typography>
             <StyledTextarea
               value={Details}
               onChange={(e) => setDetails(e.target.value)}
-              style={{ width: '105%', height: 50, marginTop: 7 }}
+              style={{ width: '100%', height: 70, marginTop: 2 }}
               maxRows={5}
               aria-label="maximum height"
-              placeholder="Details"
+              placeholder="Our hearty beef and macaroni recipe provides a robust protein boost for muscle health."
               defaultValue=""
             />
-            {/* <TextField
-              value={Details}
-              onChange={(e) => setDetails(e.target.value)}
-              style={{ margin: 5 }}
-              sx={{ width: '100%' }}
-              id="outlined-basic"
-              label="Details"
-              variant="outlined"
-            /> */}
           </Box>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+
+          <Box style={{ display: 'flex', flexDirection:"column" ,justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+          <Typography style={{fontWeight:800}}>Guaranteed Analysis  (Enter comma separated values):</Typography>
             <StyledTextarea
               value={Nnutrition}
               onChange={(e) => setNnutrition(e.target.value)}
-              style={{ width: '105%', height: 50, marginTop: 7 }}
+              style={{ width: '100%', height: 70, marginTop: 2 }}
               maxRows={5}
               aria-label="maximum height"
-              placeholder="Guaranteed Analysis  (Enter comma separated values)"
+              placeholder="Crude Protein (min) - 17% , Crude Fat (min) - 8% ,  Crude Fiber (max). - 2%,  Moisture (max) - 65%"
               defaultValue=""
             />
-            {/* <TextField
-              sx={{ width: '100%' }}
-              id="outlined-basic"
-              label="Guaranteed Analysis  (Enter comma separated values)"
-              variant="outlined"
-            /> */}
+           
           </Box>
-          <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+
+          <Box style={{ display: 'flex', flexDirection:"column" ,justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
+          <Typography style={{fontWeight:800}}>Nutritional Adequacy:</Typography>
+            <StyledTextarea
+              value={Description}
+              onChange={(e) => setDescription(e.target.value)}
+              style={{ width: '100%', height: 70, marginTop: 2 }}
+              maxRows={5}
+              aria-label="maximum height"
+              placeholder="BEEFY BARKFEST for Dogs is formulated to meet the AAFCO Dog Food Nutrient Profiles for ADULT maintenance."
+              defaultValue=""
+            />
+          </Box>
+
+          <Box style={{ display: 'flex', flexDirection:"column", justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+            <Typography style={{fontWeight:800}}> Ingredients Composition:</Typography>
+            <StyledTextarea
+              value={IngredientsComposition}
+              onChange={(e) => setIngredientsComposition(e.target.value)}
+              style={{ width: '100%', height: 70, marginTop:2}}
+              maxRows={5}
+              aria-label="maximum height"
+              placeholder="Beef Macroni, Carrot, Spinach, Peas"
+              defaultValue=""
+            />
+          </Box>
+          
+          
+          <Box style={{ display: 'flex', flexDirection:"column" ,justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+          <Typography style={{fontWeight:800}}>Feeding Directions:</Typography>
             <StyledTextarea
               value={Instructions}
               onChange={(e) => setInstructions(e.target.value)}
-              style={{ width: '105%', height: 50, marginTop: 7 }}
+              style={{ width: '100%', height: 70, marginTop: 2 }}
               maxRows={5}
               aria-label="maximum height"
-              placeholder="Feeding Directions"
+              placeholder="As a general rule, feed your adult dog 1-2 times per day.Breed, age, and activity level are all factors that play a part in the necessary feeding quantities for your dog.
+Using the guidelines below, adjust feeding quantities as necessary to maintain the ideal body weight of your dog."
               defaultValue=""
             />
             {/* <TextField
@@ -706,27 +714,7 @@ const FoodRecipes = () => {
               variant="outlined"
             /> */}
           </Box>
-          <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
-            <StyledTextarea
-              value={Description}
-              onChange={(e) => setDescription(e.target.value)}
-              style={{ width: '105%', height: 50, marginTop: 7 }}
-              maxRows={5}
-              aria-label="maximum height"
-              placeholder="Nutritional Adequacy"
-              defaultValue=""
-            />
-            {/* <TextField
-              value={Description}
-              onChange={(e) => setDescription(e.target.value)}
-              style={{ marginTop: 5 }}
-              sx={{ width: '100%' }}
-              id="outlined-basic"
-              label="Description"
-              variant="outlined"
-            /> */}
-            {/* <StyledTextarea sx={{ width: '100%' }} maxRows={5} aria-label="maximum height" placeholder="Description" defaultValue="" /> */}
-          </Box>
+          
           <FormControlLabel
             style={{ marginLeft: 7 }}
             required
