@@ -24,6 +24,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 // import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 import { GetAllCategories, DeleteCategories, SaveCategories, EditCategories } from 'store/categories/categoriesAction';
+import { number } from 'prop-types';
 
 
 const style = {
@@ -41,11 +42,12 @@ const style = {
 const Categories = () => {
   //   const navigate = useNavigate();
   const [Name, setName] = React.useState("");
+  const [Order, setOrder] = React.useState("");
   const [Error, setError] = React.useState("");
   const [IsAdd, setIsAdd] = React.useState(null);
 
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [open, setOpen] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [Delete_Id, setDelete_Id] = React.useState(null);
@@ -57,6 +59,7 @@ const Categories = () => {
     if (Name === "Add") {
       setDelete_Id(null);
       setName("");
+      setOrder("");
     }
   };
 
@@ -96,10 +99,12 @@ const Categories = () => {
     setOpen(false);
   }
   const onSave = () => {
-    if (Name !== "") {
+    console.log(Order);
+    if (Name !== "" && Order !== "" ) {
       setError("")
       let data = {
         name: Name,
+        order: parseInt(Order)
       }
       if (IsAdd === "Add") {
         dispatch(SaveCategories(data, Userdata?.clientToken, onSuccess));
@@ -115,6 +120,7 @@ const Categories = () => {
   const onEditClick = (data) => {
     setDelete_Id(data?._id);
     setName(data?.name);
+    setOrder(data?.order);
     handleOpen("Edit");
   }
 
@@ -129,6 +135,9 @@ const Categories = () => {
             </Typography>
             <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
               <TextField value={Name} onChange={(e) => setName(e.target.value)} id="outlined-basic" label="Name" variant="outlined" />
+            </Box>
+            <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7, paddingBottom: 6 }} sx={{ width: '100%' }}>
+              <TextField type={number} value={Order} onChange={(e) => setOrder(e.target.value)} id="outlined-basic" label="Order" variant="outlined" />
             </Box>
             {Error !== "" && <Typography style={{ color: "red", textAlign: "center" }} id="modal-modal-title" variant="h6" component="h2">
               {Error}
@@ -236,6 +245,7 @@ const Categories = () => {
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                   <TableRow>
+                    <TableCell>Order</TableCell>
                     <TableCell>Name</TableCell>
                     <TableCell align="right">Actions</TableCell>
                   </TableRow>
@@ -243,6 +253,9 @@ const Categories = () => {
                 <TableBody>
                   {rows?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => (
                     <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell  component="th" scope="row">
+                        {row?.order}
+                      </TableCell>
                       <TableCell style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => navigate('/product-categories', { state: row?.name })} component="th" scope="row">
                         {row?.name}
                       </TableCell>
