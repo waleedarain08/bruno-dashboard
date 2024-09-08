@@ -26,7 +26,7 @@ const Invoice = () => {
     const dispatch = useDispatch();
     const locations = useLocation();
     let SelectRow = locations?.state?.data;
-    console.log(SelectRow, "SelectRow")
+   // console.log(SelectRow, "SelectRow")
 
     const downloadPDF = () => {
         dispatch({ type: SET_MENU, opened: false });
