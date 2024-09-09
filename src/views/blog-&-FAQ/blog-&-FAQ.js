@@ -289,7 +289,8 @@ const BlogFAQ = () => {
                         <DatePicker
                           disablePast={true}
                           type="date"
-                          label={ newDate.length<=10 ? newDate : "Published Date"}
+                          format='DD/MM/YYYY'
+                          label={ newDate.length<=10 ? newDate : "Publish Date"}
                           //value={newDate}
                           sx={{ width: '100%' }}
                           onChange={(e) => setDate(moment(e).format('x'))}
@@ -512,7 +513,7 @@ const BlogFAQ = () => {
 
                   {typeforView !== 'FAQ' && <TableCell align="center">Media</TableCell>}
                   <TableCell align="center">Type</TableCell>
-                  <TableCell align="center">Published Date</TableCell>
+                  <TableCell align="center">Publish Date</TableCell>
                   <TableCell align="center">isFeature</TableCell>
                   {typeforView === 'feedback' && <TableCell align="center">Replied</TableCell>}
                   <TableCell align="right">Actions</TableCell>
