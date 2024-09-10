@@ -526,7 +526,7 @@ const BlogFAQ = () => {
                       {typeforView !== 'FAQ'? row?._id.substr(row?._id.length - 4): row?.order}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {row?.title.length > 30 ? <>{row?.title.substring(0, 30)}...</> : <>{row?.title}</>}
+                      {row?.title.length > 36 ? <>{row?.title.substring(0, 36)}. . .</> : <>{row?.title}</>}
                     </TableCell>
                     <TableCell align="center">
                       {typeforView !== 'FAQ' ? (
