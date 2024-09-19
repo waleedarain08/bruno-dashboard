@@ -7,6 +7,7 @@ export const GetAllIngredient = (data) => {
     dispatch({ type: actionTypes.isLoading });
     Get(`ingredient/`, data)
       .then(function (response) {
+        console.log(response, "response")
         if (response?.isSuccess) {
           dispatch({
             type: actionTypes.SuccessiIngredients,
