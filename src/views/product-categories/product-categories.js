@@ -32,6 +32,8 @@ import SearchFeild from 'components/searchFeild';
 import RichTextEditor from 'components/RichTextEditor';
 import { storage } from "./../../utils/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+import { GetAllIngredient } from 'store/ingredients/ingredientsAction';
+
 
 
 const style = {
@@ -221,7 +223,7 @@ const ProductCategories = () => {
   const Userdata = useSelector((state) => state.AuthReducer.data);
   const ingData = useSelector((state) => state.IngredientsReducer.data);
   const allData = useSelector((state) => state.CategoryReducer.data);
-  console.log(ingData);
+  //console.log(ingData);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
   const newRows = filterProdcuts?.recipe?.filter((i) => i?.category !== '' && i?.category === location?.state);
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
@@ -229,6 +231,7 @@ const ProductCategories = () => {
   useEffect(() => {
     dispatch(GetAllRecipes(Userdata?.clientToken,true));
     dispatch(GetAllCategories(Userdata?.clientToken));
+    dispatch(GetAllIngredient(Userdata?.clientToken));
   }, []);
 
   React.useEffect(() => {
