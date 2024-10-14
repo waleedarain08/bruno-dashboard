@@ -2,10 +2,10 @@
 import * as actionTypes from './ordersType';
 import { Get, Put } from '../../helpers/apicalls/apicalls';
 
-export const GetAllOrder = (data) => {
+export const GetAllOrder = (data,view) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingOrder });
-    Get(`order/`, data)
+    Get(`order?type=${view}`, data)
       .then(function (response) {
         if (response?.isSuccess) {
           dispatch({
