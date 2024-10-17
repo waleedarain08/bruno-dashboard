@@ -285,7 +285,7 @@ const CookingBatch = () => {
                                 {Math.trunc(i?.CookingVolume)}
                               </TableCell>
                               {items?.orderItems?.map((z, newIndex) =>
-                                z?.recipes?.map(() => {
+                                z?.recipes?.map((r) => {
                                   let updatedData =
                                     items?.ingredientConsumption &&
                                     Object.entries(items?.ingredientConsumption).map(([name, value]) => ({ name, value }));
@@ -302,7 +302,7 @@ const CookingBatch = () => {
                                   const adjustedWeight = anOther?.[0]?.value * (1 + contingencyFactor);
                                   return (
                                     <TableCell style={{ width: 250 }} key={newIndex} align="center">
-                                      {anOther?.length > 0 ? Math.trunc(adjustedWeight) : '--'}
+                                      {(r.category == "" || r.category == "Standard Recipes") ?  anOther?.length > 0 ? Math.trunc(adjustedWeight) : '--' : ''}
                                     </TableCell>
                                   );
                                 })
@@ -471,9 +471,10 @@ const CookingBatch = () => {
                                         ))}
                                       </Table>
                                     ) : (
+                                      //items.category === "Standard Recipes" &&
                                       <Table size="small" aria-label="purchases">
                                         {historyRow?.recipes?.map((item, i) => (
-                                          //item.category === "Standard Recipes" &&
+                                          item.category === "Standard Recipes" &&
                                           <>
                                             <TableHead key={i}>
                                               <TableRow>
