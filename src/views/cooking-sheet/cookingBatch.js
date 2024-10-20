@@ -368,7 +368,7 @@ const CookingBatch = () => {
                                   z?.recipes?.map((r) => {
                                     individualSum = 0;
                                       r.recipeIngredientTotal && Object.entries(r.recipeIngredientTotal).map((val)=>{
-                                          console.log(val[1]);
+                                         // console.log(val[1]);
                                          individualSum += r.category == "" || r.category == "Standard Recipes"?Math.trunc(val[1]):0;
                                       });
                                       //let anOther = record?.filter((u) => u?.nkey == key);

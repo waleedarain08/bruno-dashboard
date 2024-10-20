@@ -31,6 +31,7 @@ const BatchLable = () => {
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const [FeedingData, setFeedingData] = React.useState([]);
     const BatchOrderByIdData = useSelector((state) => state.BatchReducer.BatchOrderByIdData);
+    //console.log(BatchOrderByIdData);
     React.useEffect(() => {
         dispatch(Batch_Order_By_id(state?._id, Userdata?.clientToken));
     }, [state]);
@@ -51,7 +52,7 @@ const BatchLable = () => {
                             let extractString = z?.pouchesDetail[0].split('|');
                             let newData = [];
                             extractString.forEach((segment) => {
-                                let match = segment.match(/(\d+) pouches x (\d+\.\d+) grams/);
+                                let match = segment.match(/(\d+) servings x (\d+\.\d+) grams/);
                                 if (match) {
                                     newData.push({
                                         day: parseInt(match[1]),
@@ -66,6 +67,7 @@ const BatchLable = () => {
                     })
                     .flat(2);
             });
+            console.log("nnn",newarrr);
             setFeedingData(newarrr);
         }
     }, [BatchOrderByIdData]);
@@ -109,17 +111,20 @@ const BatchLable = () => {
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                     {BatchOrderByIdData?.map((t, firstindex) => {
                         let PuchesData = BatchOrderByIdData?.map((p) => p?.orderItems).flat(2);
-                        return FeedingData?.[firstindex]?.map((i) => {
+                        //console.log(PuchesData);
+                        return typeof FeedingData!="undefined" && FeedingData?.[firstindex]?.map((i) => {
+                            if(typeof i!="undefined"){
                             let allDay = PuchesData?.[firstindex]?.pet?.feedingRoutine > 1 ? i?.day + i?.day : i?.day;
                             let updatedPouches = i?.value / PuchesData?.[firstindex]?.pet?.feedingRoutine;
                             let newPouches = updatedPouches >= 400 && updatedPouches <= 800 ? updatedPouches / 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? updatedPouches / 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? updatedPouches / 4 : updatedPouches;
                             let numbers = updatedPouches >= 400 && updatedPouches <= 800 ? allDay * 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? allDay * 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? allDay * 4 : allDay;
-
+                            console.log(allDay);
                             let newArray = [];
                             for (let i = 0; i < numbers; i++) {
                                 newArray.push(i);
                             }
-
+                            
+                            console.log(newArray);
                             return newArray?.map((x, thiredIndex) => {
                                 return <Grid item xs={2} sm={4} md={4} key={thiredIndex} >
                                     <Card sx={{ width: 370, marginBottom: 3 }}>
@@ -171,7 +176,8 @@ const BatchLable = () => {
                                 </Grid>
                             })
 
-                        })
+                    }})
+                    
 
                     })}
                 </Grid>
