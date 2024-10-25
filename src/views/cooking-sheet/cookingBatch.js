@@ -395,9 +395,24 @@ const CookingBatch = () => {
                 <Paper sx={{ marginTop: 4 }}>
                   <TableContainer>
                     <TableRow>
-                      <TableCell style={{ fontWeight: '800' }} align="left" colSpan={2}>
+                      <TableCell style={{ fontWeight: '800' }} align="left" >
                       ORDER PACKAGING INSTRUCTIONS :
                       </TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+
+                      {/* <TableCell align="right" >
+                        <AnimateButton>
+                          <Button onClick={() =>
+                            navigate("/cooking-sheet/batch-lable", {
+                              state: items
+                            })
+                          } style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                            Batch Label
+                          </Button>
+                        </AnimateButton>
+                      </TableCell> */}
                     </TableRow>
                     {items?.orderItems?.map((historyRow, index) => {
                       let typeofPouch = typeof historyRow?.pouchesDetail;

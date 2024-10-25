@@ -113,7 +113,8 @@ const BatchLable = () => {
                         let PuchesData = BatchOrderByIdData?.map((p) => p?.orderItems).flat(2);
                         //console.log(PuchesData);
                         return typeof FeedingData!="undefined" && FeedingData?.[firstindex]?.map((i) => {
-                            if(typeof i!="undefined"){
+                            console.log(i);
+                            if(typeof i?.day!="undefined"){
                             let allDay = PuchesData?.[firstindex]?.pet?.feedingRoutine > 1 ? i?.day + i?.day : i?.day;
                             let updatedPouches = i?.value / PuchesData?.[firstindex]?.pet?.feedingRoutine;
                             let newPouches = updatedPouches >= 400 && updatedPouches <= 800 ? updatedPouches / 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? updatedPouches / 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? updatedPouches / 4 : updatedPouches;
