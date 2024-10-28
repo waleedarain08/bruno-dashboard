@@ -266,7 +266,7 @@ const CookingBatch = () => {
                                 (x) =>
                                   (x?.category === '' || x?.category === 'Standard Recipes') && (
                                     <TableCell key={index} style={{ width: 250, backgroundColor: '#D78809' }} align="center">
-                                      {x?.name}
+                                      {x?.name} ({x?.lifeStage})
                                     </TableCell>
                                   )
                               )
@@ -466,7 +466,7 @@ const CookingBatch = () => {
                                               <TableCell align="center">
                                                 {resultArray?.map((x, index) => (
                                                   <TableRow key={index}>
-                                                    <TableCell align="center">{historyRow?.recipes?.[0]?.name}</TableCell>
+                                                    <TableCell align="center">{`${historyRow?.recipes?.[0]?.name} (${historyRow?.recipes?.[0]?.lifeStage})`}</TableCell>
                                                   </TableRow>
                                                 ))}
                                               </TableCell>
@@ -511,7 +511,7 @@ const CookingBatch = () => {
                                                 <TableCell rowSpan={resultArray?.length} align="center">
                                                 {historyRow?.pet?.feedingRoutine} times
                                               </TableCell>
-                                                <TableCell align="center">{item?.name}</TableCell>
+                                                <TableCell align="center">{item?.name} ({item?.lifeStage})</TableCell>
 
                                                 <TableCell align="center" component="th" scope="row">
                                                   {resultArray?.length > 1 ? (
@@ -557,7 +557,7 @@ const CookingBatch = () => {
                                                 <TableCell component="th" scope="row">
                                                   {historyRow?.planType}
                                                 </TableCell>
-                                                <TableCell align="center">{item?.name}</TableCell>
+                                                <TableCell align="center">{item?.name} ({item?.lifeStage})</TableCell>
                                                 <TableCell align="center">{item?.quantity}</TableCell>
                                                 <TableCell align="center" component="th" scope="row">
                                                   -
