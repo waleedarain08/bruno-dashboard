@@ -42,7 +42,7 @@ const CookingBatch = () => {
     dispatch(Batch_Order_By_id(state?._id, Userdata?.clientToken));
   }, [state]);
 
-  console.log(AllKeys, 'AllKeys');
+  //console.log(AllKeys, 'AllKeys');
 
   React.useEffect(() => {
     setAllKeys([]);
@@ -374,7 +374,7 @@ const CookingBatch = () => {
                                       //let anOther = record?.filter((u) => u?.nkey == key);
                                       //console.log(anOther);
                                       //individualSum += r.category == "" || r.category == "Standard Recipes"?Math.trunc(record[0].nvalue):0;
-                                      console.log(individualSum);
+                                      //console.log(individualSum);
                                       //orderSum+=  individualSum;
                                       return (
                                            <TableCell style={{ width: 250, fontWeight:600 }} key={newIndex} align="center">{r.category == "" || r.category == "Standard Recipes"?individualSum:""}</TableCell>
