@@ -154,7 +154,7 @@ export default function RecipeReviewCard({ data, setOpen, EditValues }) {
             <MoreVertIcon />
           </IconButton>
         }
-        title={data?.name}
+        title={`${data?.name} ${data?.lifeStage!=''? '- '+data?.lifeStage  :''}`}
         subheader={`${data?.category !== '' ? `BRN-${lastThreeCharacters}` : `#${data?.recipeNo}`}`}
       />
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>

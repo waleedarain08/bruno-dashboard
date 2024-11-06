@@ -22,6 +22,9 @@ import { InfinitySpin } from 'react-loader-spinner';
 import square from '../../assets/images/square.jpeg';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import Select from '@mui/material/Select';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 import * as actionTypes from '../../store/blogs&faqs/blogs&faqsType';
 import {
@@ -110,7 +113,10 @@ const BlogFAQ = () => {
   const [Delete_Id, setDelete_Id] = React.useState(null);
   const [Process, setProcess] = React.useState('Add');
   const [Error, setError] = React.useState('');
-  console.log(rows, 'rows');
+  const [newDate, setDate] = React.useState(0);
+
+  console.log(newDate);
+  //console.log(rows, 'rows');
   const handleOpen = () => {
     setOpen(true);
     setProcess('Add');
@@ -149,6 +155,7 @@ const BlogFAQ = () => {
         description: description,
         type: Types,
         order: order,
+        createdOnDate: parseInt(newDate),
         media:
           Types === 'FAQ' || Types === 'terms' || Types === 'privacy' || Types === 'agreement'
             ? []
@@ -192,6 +199,8 @@ const BlogFAQ = () => {
     setFeatured(data?.isFeatured);
     setTypes(data?.type);
     setorder(data?.order);
+    setDate(moment(data?.createdOnDate).format("DD/MM/YYYY"));
+    //setDate(data?.createdOnDate);
     setOpen(true);
     setError('');
   };
@@ -273,6 +282,23 @@ const BlogFAQ = () => {
                   </Select>
                 </FormControl>
               </Box>
+              {
+                (Types === 'blogs' || Types === 'newsAndBlog') && (
+                  <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                        <DatePicker
+                          disablePast={true}
+                          type="date"
+                          format='DD/MM/YYYY'
+                          label={ newDate.length<=10 ? newDate : "Publish Date"}
+                          //value={newDate}
+                          sx={{ width: '100%' }}
+                          onChange={(e) => setDate(moment(e).format('x'))}
+                        />
+                    </LocalizationProvider>
+                    </Box>
+                )
+              }
               {Types === 'FAQ' ? (
                 <>
                   <Box style={{ display: 'flex', justifyContent: 'center', margin: 7 }} sx={{ width: '100%' }}>
@@ -487,7 +513,7 @@ const BlogFAQ = () => {
 
                   {typeforView !== 'FAQ' && <TableCell align="center">Media</TableCell>}
                   <TableCell align="center">Type</TableCell>
-                  <TableCell align="center">Published Date</TableCell>
+                  <TableCell align="center">Publish Date</TableCell>
                   <TableCell align="center">isFeature</TableCell>
                   {typeforView === 'feedback' && <TableCell align="center">Replied</TableCell>}
                   <TableCell align="right">Actions</TableCell>
@@ -500,7 +526,7 @@ const BlogFAQ = () => {
                       {typeforView !== 'FAQ'? row?._id.substr(row?._id.length - 4): row?.order}
                     </TableCell>
                     <TableCell component="th" scope="row">
-                      {row?.title.length > 30 ? <>{row?.title.substring(0, 30)}...</> : <>{row?.title}</>}
+                      {row?.title.length > 36 ? <>{row?.title.substring(0, 36)}. . .</> : <>{row?.title}</>}
                     </TableCell>
                     <TableCell align="center">
                       {typeforView !== 'FAQ' ? (
@@ -561,7 +587,7 @@ const BlogFAQ = () => {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25, 50, 100]}
             component="div"
-            count={0}
+            count={rows.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

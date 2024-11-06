@@ -171,7 +171,7 @@ const CookingSheet = () => {
                       <StyledTableCell align="center">{moment(row?.createdOnDate).format('DD MMM YYYY')}</StyledTableCell>
                       <StyledTableCell align="center">{formattedFutureDate}</StyledTableCell>
                       <StyledTableCell align="center">{row?.orderCount}</StyledTableCell>
-                      <StyledTableCell align="center">{row?.totalAmountSum}-AED</StyledTableCell>
+                      <StyledTableCell align="center">{row?.totalAmountSum.toFixed(2)} AED</StyledTableCell>
                       <StyledTableCell align="center">
                         <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
                           <InputLabel id="demo-select-small-label">Status</InputLabel>

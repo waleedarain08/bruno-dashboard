@@ -8,7 +8,7 @@ import * as React from 'react';
 // import Paper from '@mui/material/Paper';
 import { useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { Batch_Order_By_id } from 'store/batch/batchTypeAction';
+//import { Batch_Order_By_id } from 'store/batch/batchTypeAction';
 import moment from 'moment';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -28,13 +28,13 @@ const BatchLable = () => {
     const { state } = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const Userdata = useSelector((state) => state.AuthReducer.data);
+    //const Userdata = useSelector((state) => state.AuthReducer.data);
     const [FeedingData, setFeedingData] = React.useState([]);
     const BatchOrderByIdData = useSelector((state) => state.BatchReducer.BatchOrderByIdData);
-    //console.log(BatchOrderByIdData);
-    React.useEffect(() => {
-        dispatch(Batch_Order_By_id(state?._id, Userdata?.clientToken));
-    }, [state]);
+    console.log(state);
+    // React.useEffect(() => {
+    //     dispatch(Batch_Order_By_id(state?._id, Userdata?.clientToken));
+    // }, [state]);
 
     const onExport = () => {
         dispatch({ type: SET_MENU, opened: false });
@@ -48,52 +48,22 @@ const BatchLable = () => {
             let newarrr = BatchOrderByIdData?.map((w) => {
                 return w?.orderItems
                     ?.map((z) => {
-                        if(z?.totalWeight.length>0){
-                           // console.log("z",z)
-                            if (z?.planType === 'Transitional') {
-                                let extractString = z?.pouchesDetail[0].split('|');
-                                let newData = [];
-                                extractString.forEach((segment) => {
-                                    //console.log(segment);
-                                    let match = segment.match(/(\d+) servings x (\d+\d+) grams/);
-                                    //console.log(match);
-                                    if (match) {
-                                        newData.push({
-                                            day: parseInt(match[1]),
-                                            value: parseInt(match[2])
-                                        });
-                                    }
-                                });
-                                return newData;
-                            } else if (z?.planType === 'Monthly') {
-                                let extractString = z?.pouchesDetail
-                                let newData = [];
-                                extractString.forEach((segment) => {
-                                    //console.log(segment);
-                                    let match = segment.match(/(\d+) servings x (\d+\d+) grams/);
-                                   // console.log(match);
-                                    if (match) {
-                                        newData.push({
-                                            day: parseInt(match[1]),
-                                            value: parseFloat(match[2])
-                                        });
-                                    }
-                                });
-                                return newData;
-                            } 
-                            else {
-                                let newData = [];
-                                let quantity;
-                                    z?.recipes.map((r)=>{
-                                        quantity = r.quantity;
+                        if (z?.planType === 'Transitional') {
+                            let extractString = z?.pouchesDetail[0].split('|');
+                            let newData = [];
+                            extractString.forEach((segment) => {
+                                let match = segment.match(/(\d+) servings x (\d+\.\d+) grams/);
+                                if (match) {
+                                    newData.push({
+                                        day: parseInt(match[1]),
+                                        value: parseFloat(match[2])
                                     });
-                                newData.push({
-                                        day: quantity,
-                                        value: z?.totalWeight[0]
-                                });
-                                return newData;
-                            }
-                    }
+                                }
+                            });
+                            return newData;
+                        } else {
+                            return z?.totalWeight[0];
+                        }
                     })
                     .flat(2);
             });
@@ -139,29 +109,23 @@ const BatchLable = () => {
 
                 </div>
                 <Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                    {BatchOrderByIdData?.map((t, firstindex) => {
-                        let PuchesData = BatchOrderByIdData?.map((p) => p?.orderItems).flat(2);
-                        //console.log(PuchesData);
-                        return FeedingData?.[firstindex]?.map((i) => {
-                            //console.log(typeof PuchesData?.[firstindex]?.pet?.feedingRoutine == "undefined");
-                            //if(typeof i?.day!="undefined"){
-                            let allDay = PuchesData?.[firstindex]?.pet?.feedingRoutine > 1 ? i?.day + i?.day : i?.day;
-                            let updatedPouches = typeof PuchesData?.[firstindex]?.pet?.feedingRoutine != "undefined" ? i?.value / PuchesData?.[firstindex]?.pet?.feedingRoutine : i?.value /2;
-                            let newPouches = updatedPouches >= 400 && updatedPouches <= 800 ? updatedPouches / 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? updatedPouches / 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? updatedPouches / 4 : updatedPouches;
-                            let numbers = updatedPouches >= 400 && updatedPouches <= 800 ? allDay * 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? allDay * 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? allDay * 4 : allDay;
-                            //console.log(allDay);
-                            let newArray = [];
-                            for (let i = 0; i < numbers; i++) {
-                                newArray.push(i);
-                            }
-                            
-                            //console.log(newArray);
-                            return newArray?.map((x, thiredIndex) => {
-                                return <Grid item xs={2} sm={4} md={4} key={thiredIndex} >
+                   {
+                             state?.orderItems.map((historyRow, index) => {
+                                let typeofPouch = typeof historyRow?.pouchesDetail;
+                                let newpouchesDetail = historyRow?.pouchesDetail && historyRow?.pouchesDetail;
+                                const content = newpouchesDetail && typeofPouch === 'string' && newpouchesDetail?.slice(2, -2);
+                                const resultArray =
+                                  historyRow?.pouchesDetail?.length > 1
+                                    ? historyRow?.pouchesDetail
+                                    : newpouchesDetail && typeofPouch === 'string'
+                                    ? content?.split(/\\n|\|/)
+                                    : historyRow?.pouchesDetail[0]?.split('|');
+                                    console.log(resultArray);
+                                return <Grid item xs={2} sm={4} md={4} key={index} >
                                     <Card sx={{ width: 370, marginBottom: 3 }}>
                                         <CardContent style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
                                             <Typography style={{ marginTop: 30, textAlign: "center", height: 100, transform: 'rotate(-90deg)' }} variant="h5" component="div">
-                                                Order No : {t?._id.substr(t?._id?.length - 5)}
+                                                Order No : {state?._id.substr(state?._id?.length - 5)}
                                                 {/* <br></br>
                                                 Recipe Ref : */}
                                             </Typography>
@@ -197,7 +161,7 @@ const BatchLable = () => {
                                                         Net Weight:
                                                     </p>
                                                     <p style={{ textAlign: "end", fontWeight: "500", width: "50%" }} color="text.secondary">
-                                                        {newPouches} grams
+                                                        100 grams
                                                     </p>
                                                 </div>
                                             </div>
@@ -207,10 +171,8 @@ const BatchLable = () => {
                                 </Grid>
                             })
 
-                    })
+                    }
                     
-
-                    })}
                 </Grid>
             </Box>
 

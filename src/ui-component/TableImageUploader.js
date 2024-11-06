@@ -32,7 +32,7 @@ const TableImageUploader = ({ PreviewTableEdit, setSelectedTableFiles, selectedT
 
   const handleRemoveImage = (index) => {
     const newPreviewUrls = [...previewUrls];
-    const selectedFilesUrls = [...selectedFiles];
+    const selectedFilesUrls = [...selectedTableFiles];
     selectedFilesUrls.splice(index, 1);
     PreviewTableEdit?.length > 0 && setPreviewTableEdit(selectedFilesUrls);
     setSelectedTableFiles(selectedFilesUrls);

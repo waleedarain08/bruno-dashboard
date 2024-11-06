@@ -42,7 +42,7 @@ const CookingBatch = () => {
     dispatch(Batch_Order_By_id(state?._id, Userdata?.clientToken));
   }, [state]);
 
-  console.log(AllKeys, 'AllKeys');
+  //console.log(AllKeys, 'AllKeys');
 
   React.useEffect(() => {
     setAllKeys([]);
@@ -72,11 +72,13 @@ const CookingBatch = () => {
     }
   }, [BatchIngredientsData]);
   const sumWithInitial = AllKeys?.reduce((accumulator, currentValue) => accumulator + currentValue?.weight, 0);
-  const sumWithadjustedWeight = AllKeys?.reduce((accumulator, currentValue) => accumulator + currentValue?.CookingVolume, 0);
+ // const sumWithadjustedWeight = AllKeys?.reduce((accumulator, currentValue) => accumulator + currentValue?.CookingVolume, 0);
 
   const givenDate = moment(state?.createdOnDate);
   const futureDate = givenDate.add(30, 'days');
   const formattedFutureDate = futureDate.format('DD MMM YYYY');
+  let individualSum = 0;
+  let orderSum = 0;
 
   React.useEffect(() => {
     if (BatchOrderByIdData?.length > 0) {
@@ -87,7 +89,7 @@ const CookingBatch = () => {
               let extractString = z?.pouchesDetail[0].split('|');
               let newData = [];
               extractString.forEach((segment) => {
-                let match = segment.match(/(\d+) pouches x (\d+\.\d+) grams/);
+                let match = segment.match(/(\d+) servings x (\d+\d+) grams/);
                 if (match) {
                   newData.push({
                     day: parseInt(match[1]),
@@ -217,6 +219,8 @@ const CookingBatch = () => {
           </Paper>
 
           {BatchOrderByIdData?.map((items) => {
+            orderSum = 0;
+             // let orderIngredients = Object.entries(items?.ingredientConsumption).map(([name, value]) => ({ name, value }));
             return (
               <>
                 <p
@@ -262,7 +266,7 @@ const CookingBatch = () => {
                                 (x) =>
                                   (x?.category === '' || x?.category === 'Standard Recipes') && (
                                     <TableCell key={index} style={{ width: 250, backgroundColor: '#D78809' }} align="center">
-                                      {x?.name}
+                                      {x?.name} ({x?.lifeStage})
                                     </TableCell>
                                   )
                               )
@@ -272,23 +276,39 @@ const CookingBatch = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {AllKeys?.map((i, index) => {
+                        {Object.entries(items?.ingredientConsumption).map(([key,value], index) =>{
+                          orderSum += Math.trunc(value);
+                          //console.log(key,value);
                           return (
                             <TableRow key={index}>
                               <TableCell style={{ width: 250 }} align="center">
-                                {index + 1}
+                                {index+1}
                               </TableCell>
                               <TableCell style={{ width: 250 }} align="center">
-                                {i?.key}
+                                {key}
                               </TableCell>
                               <TableCell style={{ width: 250 }} align="center">
-                                {Math.trunc(i?.CookingVolume)}
+                                {Math.trunc(value)}
                               </TableCell>
-                              {items?.orderItems?.map((z, newIndex) =>
-                                z?.recipes?.map(() => {
+                              
+                              {items?.orderItems?.map((z,newIndex) =>
+                                  z?.recipes?.map((r) => {
+                                      let record = r.recipeIngredientTotal && Object.entries(r.recipeIngredientTotal).map(([nkey,nvalue])=>({nkey,nvalue}));
+                                      let anOther = record?.filter((u) => u?.nkey == key);
+                                        //console.log(anOther);
+                                      //individualSum += r.category == "" || r.category == "Standard Recipes"?anOther?.length > 0?Math.trunc(anOther[0].nvalue):0:0;
+                                        return (
+                                           <TableCell style={{ width: 250 }} key={newIndex} align="center">{r.category == "" || r.category == "Standard Recipes"?anOther?.length > 0?Math.trunc(anOther[0].nvalue):"--":""}</TableCell>
+                                         )
+                                  }
+                                ))
+                              }
+                              {/* {items?.orderItems?.map((z, newIndex) =>
+                                z?.recipes?.map((r) => {
                                   let updatedData =
                                     items?.ingredientConsumption &&
                                     Object.entries(items?.ingredientConsumption).map(([name, value]) => ({ name, value }));
+                                 console.log("updatedData",updatedData);   
                                   let anOther = updatedData?.filter((u) => u?.name == i?.key);
                                   let contingencyFactor = i?.ContingencyFactor;
                                   if (typeof contingencyFactor === 'string' && contingencyFactor.includes('%')) {
@@ -299,14 +319,15 @@ const CookingBatch = () => {
                                       contingencyFactor = contingencyFactor / 100;
                                     }
                                   }
+                                  console.log("another",anOther);
                                   const adjustedWeight = anOther?.[0]?.value * (1 + contingencyFactor);
                                   return (
                                     <TableCell style={{ width: 250 }} key={newIndex} align="center">
-                                      {anOther?.length > 0 ? Math.trunc(adjustedWeight) : '--'}
+                                      {(r.category == "" || r.category == "Standard Recipes") ?  anOther?.length > 0 ? Math.trunc(adjustedWeight) : '--' : ''}
                                     </TableCell>
                                   );
                                 })
-                              )}
+                              )} */}
                             </TableRow>
                           );
                         })}
@@ -314,10 +335,10 @@ const CookingBatch = () => {
                           <TableCell style={{ width: 250 }} align="center"></TableCell>
                           <TableCell style={{ width: 250 }} align="center"></TableCell>
                           <TableCell style={{ width: 250, fontWeight: '700' }} align="center">
-                            {Math.trunc(sumWithadjustedWeight)}
+                           {orderSum}
                           </TableCell>
 
-                          {items?.orderItems?.map((z, index) =>
+                          {/* {items?.orderItems?.map((z, index) =>
                             z?.recipes?.map(() => {
                               let updatedData =
                                 items?.ingredientConsumption &&
@@ -340,13 +361,32 @@ const CookingBatch = () => {
                                 return { value: matched };
                               });
                               const newSum = newS?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
-                              return (
-                                <TableCell style={{ width: 250, fontWeight: '700' }} key={index} align="center">
-                                  {newSum !== undefined ? Math.trunc(newSum) : '--'}
-                                </TableCell>
-                              );
+                              return ( */}
+                              {
+                            //Object.entries(items?.ingredientConsumption).map(([key]) =>{
+                              items?.orderItems?.map((z,newIndex) =>
+                                  z?.recipes?.map((r) => {
+                                    individualSum = 0;
+                                      r.recipeIngredientTotal && Object.entries(r.recipeIngredientTotal).map((val)=>{
+                                         // console.log(val[1]);
+                                         individualSum += r.category == "" || r.category == "Standard Recipes"?Math.trunc(val[1]):0;
+                                      });
+                                      //let anOther = record?.filter((u) => u?.nkey == key);
+                                      //console.log(anOther);
+                                      //individualSum += r.category == "" || r.category == "Standard Recipes"?Math.trunc(record[0].nvalue):0;
+                                      //console.log(individualSum);
+                                      //orderSum+=  individualSum;
+                                      return (
+                                           <TableCell style={{ width: 250, fontWeight:600 }} key={newIndex} align="center">{r.category == "" || r.category == "Standard Recipes"?individualSum:""}</TableCell>
+                                         )
+                                  }
+                                ))
+                              //})
+                              }
+                               
+                              {/* );
                             })
-                          )}
+                          )} */}
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -355,9 +395,24 @@ const CookingBatch = () => {
                 <Paper sx={{ marginTop: 4 }}>
                   <TableContainer>
                     <TableRow>
-                      <TableCell style={{ fontWeight: '800' }} align="left" colSpan={2}>
+                      <TableCell style={{ fontWeight: '800' }} align="left" >
                       ORDER PACKAGING INSTRUCTIONS :
                       </TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+
+                      {/* <TableCell align="right" >
+                        <AnimateButton>
+                          <Button onClick={() =>
+                            navigate("/cooking-sheet/batch-lable", {
+                              state: items
+                            })
+                          } style={{ margin: '12px' }} variant="contained" color="primary" sx={{ boxShadow: 'none' }}>
+                            Batch Label
+                          </Button>
+                        </AnimateButton>
+                      </TableCell> */}
                     </TableRow>
                     {items?.orderItems?.map((historyRow, index) => {
                       let typeofPouch = typeof historyRow?.pouchesDetail;
@@ -411,7 +466,7 @@ const CookingBatch = () => {
                                               <TableCell align="center">
                                                 {resultArray?.map((x, index) => (
                                                   <TableRow key={index}>
-                                                    <TableCell align="center">{historyRow?.recipes?.[0]?.name}</TableCell>
+                                                    <TableCell align="center">{`${historyRow?.recipes?.[0]?.name} (${historyRow?.recipes?.[0]?.lifeStage})`}</TableCell>
                                                   </TableRow>
                                                 ))}
                                               </TableCell>
@@ -456,7 +511,7 @@ const CookingBatch = () => {
                                                 <TableCell rowSpan={resultArray?.length} align="center">
                                                 {historyRow?.pet?.feedingRoutine} times
                                               </TableCell>
-                                                <TableCell align="center">{item?.name}</TableCell>
+                                                <TableCell align="center">{item?.name} ({item?.lifeStage})</TableCell>
 
                                                 <TableCell align="center" component="th" scope="row">
                                                   {resultArray?.length > 1 ? (
@@ -471,8 +526,10 @@ const CookingBatch = () => {
                                         ))}
                                       </Table>
                                     ) : (
+                                      //items.category === "Standard Recipes" &&
                                       <Table size="small" aria-label="purchases">
                                         {historyRow?.recipes?.map((item, i) => (
+                                          item.category === "Standard Recipes" &&
                                           <>
                                             <TableHead key={i}>
                                               <TableRow>
@@ -500,7 +557,7 @@ const CookingBatch = () => {
                                                 <TableCell component="th" scope="row">
                                                   {historyRow?.planType}
                                                 </TableCell>
-                                                <TableCell align="center">{item?.name}</TableCell>
+                                                <TableCell align="center">{item?.name} ({item?.lifeStage})</TableCell>
                                                 <TableCell align="center">{item?.quantity}</TableCell>
                                                 <TableCell align="center" component="th" scope="row">
                                                   -
@@ -529,7 +586,8 @@ const CookingBatch = () => {
                 </Paper>
               </>
             );
-          })}
+          })
+          }
         </>
       )}
     </>

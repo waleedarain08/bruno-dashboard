@@ -32,6 +32,8 @@ import SearchFeild from 'components/searchFeild';
 import RichTextEditor from 'components/RichTextEditor';
 import { storage } from "./../../utils/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
+import { GetAllIngredient } from 'store/ingredients/ingredientsAction';
+
 
 
 const style = {
@@ -71,6 +73,11 @@ const ProductCategories = () => {
   //const [selectedSizeFile, setSelectedSizeFile] = React.useState('');
   const [SelectedId, setSelectedId] = React.useState(null);
   const [fields, setFields] = React.useState([{ name: '', price: 0, stock:0, weight:0, unit:'' , image:'' }]);
+  const [fields2, setFields2] = React.useState([{ name: '', aggregate: 0 }]);
+  const [LifeStage, setLifeStage] = React.useState('Adult');
+  const [ContentNo, setContentNo] = React.useState(0);
+
+
 
   const InitialState = () => {
     setNameRecipe('');
@@ -83,6 +90,10 @@ const ProductCategories = () => {
     setSelectedFiles([]);
     setPreviewEdit([]);
     setSelectedId(null);
+    setLifeStage('');
+    setFields2([{ name: '', aggregate: 0 }]);
+    setContentNo(0);
+
   };
 
   const onAddRecipeBtn = () => {
@@ -129,6 +140,26 @@ const ProductCategories = () => {
       setFields(updatedFields);
       console.log(updatedFields);
         
+  };
+
+  const handleSelectChange2 = (index, value) => {
+    const updatedFields2 = [...fields2];
+    updatedFields2[index].name = value;
+    setFields2(updatedFields2);
+  };
+  const handleNumberChange2 = (index, value) => {
+    const updatedFields2 = [...fields2];
+    updatedFields2[index].aggregate = parseFloat(value);
+    setFields2(updatedFields2);
+  };
+  const handleRemoveField2 = (index) => {
+    const updatedFields2 = [...fields2];
+    updatedFields2.splice(index, 1);
+    setFields2(updatedFields2);
+  };
+
+  const handleAddField2 = () => {
+    setFields2([...fields2, { name: '', aggregate: 0 }]);
   };
 
   const handleSelectChange = (index, value) => {
@@ -190,7 +221,9 @@ const ProductCategories = () => {
   const handleClose = () => setOpen(false);
   const [rows, setrows] = React.useState([]);
   const Userdata = useSelector((state) => state.AuthReducer.data);
+  const ingData = useSelector((state) => state.IngredientsReducer.data);
   const allData = useSelector((state) => state.CategoryReducer.data);
+  //console.log(ingData);
   const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
   const newRows = filterProdcuts?.recipe?.filter((i) => i?.category !== '' && i?.category === location?.state);
   const isLoading = useSelector((state) => state.RecipeReducer.isLoading);
@@ -198,6 +231,7 @@ const ProductCategories = () => {
   useEffect(() => {
     dispatch(GetAllRecipes(Userdata?.clientToken,true));
     dispatch(GetAllCategories(Userdata?.clientToken));
+    dispatch(GetAllIngredient(Userdata?.clientToken));
   }, []);
 
   React.useEffect(() => {
@@ -218,6 +252,16 @@ const ProductCategories = () => {
     };
   });
 
+  const IngredientArr = ingData?.map((i) => {
+    return {
+      _id: i?._id,
+      name: i?.name,
+      aggregate: i?.ingredientReference
+    };
+  });
+
+  //console.log(IngredientArr);
+
   const onSuccess = () => {
     dispatch(GetAllRecipes(Userdata?.clientToken,true));
     InitialState();
@@ -226,7 +270,15 @@ const ProductCategories = () => {
 
   const onSave = async () => {
     console.log(KG,Weight,Unit); // dont remove this console
-    //console.log(fields);
+
+    let NewValues = fields2?.map((i) => {
+      return {
+        name: i?.name,
+        aggregate: i?.aggregate
+      };
+    });
+
+    console.log(NewValues);
    
     if (
       NameRecipe !== '' &&
@@ -242,7 +294,7 @@ const ProductCategories = () => {
       await Promise.all(fields?.map(async (i) => {
         if(typeof i.image !="string"){
           const res = await handleSizeFileUpload(i.image);
-          console.log(res.data);
+          //console.log(res.data);
           i.image = res.data;
         }
         return i;
@@ -273,7 +325,10 @@ const ProductCategories = () => {
           price3: 0,
           price4: 0,
           price5: 0,
-          price6: 0
+          price6: 0,
+          ingredient : NewValues.length>0?NewValues:[],
+          caloriesContentNo : parseInt(ContentNo),
+          lifeStage : LifeStage
         };
         //console.log(newdata, 'newdata');
         dispatch(AddRecipe(newdata, Userdata?.clientToken, setLoading, onSuccess));
@@ -300,7 +355,10 @@ const ProductCategories = () => {
             price3: 0,
             price4: 0,
             price5: 0,
-            price6: 0
+            price6: 0,
+            ingredient : NewValues.length>0?NewValues:[],
+            caloriesContentNo : parseInt(ContentNo),
+            lifeStage : LifeStage
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         } else {
@@ -325,7 +383,10 @@ const ProductCategories = () => {
             price3: 0,
             price4: 0,
             price5: 0,
-            price6: 0
+            price6: 0,
+            ingredient : NewValues.length>0?NewValues:[],
+            caloriesContentNo : parseInt(ContentNo),
+            lifeStage : LifeStage
           };
           dispatch(EditRecipe(SelectedId, newdata, Userdata?.clientToken, setLoading, onSuccess));
         }
@@ -386,6 +447,12 @@ const ProductCategories = () => {
     setPreviewEdit(data?.media);
     setCategoryes(data?.category);
     setFields(data?.sizes);
+    setLifeStage(data?.lifeStage);
+    setContentNo(data?.caloriesContentNo);
+    setFields2(data?.ingredient);
+
+
+
     // console.log(data, "data")
   };
   return (
@@ -427,6 +494,91 @@ const ProductCategories = () => {
               </Select>
             </FormControl>
           </Box>
+          
+
+          {Categoryes === "Standard Recipes" && 
+            <>
+           <Box sx={{ width: '100%', position: 'relative' }}>
+           {fields2.map((field, index) => (
+             <Box key={index} style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+               {fields2?.length > 1 && (
+                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: -20, cursor: 'pointer' }}>
+                   <DeleteIcon variant="contained" color="secondary" onClick={() => handleRemoveField2(index)} />{' '}
+                 </div>
+               )}
+               <FormControl sx={{ width: '80%' }}>
+                 <InputLabel>Ingredient</InputLabel>
+                 <Select value={field?.name} onChange={(e) => handleSelectChange2(index, e.target.value)}>
+                   {IngredientArr?.map((i, index) => {
+                     return (
+                       <MenuItem key={index} value={i?.name}>
+                         {i?.name}
+                       </MenuItem>
+                     );
+                   })}
+                 </Select>
+               </FormControl>
+               <TextField
+                 style={{ marginLeft: 10 }}
+                 sx={{ width: '80%' }}
+                 label="Aggregate"
+                 type="number"
+                 value={field?.aggregate}
+                 onChange={(e) => handleNumberChange2(index, e.target.value)}
+               />
+             </Box>
+             
+           ))}
+           <div
+             style={{
+               display: 'flex',
+               justifyContent: 'center',
+               alignItems: 'center',
+               marginRight: -20,
+               cursor: 'pointer',
+               position: 'absolute',
+               right: -11,
+               top: 14
+             }}
+           >
+             <AddCircleIcon variant="contained" color="primary" onClick={handleAddField2} />
+           </div>
+         </Box>
+
+          
+  <Box style={{ display: 'flex', justifyContent: 'space-between', margin: 7 }} sx={{ width: '100%' }}>
+
+    <TextField
+      value={ContentNo}
+      onChange={(e) => setContentNo(e.target.value)}
+      style={{ margin: 5 }}
+      sx={{ width: '100%' }}
+      type={'number'}
+      id="outlined-basic"
+      label="Calories Content No"
+      variant="outlined"
+    />
+    <FormControl sx={{ width: '100%', marginTop: 0.7 }}>
+      <InputLabel>LifeStage</InputLabel>
+      <Select value={LifeStage} onChange={(e) => setLifeStage(e.target.value)}>
+        <MenuItem key={1} value="Adult">
+          {' '}
+          Adult
+        </MenuItem>
+        <MenuItem key={2} value="Puppy">
+          Puppy{' '}
+        </MenuItem>
+        {/* <MenuItem key={3} value="Senior">
+          {' '}
+          Senior
+        </MenuItem> */}
+      </Select>
+    </FormControl>
+  </Box>
+  
+  </>
+         
+          }
           <Box sx={{ width: '100%', position: 'relative' }}>
             <Typography style={{fontWeight:500, margin:'10px'}}>Product Options:</Typography>
             {fields.map((field, index) => (

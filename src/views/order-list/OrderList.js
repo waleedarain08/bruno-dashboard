@@ -2,6 +2,10 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -60,7 +64,7 @@ function Row(props) {
   };
 
   const onSuccess = () => {
-    dispatch(GetAllOrder(Userdata?.clientToken));
+    dispatch(GetAllOrder(Userdata?.clientToken,));
   };
   // const ViewLocation = (id) => {
   //   dispatch(ViewOrderLocation(id, Userdata?.clientToken));
@@ -421,9 +425,11 @@ export default function OrderList() {
   const isLoading = useSelector((state) => state.OrderReducer.isLoadingOrder);
   const dataOrders = useSelector((state) => state.OrderReducer.orderData);
   const isLoadingAddBatch = useSelector((state) => state.BatchReducer.isLoadingAddBatch);
+  const [typeforView, settypeforView] = React.useState('Newest');
+
   React.useEffect(() => {
-    dispatch(GetAllOrder(Userdata?.clientToken));
-  }, []);
+    dispatch(GetAllOrder(Userdata?.clientToken,typeforView));
+  }, [typeforView]);
   React.useEffect(() => {
     if (Id !== null) {
       let ifMatch = OrderIds.indexOf(Id);
@@ -490,7 +496,7 @@ export default function OrderList() {
     }
   };
   const onSuccessBatch = () => {
-    dispatch(GetAllOrder(Userdata?.clientToken));
+    dispatch(GetAllOrder(Userdata?.clientToken,typeforView));
   };
   return (
     <TableContainer component={Paper}>
@@ -504,6 +510,20 @@ export default function OrderList() {
         <>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
             <SearchFeild setValue={setValue} value={value} />
+            <FormControl style={{ marginTop: 13, width: 190, marginLeft: 10, height:70 }}>
+              <InputLabel id="demo-simple-select-label">Filter By</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={typeforView}
+                label="Filter"
+                onChange={(e) => settypeforView(e.target.value)}
+              >
+                <MenuItem value={'Newest'}>Newest</MenuItem>
+                <MenuItem value={'Cooked'}>Cooked</MenuItem>
+                <MenuItem value={'Delivered'}>Delivered</MenuItem> 
+              </Select>
+            </FormControl>
             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '100%' }}>
               <AnimateButton>
                 <ExportUsers data={FiltredData} filename={'OrderList'} />
