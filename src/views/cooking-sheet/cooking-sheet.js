@@ -155,7 +155,7 @@ const CookingSheet = () => {
                   <StyledTableCell align="center">Cooking Sheet</StyledTableCell>
                   <StyledTableCell align="center">Edit</StyledTableCell>
                   <StyledTableCell align="center">Delete</StyledTableCell>
-                  {/* <StyledTableCell align="center">Batch Label</StyledTableCell> */}
+                  <StyledTableCell align="center">Batch Label</StyledTableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -244,7 +244,7 @@ const CookingSheet = () => {
                           </Button>
                         </AnimateButton>
                       </StyledTableCell>
-                      {/* <StyledTableCell align="center">
+                      <StyledTableCell align="center">
                         <AnimateButton>
                           <Button onClick={() =>
                             navigate("/cooking-sheet/batch-lable", {
@@ -254,7 +254,7 @@ const CookingSheet = () => {
                             Batch Label
                           </Button>
                         </AnimateButton>
-                      </StyledTableCell> */}
+                      </StyledTableCell>
                     </StyledTableRow>
                   );
                 })}

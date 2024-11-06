@@ -89,7 +89,7 @@ const CookingBatch = () => {
               let extractString = z?.pouchesDetail[0].split('|');
               let newData = [];
               extractString.forEach((segment) => {
-                let match = segment.match(/(\d+) pouches x (\d+\.\d+) grams/);
+                let match = segment.match(/(\d+) servings x (\d+\d+) grams/);
                 if (match) {
                   newData.push({
                     day: parseInt(match[1]),
