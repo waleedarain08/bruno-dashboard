@@ -49,7 +49,7 @@ const BatchLable = () => {
                 return w?.orderItems
                     ?.map((z) => {
                         if(z?.totalWeight.length>0){
-                            console.log("z",z)
+                           // console.log("z",z)
                             if (z?.planType === 'Transitional') {
                                 let extractString = z?.pouchesDetail[0].split('|');
                                 let newData = [];
@@ -143,7 +143,7 @@ const BatchLable = () => {
                         let PuchesData = BatchOrderByIdData?.map((p) => p?.orderItems).flat(2);
                         //console.log(PuchesData);
                         return FeedingData?.[firstindex]?.map((i) => {
-                            console.log(typeof PuchesData?.[firstindex]?.pet?.feedingRoutine == "undefined");
+                            //console.log(typeof PuchesData?.[firstindex]?.pet?.feedingRoutine == "undefined");
                             //if(typeof i?.day!="undefined"){
                             let allDay = PuchesData?.[firstindex]?.pet?.feedingRoutine > 1 ? i?.day + i?.day : i?.day;
                             let updatedPouches = typeof PuchesData?.[firstindex]?.pet?.feedingRoutine != "undefined" ? i?.value / PuchesData?.[firstindex]?.pet?.feedingRoutine : i?.value /2;
