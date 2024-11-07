@@ -160,8 +160,8 @@ const BatchLable = () => {
                                 return <Grid item xs={2} sm={4} md={4} key={thiredIndex} >
                                     <Card sx={{ width: 370, marginBottom: 3 }}>
                                         <CardContent style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-                                            <Typography style={{ marginTop: 30, textAlign: "center", height: 100, transform: 'rotate(-90deg)' }} variant="h5" component="div">
-                                                Order No : {t?._id.substr(t?._id?.length - 5)}
+                                            <Typography style={{ marginTop: "16%", textAlign: "center", height: 100, width:"20%" }} variant="h5" component="div">
+                                                <b>Order No :</b> {t?._id.substr(t?._id?.length - 5)}
                                                 {/* <br></br>
                                                 Recipe Ref : */}
                                             </Typography>
