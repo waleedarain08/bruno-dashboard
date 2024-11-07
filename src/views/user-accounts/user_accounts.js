@@ -9,7 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { InfinitySpin } from 'react-loader-spinner';
-import Switch from '@mui/material/Switch';
+//import Switch from '@mui/material/Switch';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AnimateButton from 'ui-component/extended/AnimateButton';
@@ -135,7 +135,7 @@ const UserAccounts = () => {
                   <TableCell align="left">Pets</TableCell>
                   <TableCell align="center">Last Order</TableCell>
                   <TableCell align="center">Loyalty Points</TableCell>
-                  <TableCell align="right">Block</TableCell>
+                  {/* <TableCell align="right">Block</TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -154,9 +154,9 @@ const UserAccounts = () => {
                     </TableCell>
                     <TableCell align="center">{row?.lastOrderDate ? moment(row?.lastOrderDate).format('MMM Do YYYY') : "N/A"}</TableCell>
                     <TableCell align="center">{Math?.trunc(row?.availablePoints)}</TableCell>
-                    <TableCell align="right">
+                    {/* <TableCell align="right">
                       <Switch value={row?.isBlock} color="warning" />
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 ))}
               </TableBody>
