@@ -12,7 +12,7 @@ const ExportBatchLable = ({ data, state, filename, FeedingData }) => {
         let PuchesData = data?.map((p) => p?.orderItems).flat(2);
         return FeedingData?.[firstindex]?.map?.((i) => {
             let allDay = PuchesData?.[firstindex]?.pet?.feedingRoutine > 1 ? i?.day + i?.day : i?.day;
-            let updatedPouches = i?.value / PuchesData?.[firstindex]?.pet?.feedingRoutine;
+            let updatedPouches = typeof PuchesData?.[firstindex]?.pet?.feedingRoutine != "undefined" ? i?.value / PuchesData?.[firstindex]?.pet?.feedingRoutine : i?.value / i?.day;
             let newPouches = updatedPouches >= 400 && updatedPouches <= 800 ? updatedPouches / 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? updatedPouches / 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? updatedPouches / 4 : updatedPouches;
             let numbers = updatedPouches >= 400 && updatedPouches <= 800 ? allDay * 2 : updatedPouches >= 800 && updatedPouches <= 1200 ? allDay * 3 : updatedPouches >= 1200 && updatedPouches <= 1600 ? allDay * 4 : allDay;
 
