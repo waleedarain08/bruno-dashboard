@@ -49,7 +49,7 @@ const BatchLable = () => {
 
     let expiry = discountData?.filter((i) => i?.name === "expiry");
 
-    console.log(expiry[0]?.aggregate);
+    //console.log(expiry[0]?.aggregate);
 
 
     React.useEffect(() => {

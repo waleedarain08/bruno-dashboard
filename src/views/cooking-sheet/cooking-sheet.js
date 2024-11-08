@@ -15,6 +15,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { GetAllCookingSheet } from 'store/cookingSheet/cookingSheetAction';
+import { GetDiscount } from 'store/promos/promosAction';
+
 import TablePagination from '@mui/material/TablePagination';
 // import Tooltip from '@mui/material/Tooltip';
 import moment from 'moment';
@@ -61,6 +63,8 @@ const CookingSheet = () => {
   const [FiltredData, setFiltredData] = React.useState([]);
   const { state } = useLocation();
   const [value, setValue] = React.useState('');
+  const discountData = useSelector((state) => state.PromosReducer.discountdata);
+
 
 
   useEffect(() => {
@@ -89,6 +93,7 @@ const CookingSheet = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetAllCookingSheet(Userdata?.clientToken));
+    dispatch(GetDiscount(Userdata?.clientToken))
   }, []);
 
   const handleChangePage = (event, newPage) => {
@@ -122,6 +127,9 @@ const CookingSheet = () => {
     }
     setsnackOpen(false);
   };
+
+  let expiry = discountData?.filter((i) => i?.name === "expiry");
+
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -161,7 +169,7 @@ const CookingSheet = () => {
               <TableBody>
                 {FiltredData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)?.map((row, index) => {
                   const givenDate = moment(row?.createdOnDate);
-                  const futureDate = givenDate.add(30, 'days');
+                  const futureDate = givenDate.add(expiry[0]?.aggregate, 'months');
                   const formattedFutureDate = futureDate.format('DD MMM YYYY');
                   return (
                     <StyledTableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
