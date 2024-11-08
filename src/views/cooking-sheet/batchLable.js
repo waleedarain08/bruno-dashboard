@@ -9,6 +9,7 @@ import * as React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { Batch_Order_By_id } from 'store/batch/batchTypeAction';
+import { GetDiscount } from 'store/promos/promosAction';
 import moment from 'moment';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -31,9 +32,12 @@ const BatchLable = () => {
     const Userdata = useSelector((state) => state.AuthReducer.data);
     const [FeedingData, setFeedingData] = React.useState([]);
     const BatchOrderByIdData = useSelector((state) => state.BatchReducer.BatchOrderByIdData);
+    const discountData = useSelector((state) => state.PromosReducer.discountdata);
+
     //console.log(BatchOrderByIdData);
     React.useEffect(() => {
         dispatch(Batch_Order_By_id(state?._id, Userdata?.clientToken));
+        dispatch(GetDiscount(Userdata?.clientToken))
     }, [state]);
 
     const onExport = () => {
@@ -42,6 +46,11 @@ const BatchLable = () => {
             window.print();
         }, 200);
     }
+
+    let expiry = discountData?.filter((i) => i?.name === "expiry");
+
+    console.log(expiry[0]?.aggregate);
+
 
     React.useEffect(() => {
         if (BatchOrderByIdData?.length > 0) {
@@ -103,7 +112,7 @@ const BatchLable = () => {
     }, [BatchOrderByIdData]);
 
     const givenDate = moment(state?.createdOnDate);
-    const futureDate = givenDate.add(30, 'days');
+    const futureDate = givenDate.add(expiry[0]?.aggregate, 'months');
     const formattedFutureDate = futureDate.format('DD MMM YYYY');
 
     return (
