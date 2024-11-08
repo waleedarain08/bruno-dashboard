@@ -117,6 +117,8 @@ const PromoLoality = ({ ...others }) => {
   let deliveryFeesInCity = dicountdata?.filter((i) => i?.name === "deliveryFeesInCity");
   let deliveryFeesOutside = dicountdata?.filter((i) => i?.name === "deliveryFeesOutside");
   let VAT = dicountdata?.filter((i) => i?.name === "VAT");
+  let expiry = dicountdata?.filter((i) => i?.name === "expiry");
+
 
 
 
@@ -467,6 +469,90 @@ const PromoLoality = ({ ...others }) => {
               </Formik>
               </Grid>
         </CardContent>}
+
+        {!isDiscountLoading && <CardContent>
+              <Grid container direction="column" justifyContent="center" spacing={2}>
+                {/* <Grid item xs={12} container alignItems="center" justifyContent="center">
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle1">Delivery Charges</Typography>
+                  </Box>
+                </Grid> */}
+                <Formik
+                initialValues={{
+                  expiry: parseInt(expiry?.[0]?.aggregate),
+                  submit: null
+                }}
+
+                onSubmit={async (values, { setStatus, setSubmitting }) => {
+                  try {
+                    if (scriptedRef.current) {
+                      let data = {
+                        name: expiry?.[0]?.name,
+                        aggregate: parseInt(values?.expiry),
+
+                      };
+                      dispatch(UpdateDiscount(data, Userdata?.clientToken, setsnackOpen));
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    if (scriptedRef.current) {
+                      setStatus({ success: false });
+                      // setErrors({ submit: err.message });
+                      setSubmitting(false);
+                    }
+                  }
+                }}
+              >
+                {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
+                  <form noValidate onSubmit={handleSubmit} {...others}>
+                    <FormControl
+                      fullWidth
+                      error={Boolean(touched.expiry && errors.expiry)}
+                      sx={{ ...theme.typography.customInput }}
+                    >
+                      <InputLabel htmlFor="outlined-adornment-email-login">Expiry in months</InputLabel>
+                      <OutlinedInput
+                        id="outlined-adornment-email-login"
+                        type="text"
+                        value={values.expiry}
+                        name="expiry"
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        label="Expiry"
+                        inputProps={{}}
+                      />
+                      {touched.expiry && errors.expiry && (
+                        <FormHelperText error id="standard-weight-helper-text-email-login">
+                          {errors.expiry}
+                        </FormHelperText>
+                      )}
+                    </FormControl>
+                    {errors.submit && (
+                      <Box sx={{ mt: 3 }}>
+                        <FormHelperText error>{errors.submit}</FormHelperText>
+                      </Box>
+                    )}
+                    <Box sx={{ mt: 2 }}>
+                      <AnimateButton>
+                        <Button
+                          disableElevation
+                          disabled={updateDiscountLoading}
+                          fullWidth
+                          size="large"
+                          type="submit"
+                          variant="contained"
+                          color="secondary"
+                        >
+                          Save
+                        </Button>
+                      </AnimateButton>
+                    </Box>
+                  </form>
+                )}
+              </Formik>
+              </Grid>
+        </CardContent>}
+        
         </Card>
         </Grid>
         <Grid item xs={4}>
