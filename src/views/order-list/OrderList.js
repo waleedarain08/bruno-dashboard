@@ -295,7 +295,7 @@ function Row(props) {
                                             <TableCell component="th" scope="row">
                                               {historyRow?.planType}
                                             </TableCell>
-                                            <TableCell align="center">{item?.name}</TableCell>
+                                            <TableCell align="center">{item?.name} ({item?.lifeStage})</TableCell>
                                             <TableCell align="center">
                                               {item?.totalDays}
                                             </TableCell>
@@ -348,7 +348,7 @@ function Row(props) {
                                             <TableCell component="th" scope="row">
                                               {historyRow?.planType}
                                             </TableCell>
-                                            <TableCell align="center">{item?.name}</TableCell>
+                                            <TableCell align="center">{item?.name} {item?.lifeStage!=''?"("+item?.lifeStage+")":""}</TableCell>
                                             <TableCell align="center">
                                               {item?.quantity}
                                             </TableCell>

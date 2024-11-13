@@ -208,7 +208,7 @@ const Invoice = () => {
                                                                             <TableCell component="th" scope="row" style={{ fontSize:'10px',padding:'3px' }}>
                                                                                 {item?.category !== '' ? item?.category : historyRow?.planType}
                                                                             </TableCell>
-                                                                            <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{item?.name}</TableCell>
+                                                                            <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{item?.name} {item?.lifeStage}</TableCell>
                                                                             <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{item?._id.substr(item?._id?.length - 5)}</TableCell>
                                                                             <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{historyRow?.planType==="Monthly"?item?.totalDays:historyRow?.planType==="Transitional"?historyRow?.pet?.feedingRoutine*10:item?.quantity}</TableCell>
                                                                             <TableCell style={{ fontSize:'10px',padding:'3px' }} align="center">{historyRow?.planType==="Product"?`${item?.finalPrice/item?.quantity} AED`:"-"}</TableCell>
