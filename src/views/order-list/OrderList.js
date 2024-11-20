@@ -425,7 +425,7 @@ export default function OrderList() {
   const isLoading = useSelector((state) => state.OrderReducer.isLoadingOrder);
   const dataOrders = useSelector((state) => state.OrderReducer.orderData);
   const isLoadingAddBatch = useSelector((state) => state.BatchReducer.isLoadingAddBatch);
-  const [typeforView, settypeforView] = React.useState('All');
+  const [typeforView, settypeforView] = React.useState('Newest');
 
   React.useEffect(() => {
     dispatch(GetAllOrder(Userdata?.clientToken,typeforView));
@@ -519,7 +519,7 @@ export default function OrderList() {
                 label="Filter"
                 onChange={(e) => settypeforView(e.target.value)}
               >
-                <MenuItem value={'All'}>All</MenuItem>
+                {/* <MenuItem value={'All'}>All</MenuItem> */}
                 <MenuItem value={'Newest'}>Newest</MenuItem>
                 <MenuItem value={'Cooked'}>Cooked</MenuItem>
                 <MenuItem value={'Delivered'}>Delivered</MenuItem> 

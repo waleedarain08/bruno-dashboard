@@ -64,6 +64,9 @@ const CookingSheet = () => {
   const { state } = useLocation();
   const [value, setValue] = React.useState('');
   const discountData = useSelector((state) => state.PromosReducer.discountdata);
+ // const [IsCompleted, setIsCompleted] = React.useState(false);
+  const [typeforView, settypeforView] = React.useState('Process');
+
 
 
 
@@ -88,6 +91,33 @@ const CookingSheet = () => {
       setFiltredData(allData?.data);
     }
   }, [allData,value]);
+
+  React.useEffect(() => {
+    if (value !== "") {
+      const filteredData = allData?.data?.filter(item => {
+
+        return item?.batchNumber?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          item?.orderCount?.toString()?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          item?.totalAmountSum.toString()?.toLowerCase()?.includes(value?.toLowerCase()) ||
+          moment(item?.createdOnDate).format('DD MMM YYYY, h:mm a')?.toLowerCase()?.includes(value?.toLowerCase())
+      });
+      setFiltredData(filteredData);
+    }
+    else {
+      setFiltredData(allData?.data);
+    }
+  }, [allData,value]);
+
+  React.useEffect(() => {
+    if (typeforView==="Completed") {
+      let findData = allData?.data?.filter((item) => item?.isCooked === true);
+      setFiltredData(findData);
+    } else {
+      let findData = allData?.data?.filter((item) => item?.isCooked === false);
+      setFiltredData(findData);
+    }
+  }, [allData,typeforView]);
+
 
 
   const dispatch = useDispatch();
@@ -147,8 +177,22 @@ const CookingSheet = () => {
       ) : (
         <Paper sx={{ width: '100%', mb: 2 }}>
           <TableContainer component={Paper}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', margin: "5px 0px 5px 0px" }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%', margin: "5px 0px 5px 0px" }}>
               <SearchFeild setValue={setValue} value={value} />
+              <FormControl style={{ marginTop: 13, width: 190, marginLeft: 10, height:70 }}>
+              <InputLabel id="demo-simple-select-label">Filter By</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={typeforView}
+                label="Filter"
+                onChange={(e) => settypeforView(e.target.value)}
+              >
+                {/* <MenuItem value={'All'}>All</MenuItem> */}
+                <MenuItem value={'Process'}>Process</MenuItem>
+                <MenuItem value={'Completed'}>Completed</MenuItem>
+              </Select>
+            </FormControl>
             </div>
             <Table sx={{ minWidth: 700 }} aria-label="customized table">
               <TableHead>
