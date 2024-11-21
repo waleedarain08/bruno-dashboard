@@ -20,7 +20,7 @@ import { gridSpacing } from 'store/constant';
 // ==============================|| DASHBOARD DEFAULT - POPULAR CARD ||============================== //
 
 const PopularCard = ({ isLoading, chartstartData }) => {
-  console.log(chartstartData, 'chartstartData');
+  //console.log(chartstartData, 'chartstartData');
   // const theme = useTheme();
 
   // const [anchorEl, setAnchorEl] = useState(null);
@@ -34,7 +34,37 @@ const PopularCard = ({ isLoading, chartstartData }) => {
   // };
 
   const firstElement = chartstartData?.slice(0, 1); // Extract the first element
-  const restElements = chartstartData?.slice(1);
+  const renderItems = () => {
+    //const restElements = chartstartData?.slice(1);
+    ///console.log(restElements);
+    const uniqueItems = chartstartData?.slice(1).filter((value, index, self) => 
+      self.findIndex(item => item.name === value.name) === index
+    );
+    return uniqueItems?.map((x, index) => {
+      return (
+        <>
+          <Grid key={index} container direction="column">
+            <Grid item>
+              <Grid container alignItems="center" justifyContent="space-between">
+                <Grid item>
+                  <Typography variant="subtitle1" color="inherit">
+                    {x?.name} {x?.lifeStage!=""?`(${x?.lifeStage})`:""}
+                  </Typography>
+                </Grid>
+                <Grid item></Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              {/* <Typography variant="subtitle2" sx={{ color: 'success.dark' }}>
+          10% Profit
+        </Typography> */}
+            </Grid>
+          </Grid>
+          <Divider sx={{ my: 1.5 }} />
+        </>
+      );
+    })
+  }
   return (
     <>
       {isLoading ? (
@@ -54,30 +84,7 @@ const PopularCard = ({ isLoading, chartstartData }) => {
                 <BajajAreaChartCard firstElement={firstElement} />
               </Grid>
               <Grid item xs={12}>
-                {restElements?.map((x, index) => {
-                  return (
-                    <>
-                      <Grid key={index} container direction="column">
-                        <Grid item>
-                          <Grid container alignItems="center" justifyContent="space-between">
-                            <Grid item>
-                              <Typography variant="subtitle1" color="inherit">
-                                {x?.name}
-                              </Typography>
-                            </Grid>
-                            <Grid item></Grid>
-                          </Grid>
-                        </Grid>
-                        <Grid item>
-                          {/* <Typography variant="subtitle2" sx={{ color: 'success.dark' }}>
-                      10% Profit
-                    </Typography> */}
-                        </Grid>
-                      </Grid>
-                      <Divider sx={{ my: 1.5 }} />
-                    </>
-                  );
-                })}
+                {renderItems()}
               </Grid>
             </Grid>
           </CardContent>

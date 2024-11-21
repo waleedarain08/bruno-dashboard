@@ -19,16 +19,14 @@ const BajajAreaChartCard = ({ firstElement }) => {
   const customization = useSelector((state) => state.customization);
   const { navType } = customization;
 
-  console.log(firstElement, 'firstElement');
+  //console.log(firstElement, 'firstElement');
   const orangeDark = theme.palette.secondary[800];
 
   useEffect(() => {
     const newSupportChart = {
       ...chartData.options,
       colors: [orangeDark],
-      tooltip: {
-        theme: 'light'
-      }
+      tooltip: 0
     };
     ApexCharts.exec(`support-chart`, 'updateOptions', newSupportChart);
   }, [navType, orangeDark]);
@@ -40,7 +38,7 @@ const BajajAreaChartCard = ({ firstElement }) => {
           <Grid container alignItems="center" justifyContent="space-between">
             <Grid item>
               <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.dark }}>
-                {firstElement?.[0]?.name}
+                {firstElement?.[0]?.name} {firstElement?.length>0 && firstElement?.[0]?.lifeStage!=""?`(${firstElement?.[0]?.lifeStage})`:""}
               </Typography>
             </Grid>
           </Grid>
