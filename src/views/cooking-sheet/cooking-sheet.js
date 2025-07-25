@@ -57,7 +57,7 @@ const CookingSheet = () => {
   const allData = useSelector((state) => state.CookingSheetReducer.cookingSheetData);
   const isLoading = useSelector((state) => state.CookingSheetReducer.isLoadingcookingSheet);
   const isLoadingDeleteBatch = useSelector((state) => state.BatchReducer.isLoadingDeleteBatch);
-  const [Cooked, setCooked] = React.useState(null);
+  //const [Cooked, setCooked] = React.useState(null);
   const [snackOpen, setsnackOpen] = React.useState(false);
   const navigate = useNavigate();
   const [FiltredData, setFiltredData] = React.useState([]);
@@ -144,11 +144,12 @@ const CookingSheet = () => {
   };
 
   const handleChange = (id, event) => {
+    //console.log('id', id);
     let data = {
       isCooked: event.target.value
     };
-    dispatch(updateToBatch(id, data, Userdata?.clientToken));
-    setCooked(event.target.value);
+    dispatch(updateToBatch(id, data, Userdata?.clientToken,onSuccessBatch));
+    //setCooked(event.target.value);
   };
 
   const handleClosee = (event, reason) => {
@@ -230,7 +231,7 @@ const CookingSheet = () => {
                           <Select
                             labelId="demo-select-small-label"
                             id="demo-select-small"
-                            value={Cooked === null ? row?.isCooked : Cooked}
+                            value={row?.isCooked}
                             label="Status"
                             onChange={(e) => handleChange(row?._id, e)}
                           >

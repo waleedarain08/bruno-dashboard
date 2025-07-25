@@ -73,6 +73,9 @@ const Invoice = () => {
                                             Order Total
                                         </TableCell>
                                         <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }} align="center">
+                                            Shipping Fees
+                                        </TableCell>
+                                        <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }} align="center">
                                             Discount Applied
                                         </TableCell>
                                         <TableCell style={{ fontWeight: 'bold', fontSize:'8px',lineHeight:'12px', padding:'3px' }} align="center">
@@ -95,7 +98,8 @@ const Invoice = () => {
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} component="th" scope="row">
                                             {SelectRow?.user?.fullName}
                                         </TableCell>
-                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{(parseFloat(SelectRow?.cartTotal)+parseFloat(SelectRow?.shippingFees)).toFixed(2)} AED</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{parseFloat(SelectRow?.cartTotal).toFixed(2)} AED</TableCell>
+                                        <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.shippingFees.toFixed(2)} AED</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.discount.toFixed(2)} AED</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.vat.toFixed(2)} AED</TableCell>
                                         <TableCell style={{fontSize:'9px',padding:'5px'}} align="center">{SelectRow?.totalAmount.toFixed(2)} AED</TableCell>
