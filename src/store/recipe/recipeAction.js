@@ -96,7 +96,7 @@ export const DeleteRecipe = (id, token, onSuccess) => {
 export const EditRecipe = (id, data, token, setLoading, onSuccess, isStandard, callAgain) => {
   return (dispatch) => {
     dispatch({ type: actionTypes.isLoadingEdit });
-    data.isVisible=true;
+    //data.isVisible=true;
     console.log("dddddddd",data);
     Put(`recipe/${id}`, data, token)
       .then(function (response) {
