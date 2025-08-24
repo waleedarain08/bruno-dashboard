@@ -64,7 +64,7 @@ const ProductCategories = () => {
   const [Details, setDetails] = React.useState('');
   const [Description, setDescription] = React.useState('');
   const [Featured, setFeatured] = React.useState(false);
-  const [Visible, setVisible] = React.useState(true);
+  const [visible, setVisible] = React.useState(true);
   const [Loading, setLoading] = React.useState(false);
   const [Error, setError] = React.useState('');
   const [Condition, setCondition] = React.useState(null);
@@ -86,7 +86,7 @@ const ProductCategories = () => {
     setDetails('');
     setDescription('');
     setFeatured(false);
-    setVisible('');
+    setVisible(true);
     setSelectedFiles([]);
     setPreviewEdit([]);
     setSelectedId(null);
@@ -232,6 +232,7 @@ const ProductCategories = () => {
     dispatch(GetAllRecipes(Userdata?.clientToken,true));
     dispatch(GetAllCategories(Userdata?.clientToken));
     dispatch(GetAllIngredient(Userdata?.clientToken));
+    //alert(Visible);
   }, []);
 
   React.useEffect(() => {
@@ -270,7 +271,7 @@ const ProductCategories = () => {
 
   const onSave = async () => {
     console.log(KG,Weight,Unit); // dont remove this console
-
+    //alert(visible);
     let NewValues = fields2?.map((i) => {
       return {
         name: i?.name,
@@ -308,7 +309,7 @@ const ProductCategories = () => {
         let newdata = {
           name: NameRecipe,
           isFeatured: Featured,
-          isVisible: Visible,
+          isVisible: visible,
           description: Description,
           details: Details,
           pricePerKG: fields[0].price,
@@ -338,7 +339,7 @@ const ProductCategories = () => {
           let newdata = {
             name: NameRecipe,
             isFeatured: Featured,
-            isVisible: Visible,
+            isVisible: visible,
             description: Description,
             details: Details,
             pricePerKG: fields[0].price,
@@ -366,7 +367,7 @@ const ProductCategories = () => {
           let newdata = {
             name: NameRecipe,
             isFeatured: Featured,
-            isVisible: Visible,
+            isVisible: visible,
             description: Description,
             details: Details,
             pricePerKG: fields[0].price,
@@ -755,7 +756,7 @@ const ProductCategories = () => {
           <FormControlLabel
             style={{ marginLeft: 7 }}
             required
-            control={<Switch checked={Visible} onChange={() => setVisible(!Visible)} />}
+            control={<Switch checked={visible} onChange={() => setVisible(!visible)} />}
             label="Visible"
           />
           <ImageUploader
