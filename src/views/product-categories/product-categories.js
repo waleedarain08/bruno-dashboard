@@ -278,8 +278,14 @@ const ProductCategories = () => {
         aggregate: i?.aggregate
       };
     });
-
-    console.log(NewValues);
+    console.log("cattt",Categoryes);
+    if(Categoryes !== "Standard Recipes"){
+      NewValues = [{
+        name: "White Fish",
+        aggregate: 0.0
+      }];
+    }
+    console.log("new values",NewValues);
    
     if (
       NameRecipe !== '' &&
