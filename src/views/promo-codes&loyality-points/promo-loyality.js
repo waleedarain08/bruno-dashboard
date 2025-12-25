@@ -61,7 +61,7 @@ const PromoLoality = ({ ...others }) => {
     setPromoId(null);
   };
   const Share = (code, discount) => {
-    let message = `Please use promo code "${code}" to avail ${discount} AED discount at Bruno's Kitchen Mobile App. \n   https://brunos.kitchen`;
+    let message = `Please use promo code "${code}" to avail ${discount} discount at Bruno's Kitchen Mobile App. \n   https://brunos.kitchen`;
     // let url = `https://web.whatsapp.com/send`;
     // url += `&text=${encodeURI(message)}&app_absent=0`;
     window.open('https://api.whatsapp.com/send?text=' + message);
@@ -1158,7 +1158,7 @@ const PromoLoality = ({ ...others }) => {
                     <TableCell align="center"> {row?.usage}</TableCell>
                     <TableCell align="left">
                       <svg
-                        onClick={() => Share(row?.name, row?.discount)}
+                        onClick={() => Share(row?.name, row?.type === 'percentage' ? `${row?.discount}%` : `${row?.discount} AED`)}
                         xmlns="http://www.w3.org/2000/svg"
                         width={48}
                         height={48}
