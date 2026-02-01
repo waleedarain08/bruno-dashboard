@@ -39,6 +39,8 @@ const Dashboard = () => {
   const [newDate, setDate] = React.useState(null);
   const [DateTopChart, setDateTopChart] = useState(null);
   const [isOpen, setisOpen] = useState(false);
+  const filterProdcuts = useSelector((state) => state.RecipeReducer.data);
+  const exportProducts = filterProdcuts?.recipe?.filter((i) => i?.category !== '');
 
   const [newDateMonth, setDateMonth] = React.useState(getCurrentMonth());
   // const [selectedDateRange, setSelectedDateRange] = useState([]);
@@ -102,6 +104,34 @@ const Dashboard = () => {
     setisOpen(false);
   };
 
+  const exportToExcel = async () => {
+    if (!exportProducts?.length) return;
+
+    try {
+      const XLSX = await import('xlsx');
+
+      const data = exportProducts.flatMap((product) =>
+        Array.isArray(product.sizes)
+          ? product.sizes.map((s) => ({
+              name: `${product.name} ${s.name.includes('(') ? '' : `(${s.name})`}`,
+              category: product.category,
+              sku: s.sku,
+              price: s.price,
+              stock: s.stock
+            }))
+          : []
+      );
+
+      const ws = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Products');
+
+      XLSX.writeFile(wb, `BrunoInventory_${new Date().toISOString().slice(0, 10)}.xlsx`);
+    } catch (err) {
+      console.error('Export failed', err);
+    }
+  };
+
   return (
     <Grid container spacing={gridSpacing}>
       <DateSelector open={isOpen} onClose={() => onClose()} />
@@ -116,6 +146,17 @@ const Dashboard = () => {
               sx={{ boxShadow: 'none' }}
             >
               Download Report
+            </Button>
+          </AnimateButton>
+          <AnimateButton>
+            <Button
+              onClick={() => exportToExcel()}
+              style={{ margin: '12px' }}
+              variant="contained"
+              color="primary"
+              sx={{ boxShadow: 'none' }}
+            >
+              Download Inventory
             </Button>
           </AnimateButton>
           <LocalizationProvider dateAdapter={AdapterMoment}>
