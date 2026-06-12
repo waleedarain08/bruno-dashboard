@@ -79,6 +79,9 @@ const PromoLoality = ({ ...others }) => {
 
   const [newDate, setDate] = React.useState(0);
   const [snackOpen, setsnackOpen] = React.useState(false);
+  const [shop, setShop] = React.useState(null);
+  const [shopLoading, setShopLoading] = React.useState(false);
+  const [radiusUpdating, setRadiusUpdating] = React.useState(false);
   // const [OnMonth, setOnMonth] = React.useState([]);
   // const [Ratio, setRatio] = React.useState([]);
   // const [Redeem, setRedeem] = React.useState([]);
@@ -88,6 +91,30 @@ const PromoLoality = ({ ...others }) => {
     dispatch(GetPromos(Userdata?.clientToken));
     dispatch(GetDiscount(Userdata?.clientToken));
   }, []);
+
+  // Fetch shop details
+  const fetchShopDetails = async () => {
+    try {
+      setShopLoading(true);
+      const res = await fetch('https://api.brunos.kitchen/bruno/api/v1/shop-details', {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: Userdata?.clientToken ? `Bearer ${Userdata.clientToken}` : ''
+        }
+      });
+      const json = await res.json();
+      if (json && json.data) setShop(json.data[0]);
+    } catch (err) {
+      console.error('Failed to fetch shop details', err);
+    } finally {
+      setShopLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchShopDetails();
+  }, [Userdata?.clientToken]);
 
   const theme = useTheme();
   const scriptedRef = useScriptRef();
@@ -215,6 +242,123 @@ const PromoLoality = ({ ...others }) => {
           </Card>
         </Grid> */}
         <Grid item xs={4}>
+          <Card>
+            <CardContent>
+              <Grid container direction="column" justifyContent="center" spacing={2}>
+                <Grid item xs={12} container alignItems="center" justifyContent="center">
+                  <Box sx={{ mb: 2 }}>
+                    <Typography variant="subtitle1">Shop Information</Typography>
+                  </Box>
+                </Grid>
+                {shopLoading ? (
+                  <Grid item xs={12}>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                      <InfinitySpin width="80" color="#D78809" />
+                    </div>
+                  </Grid>
+                ) : (
+                  <Box>
+                    <Grid item xs={12}>
+                      <FormControl fullWidth sx={{ ...theme.typography.customInput, mb: 1 }}>
+                        <InputLabel shrink>Name</InputLabel>
+                        <OutlinedInput value={shop?.name || ''} disabled />
+                      </FormControl>
+                      <FormControl fullWidth sx={{ ...theme.typography.customInput, mb: 1 }}>
+                        <InputLabel shrink>Address</InputLabel>
+                        <OutlinedInput value={shop?.address || ''} disabled />
+                      </FormControl>
+                      <FormControl fullWidth sx={{ ...theme.typography.customInput, mb: 1 }}>
+                        <InputLabel shrink>Phone</InputLabel>
+                        <OutlinedInput value={shop?.phone || ''} disabled />
+                      </FormControl>
+                      <FormControl fullWidth sx={{ ...theme.typography.customInput, mb: 1 }}>
+                        <InputLabel shrink>Email</InputLabel>
+                        <OutlinedInput value={shop?.email || ''} disabled />
+                      </FormControl>
+                      <Grid container spacing={1}>
+                        <Grid item xs={6}>
+                          <FormControl fullWidth sx={{ ...theme.typography.customInput, mb: 1 }}>
+                            <InputLabel shrink>Latitude</InputLabel>
+                            <OutlinedInput value={shop?.latitude ?? ''} disabled />
+                          </FormControl>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <FormControl fullWidth sx={{ ...theme.typography.customInput, mb: 1 }}>
+                            <InputLabel shrink>Longitude</InputLabel>
+                            <OutlinedInput value={shop?.longitude ?? ''} disabled />
+                          </FormControl>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Formik
+                        enableReinitialize
+                        initialValues={{ deliveryRadius: shop?.deliveryRadius ?? '' }}
+                        onSubmit={async (values, { setSubmitting }) => {
+                          try {
+                            setRadiusUpdating(true);
+                            const id = shop?._id;
+                            const res = await fetch(`https://api.brunos.kitchen/bruno/api/v1/shop-details/${id}`, {
+                              method: 'PATCH',
+                              headers: {
+                                Accept: 'application/json',
+                                'Content-Type': 'application/json',
+                                Authorization: Userdata?.clientToken ? `Bearer ${Userdata.clientToken}` : ''
+                              },
+                              body: JSON.stringify({ deliveryRadius: parseFloat(values.deliveryRadius) })
+                            });
+                            const json = await res.json();
+                            if (json && json.isSuccess) {
+                              setsnackOpen(true);
+                              fetchShopDetails();
+                            }
+                          } catch (err) {
+                            console.error('Failed to update deliveryRadius', err);
+                          } finally {
+                            setRadiusUpdating(false);
+                            setSubmitting(false);
+                          }
+                        }}
+                      >
+                        {({ handleBlur, handleChange, handleSubmit, values }) => (
+                          <form noValidate onSubmit={handleSubmit}>
+                            <FormControl fullWidth sx={{ ...theme.typography.customInput, mt: 1 }}>
+                              <InputLabel htmlFor="deliveryRadius">Delivery Radius (km)</InputLabel>
+                              <OutlinedInput
+                                id="deliveryRadius"
+                                type="number"
+                                value={values.deliveryRadius}
+                                name="deliveryRadius"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                label="Delivery Radius (km)"
+                                inputProps={{ step: '0.1' }}
+                              />
+                            </FormControl>
+                            <Box sx={{ mt: 2 }}>
+                              <AnimateButton>
+                                <Button
+                                  disableElevation
+                                  disabled={radiusUpdating}
+                                  fullWidth
+                                  size="large"
+                                  type="submit"
+                                  variant="contained"
+                                  color="secondary"
+                                >
+                                  {radiusUpdating ? 'Saving...' : 'Update Delivery Radius'}
+                                </Button>
+                              </AnimateButton>
+                            </Box>
+                          </form>
+                        )}
+                      </Formik>
+                    </Grid>
+                  </Box>
+                )}
+              </Grid>
+            </CardContent>
+          </Card>
           <Card>
             {!isDiscountLoading && (
               <CardContent>
