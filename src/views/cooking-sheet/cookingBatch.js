@@ -72,7 +72,7 @@ const CookingBatch = () => {
     }
   }, [BatchIngredientsData]);
   const sumWithInitial = AllKeys?.reduce((accumulator, currentValue) => accumulator + currentValue?.weight, 0);
- // const sumWithadjustedWeight = AllKeys?.reduce((accumulator, currentValue) => accumulator + currentValue?.CookingVolume, 0);
+  // const sumWithadjustedWeight = AllKeys?.reduce((accumulator, currentValue) => accumulator + currentValue?.CookingVolume, 0);
 
   const givenDate = moment(state?.createdOnDate);
   const futureDate = givenDate.add(30, 'days');
@@ -220,7 +220,7 @@ const CookingBatch = () => {
 
           {BatchOrderByIdData?.map((items) => {
             orderSum = 0;
-             // let orderIngredients = Object.entries(items?.ingredientConsumption).map(([name, value]) => ({ name, value }));
+            // let orderIngredients = Object.entries(items?.ingredientConsumption).map(([name, value]) => ({ name, value }));
             return (
               <>
                 <p
@@ -276,13 +276,13 @@ const CookingBatch = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {Object.entries(items?.ingredientConsumption).map(([key,value], index) =>{
+                        {Object.entries(items?.ingredientConsumption).map(([key, value], index) => {
                           orderSum += Math.trunc(value);
                           //console.log(key,value);
                           return (
                             <TableRow key={index}>
                               <TableCell style={{ width: 250 }} align="center">
-                                {index+1}
+                                {index + 1}
                               </TableCell>
                               <TableCell style={{ width: 250 }} align="center">
                                 {key}
@@ -290,19 +290,26 @@ const CookingBatch = () => {
                               <TableCell style={{ width: 250 }} align="center">
                                 {Math.trunc(value)}
                               </TableCell>
-                              
-                              {items?.orderItems?.map((z,newIndex) =>
-                                  z?.recipes?.map((r) => {
-                                      let record = r.recipeIngredientTotal && Object.entries(r.recipeIngredientTotal).map(([nkey,nvalue])=>({nkey,nvalue}));
-                                      let anOther = record?.filter((u) => u?.nkey == key);
-                                        //console.log(anOther);
-                                      //individualSum += r.category == "" || r.category == "Standard Recipes"?anOther?.length > 0?Math.trunc(anOther[0].nvalue):0:0;
-                                        return (
-                                           <TableCell style={{ width: 250 }} key={newIndex} align="center">{r.category == "" || r.category == "Standard Recipes"?anOther?.length > 0?Math.trunc(anOther[0].nvalue):"--":""}</TableCell>
-                                         )
-                                  }
-                                ))
-                              }
+
+                              {items?.orderItems?.map((z, newIndex) =>
+                                z?.recipes?.map((r) => {
+                                  let record =
+                                    r.recipeIngredientTotal &&
+                                    Object.entries(r.recipeIngredientTotal).map(([nkey, nvalue]) => ({ nkey, nvalue }));
+                                  let anOther = record?.filter((u) => u?.nkey == key);
+                                  //console.log(anOther);
+                                  //individualSum += r.category == "" || r.category == "Standard Recipes"?anOther?.length > 0?Math.trunc(anOther[0].nvalue):0:0;
+                                  return (
+                                    <TableCell style={{ width: 250 }} key={newIndex} align="center">
+                                      {r.category == '' || r.category == 'Standard Recipes'
+                                        ? anOther?.length > 0
+                                          ? Math.trunc(anOther[0].nvalue)
+                                          : '--'
+                                        : ''}
+                                    </TableCell>
+                                  );
+                                })
+                              )}
                               {/* {items?.orderItems?.map((z, newIndex) =>
                                 z?.recipes?.map((r) => {
                                   let updatedData =
@@ -335,7 +342,7 @@ const CookingBatch = () => {
                           <TableCell style={{ width: 250 }} align="center"></TableCell>
                           <TableCell style={{ width: 250 }} align="center"></TableCell>
                           <TableCell style={{ width: 250, fontWeight: '700' }} align="center">
-                           {orderSum}
+                            {orderSum}
                           </TableCell>
 
                           {/* {items?.orderItems?.map((z, index) =>
@@ -362,29 +369,32 @@ const CookingBatch = () => {
                               });
                               const newSum = newS?.reduce((accumulator, currentValue) => accumulator + currentValue?.value, 0);
                               return ( */}
-                              {
+                          {
                             //Object.entries(items?.ingredientConsumption).map(([key]) =>{
-                              items?.orderItems?.map((z,newIndex) =>
-                                  z?.recipes?.map((r) => {
-                                    individualSum = 0;
-                                      r.recipeIngredientTotal && Object.entries(r.recipeIngredientTotal).map((val)=>{
-                                         // console.log(val[1]);
-                                         individualSum += r.category == "" || r.category == "Standard Recipes"?Math.trunc(val[1]):0;
-                                      });
-                                      //let anOther = record?.filter((u) => u?.nkey == key);
-                                      //console.log(anOther);
-                                      //individualSum += r.category == "" || r.category == "Standard Recipes"?Math.trunc(record[0].nvalue):0;
-                                      //console.log(individualSum);
-                                      //orderSum+=  individualSum;
-                                      return (
-                                           <TableCell style={{ width: 250, fontWeight:600 }} key={newIndex} align="center">{r.category == "" || r.category == "Standard Recipes"?individualSum:""}</TableCell>
-                                         )
-                                  }
-                                ))
-                              //})
-                              }
-                               
-                              {/* );
+                            items?.orderItems?.map((z, newIndex) =>
+                              z?.recipes?.map((r) => {
+                                individualSum = 0;
+                                r.recipeIngredientTotal &&
+                                  Object.entries(r.recipeIngredientTotal).map((val) => {
+                                    // console.log(val[1]);
+                                    individualSum += r.category == '' || r.category == 'Standard Recipes' ? Math.trunc(val[1]) : 0;
+                                  });
+                                //let anOther = record?.filter((u) => u?.nkey == key);
+                                //console.log(anOther);
+                                //individualSum += r.category == "" || r.category == "Standard Recipes"?Math.trunc(record[0].nvalue):0;
+                                //console.log(individualSum);
+                                //orderSum+=  individualSum;
+                                return (
+                                  <TableCell style={{ width: 250, fontWeight: 600 }} key={newIndex} align="center">
+                                    {r.category == '' || r.category == 'Standard Recipes' ? individualSum : ''}
+                                  </TableCell>
+                                );
+                              })
+                            )
+                            //})
+                          }
+
+                          {/* );
                             })
                           )} */}
                         </TableRow>
@@ -395,8 +405,8 @@ const CookingBatch = () => {
                 <Paper sx={{ marginTop: 4 }}>
                   <TableContainer>
                     <TableRow>
-                      <TableCell style={{ fontWeight: '800' }} align="left" >
-                      ORDER PACKAGING INSTRUCTIONS :
+                      <TableCell style={{ fontWeight: '800' }} align="left">
+                        ORDER PACKAGING INSTRUCTIONS :
                       </TableCell>
                       <TableCell></TableCell>
                       <TableCell></TableCell>
@@ -456,7 +466,7 @@ const CookingBatch = () => {
                                               <TableCell rowSpan={resultArray?.length} align="center">
                                                 {historyRow?.pet?.name}
                                               </TableCell>
-                                              
+
                                               <TableCell rowSpan={resultArray?.length} component="th" scope="row">
                                                 {historyRow?.planType}
                                               </TableCell>
@@ -483,7 +493,7 @@ const CookingBatch = () => {
                                           {/* ))} */}
                                         </TableBody>
                                       </Table>
-                                    ) : historyRow?.planType === 'Monthly' ? (
+                                    ) : historyRow?.planType === 'monthly' || historyRow?.planType === 'Monthly' ? (
                                       <Table size="small" aria-label="purchases">
                                         {historyRow?.recipes?.map((item, i) => (
                                           <>
@@ -509,9 +519,11 @@ const CookingBatch = () => {
                                                   {historyRow?.planType}
                                                 </TableCell>
                                                 <TableCell rowSpan={resultArray?.length} align="center">
-                                                {historyRow?.pet?.feedingRoutine} times
-                                              </TableCell>
-                                                <TableCell align="center">{item?.name} ({item?.lifeStage})</TableCell>
+                                                  {historyRow?.pet?.feedingRoutine} times
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                  {item?.name} ({item?.lifeStage})
+                                                </TableCell>
 
                                                 <TableCell align="center" component="th" scope="row">
                                                   {resultArray?.length > 1 ? (
@@ -528,50 +540,54 @@ const CookingBatch = () => {
                                     ) : (
                                       //items.category === "Standard Recipes" &&
                                       <Table size="small" aria-label="purchases">
-                                        {historyRow?.recipes?.map((item, i) => (
-                                          item.category === "Standard Recipes" &&
-                                          <>
-                                            <TableHead key={i}>
-                                              <TableRow>
-                                                <TableCell style={{ fontWeight: 'bold' }}></TableCell>
-                                                <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
-                                                <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                                  Product Description
-                                                </TableCell>
-                                                <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                                  Quantity
-                                                </TableCell>
-                                                <TableCell style={{ fontWeight: 'bold' }} align="center">
-                                                  Serving
-                                                </TableCell>
-                                                {item?.selectedItemSize && (
-                                                  <TableCell style={{ fontWeight: 'bold' }} align="right">
-                                                    Selected Size
-                                                  </TableCell>
-                                                )}
-                                              </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                              <TableRow>
-                                                <TableCell align="center"></TableCell>
-                                                <TableCell component="th" scope="row">
-                                                  {historyRow?.planType}
-                                                </TableCell>
-                                                <TableCell align="center">{item?.name} ({item?.lifeStage})</TableCell>
-                                                <TableCell align="center">{item?.quantity}</TableCell>
-                                                <TableCell align="center" component="th" scope="row">
-                                                  -
-                                                </TableCell>
-                                                {item?.selectedItemSize && (
-                                                  <TableCell align="right">
-                                                    {item?.selectedItemSize?.price}-AED <br></br>
-                                                    {item?.selectedItemSize?.name}
-                                                  </TableCell>
-                                                )}
-                                              </TableRow>
-                                            </TableBody>
-                                          </>
-                                        ))}
+                                        {historyRow?.recipes?.map(
+                                          (item, i) =>
+                                            item.category === 'Standard Recipes' && (
+                                              <>
+                                                <TableHead key={i}>
+                                                  <TableRow>
+                                                    <TableCell style={{ fontWeight: 'bold' }}></TableCell>
+                                                    <TableCell style={{ fontWeight: 'bold' }}>Category</TableCell>
+                                                    <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                      Product Description
+                                                    </TableCell>
+                                                    <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                      Quantity
+                                                    </TableCell>
+                                                    <TableCell style={{ fontWeight: 'bold' }} align="center">
+                                                      Serving
+                                                    </TableCell>
+                                                    {item?.selectedItemSize && (
+                                                      <TableCell style={{ fontWeight: 'bold' }} align="right">
+                                                        Selected Size
+                                                      </TableCell>
+                                                    )}
+                                                  </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                  <TableRow>
+                                                    <TableCell align="center"></TableCell>
+                                                    <TableCell component="th" scope="row">
+                                                      {historyRow?.planType}
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                      {item?.name} ({item?.lifeStage})
+                                                    </TableCell>
+                                                    <TableCell align="center">{item?.quantity}</TableCell>
+                                                    <TableCell align="center" component="th" scope="row">
+                                                      -
+                                                    </TableCell>
+                                                    {item?.selectedItemSize && (
+                                                      <TableCell align="right">
+                                                        {item?.selectedItemSize?.price}-AED <br></br>
+                                                        {item?.selectedItemSize?.name}
+                                                      </TableCell>
+                                                    )}
+                                                  </TableRow>
+                                                </TableBody>
+                                              </>
+                                            )
+                                        )}
                                       </Table>
                                     )}
                                   </Box>
@@ -586,8 +602,7 @@ const CookingBatch = () => {
                 </Paper>
               </>
             );
-          })
-          }
+          })}
         </>
       )}
     </>
